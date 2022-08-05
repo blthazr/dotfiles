@@ -1,0 +1,3 @@
+{{- if .flags.is_work -}}
+{{ (index (lastpass "id_ed25519_cribl") 0).note.publicKey }}
+{{- end -}}

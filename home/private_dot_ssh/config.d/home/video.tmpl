@@ -1,0 +1,8 @@
+{{- if .flags.is_personal -}}
+Host video
+  Hostname 172.16.30.100
+  User kane
+  IdentityFile ~/.ssh/kane_rsa
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+{{ end -}}

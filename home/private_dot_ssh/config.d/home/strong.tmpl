@@ -1,0 +1,8 @@
+{{- if .flags.is_personal -}}
+Host strong
+  Hostname 10.0.101.12
+  User kane
+  IdentityFile ~/.ssh/kane_rsa
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+{{ end -}}

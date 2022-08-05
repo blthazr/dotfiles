@@ -1,0 +1,8 @@
+{{- if .flags.is_personal -}}
+Host tiger
+  Hostname 172.16.30.10
+  User root
+  IdentityFile ~/.ssh/root_rsa
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+{{ end -}}

@@ -1,0 +1,46 @@
+{{ if .flags.is_personal }}
+Include config.d/home/*
+{{ end }}
+
+{{ if .flags.is_work }}
+Include config.d/work/*
+{{ end }}
+
+# default options that apply to all connections
+Host *
+  # default port
+  port 22
+
+  # enable compression
+  Compression yes
+
+  # keep the connection alive by sending a null packet every minute
+  ServerAliveCountMax 10
+  ServerAliveInterval 60
+
+  # accelerate connections by reusing existing connections to the same host
+  ControlMaster auto
+  ControlPath ~/.ssh/control-%h-%p-%r
+  ControlPersist 5
+
+{{ if (eq .chezmoi.os "darwin") }}
+  # store passphrases in the macOS keychain
+  # https://developer.apple.com/library/archive/technotes/tn2449/_index.html
+  AddKeysToAgent yes
+  IgnoreUnknown UseKeychain
+  UseKeychain yes
+{{ end }}
+
+{{ if .flags.is_personal }}
+Host 192.168.*.*
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+Host 172.16.*.*
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+Host 10.*.*.*
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+{{ end }}

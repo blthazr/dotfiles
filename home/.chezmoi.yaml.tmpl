@@ -8,6 +8,13 @@
 {{-   $name = promptString "Name" $name -}}
 {{- end -}}
 
+{{- $is_personal := false -}}{{/* true if this machine should have personal config & secrets (LastPass) */}}
+{{- if hasKey .flags "is_personal" -}}
+{{-   $is_personal = .flags.is_personal -}}
+{{- else -}}
+{{-   $is_personal = promptBool "Is this a personal machine" $is_personal -}}
+{{- end -}}
+
 {{- $is_work := false -}}{{/* true if this machine should have work config & secrets (1Password) */}}
 {{- if hasKey .flags "is_work" -}}
 {{-   $is_work = .flags.is_work -}}
@@ -25,4 +32,5 @@ data:
   name: {{ $name | quote }}
 
   flags:
+    is_personal: {{ $is_personal }}
     is_work: {{ $is_work }}

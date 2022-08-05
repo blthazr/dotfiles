@@ -8,6 +8,13 @@
 {{-   $name = promptString "Name" $name -}}
 {{- end -}}
 
+{{- $is_work := false -}}{{/* true if this machine should have work config & secrets (1Password) */}}
+{{- if hasKey .flags "is_work" -}}
+{{-   $is_work = .flags.is_work -}}
+{{- else -}}
+{{-   $is_work = promptBool "Is this a work machine" $is_work -}}
+{{- end -}}
+
 {{- if $interactive -}}
 {{-   writeToStdout "💡 Tip: you can re-enter your data with `chezmoi init --data=false`\n" -}}
 {{- end -}}
@@ -16,3 +23,6 @@ sourceDir: "{{ .chezmoi.sourceDir }}"
 
 data:
   name: {{ $name | quote }}
+
+  flags:
+    is_work: {{ $is_work }}

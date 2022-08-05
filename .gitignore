@@ -1,0 +1,11 @@
+# Apple MacOS
+.DS_Store
+
+# Microsoft Windows
+Thumbs.db
+
+# VS Code
+*.code-workspace
+
+# file shards
+*-shard*

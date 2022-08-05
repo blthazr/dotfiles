@@ -1,0 +1,29 @@
+[core]
+  editor = code --wait
+  excludesfile = ~/.gitignore_global
+
+[filter "lfs"]
+  required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+
+[init]
+  defaultBranch = main
+
+[user]
+  name = {{ .name | quote }}
+  useConfigOnly = true
+
+{{ if .flags.is_personal -}}
+[includeIf "gitdir:~/Code/github.com/blthazr/"]
+  path = ~/Code/github.com/blthazr/.gitconfig
+
+[includeIf "gitdir:~/Code/github.com/christopherburnham/"]
+  path = ~/Code/github.com/christopherburnham/.gitconfig
+{{ end -}}
+
+{{ if .flags.is_work -}}
+[includeIf "gitdir:~/Code/bitbucket.org/blthazr/"]
+  path = :~/Code/bitbucket.org/blthazr/.gitconfig
+{{ end -}}

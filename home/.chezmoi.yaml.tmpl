@@ -15,11 +15,43 @@
 {{-   $is_personal = promptBool "Is this a personal machine" $is_personal -}}
 {{- end -}}
 
+{{- $personal_git_user := "" -}}
+{{- $personal_git_email := "" -}}
+{{- if $is_personal -}}
+{{-   if hasKey .personal.git "user" -}}
+{{-     $personal_git_user = .personal.git.user -}}
+{{-   else -}}
+{{-     $personal_git_user = promptString "Personal git username" $personal_git_user -}}
+{{-   end -}}
+
+{{-   if hasKey .personal.git "email" -}}
+{{-     $personal_git_email = .personal.git.email -}}
+{{-   else -}}
+{{-     $personal_git_email = promptString "Personal git email" $personal_git_email -}}
+{{-   end -}}
+{{- end -}}
+
 {{- $is_work := false -}}{{/* true if this machine should have work config & secrets (1Password) */}}
 {{- if hasKey .flags "is_work" -}}
 {{-   $is_work = .flags.is_work -}}
 {{- else -}}
 {{-   $is_work = promptBool "Is this a work machine" $is_work -}}
+{{- end -}}
+
+{{- $work_git_user := "" -}}
+{{- $work_git_email := "" -}}
+{{- if $is_work -}}
+{{-   if hasKey .work.git "user" -}}
+{{-     $work_git_user = .work.git.user -}}
+{{-   else -}}
+{{-     $work_git_user = promptString "Work git username" $work_git_user -}}
+{{-   end -}}
+
+{{-   if hasKey .work.git "email" -}}
+{{-     $work_git_email = .work.git.email -}}
+{{-   else -}}
+{{-     $work_git_email = promptString "Work git email" $work_git_email -}}
+{{-   end -}}
 {{- end -}}
 
 {{- if $interactive -}}
@@ -34,3 +66,17 @@ data:
   flags:
     is_personal: {{ $is_personal }}
     is_work: {{ $is_work }}
+
+{{- if $is_personal }}
+  personal:
+    git:
+      user: {{ $personal_git_user | quote }}
+      email: {{ $personal_git_email | quote }}
+{{- end }}
+
+{{- if $is_work }}
+  work:
+    git:
+      user: {{ $work_git_user | quote }}
+      email: {{ $work_git_email | quote }}
+{{- end }}

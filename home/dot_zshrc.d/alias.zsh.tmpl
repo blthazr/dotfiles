@@ -1,0 +1,15 @@
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @date           :   2022-07-06
+#   @file           :   ~/.zshrc.d/alias.zsh
+#   @description    :   Alias definitions
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Make commands more colorful
+alias grep='grep --color=auto'
+alias ls='ls --color=auto'
+
+{{ if .flags.is_personal }}
+alias chezmoi='chezmoi --source $HOME/Code/github.com/blthazr/dotfiles'
+{{ end }}

@@ -16,14 +16,11 @@
   useConfigOnly = true
 
 {{ if .flags.is_personal -}}
-[includeIf "gitdir:~/Code/github.com/blthazr/"]
-  path = ~/Code/github.com/blthazr/.gitconfig
-
-[includeIf "gitdir:~/Code/github.com/christopherburnham/"]
-  path = ~/Code/github.com/christopherburnham/.gitconfig
+[includeIf "gitdir:~/Code/github.com/{{ .personal.git.user }}/"]
+  path = ~/.gitconfig_personal
 {{ end -}}
 
 {{ if .flags.is_work -}}
-[includeIf "gitdir:~/Code/bitbucket.org/blthazr/"]
-  path = :~/Code/bitbucket.org/blthazr/.gitconfig
+[includeIf "gitdir:~/Code/bitbucket.org/{{ .work.git.user }}/"]
+  path = ~/.gitconfig_work
 {{ end -}}

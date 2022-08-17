@@ -1,7 +1,0 @@
-{{ if .flags.is_work -}}
-[user]
-  email = {{ .work.git.email | quote }}
-
-[url "bitbucket-work:blthazr/"]
-  insteadOf = git@bitbucket.org:blthazr/
-{{ end -}}

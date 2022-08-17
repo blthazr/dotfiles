@@ -1,0 +1,7 @@
+{{ if .flags.is_work -}}
+[user]
+  email = {{ .work.git.email | quote }}
+
+[url "bitbucket-work:{{ .work.git.user }}/"]
+  insteadOf = git@bitbucket.org:{{ .work.git.user }}/
+{{ end -}}

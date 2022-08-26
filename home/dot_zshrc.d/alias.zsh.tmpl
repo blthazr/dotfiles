@@ -11,5 +11,5 @@ alias grep='grep --color=auto'
 alias ls='ls --color=auto'
 
 {{ if .flags.is_personal }}
-alias chezmoi='chezmoi --source $HOME/Code/github.com/christopherburnham/dotfiles'
+alias chezmoi='chezmoi --source $HOME/Code/github.com/{{ .personal.git.user }}/dotfiles'
 {{ end }}

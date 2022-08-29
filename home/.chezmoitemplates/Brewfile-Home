@@ -1,44 +1,22 @@
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#   @author         :   Chris Burnham
-#   @file           :   ~/.config/Homebrew/Brewfile
-#   @description    :   Brewfile - one file to rule them all
-#   @usage          :   brew bundle --file "$HOME/.config/Homebrew/Brewfile"
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 tap "fluxcd/tap"
 tap "go-task/tap"
-tap "homebrew/bundle"
-tap "homebrew/cask"
-tap "homebrew/cask-drivers"
-tap "homebrew/core"
 tap "minio/stable"
 # Simple, modern, secure file encryption
 brew "age"
 # Automate deployment, configuration, and upgrading
 brew "ansible"
-# Manage your dotfiles across multiple diverse machines, securely
-brew "chezmoi"
-# GNU File, Shell, and Text utilities
-brew "coreutils"
+# Official Amazon AWS command-line interface
+brew "awscli"
 # Load/unload environment variables based on $PWD
 brew "direnv"
-# Popular GNU data compression program
-brew "gzip"
 # Kubernetes package manager
 brew "helm"
-# Toolkit for embedding hypervisor capabilities in your application
-brew "hyperkit"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # Template-free customization of Kubernetes YAML manifests
 brew "kustomize"
 # LastPass command-line interface tool
 brew "lastpass-cli"
-# Mac App Store command-line interface
-brew "mas"
-# Run a Kubernetes cluster locally
-brew "minikube"
 # Framework for managing multi-language pre-commit hooks
 brew "pre-commit"
 # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
@@ -49,16 +27,10 @@ brew "rclone"
 brew "shellcheck"
 # Editor of encrypted files
 brew "sops"
-# Cross-shell prompt for astronauts
-brew "starship"
 # Tool to build, change, and version infrastructure
 brew "terraform"
 # Linter for Terraform files
 brew "tflint"
-# Executes a program periodically, showing output fullscreen
-brew "watch"
-# Internet file retriever
-brew "wget"
 # Linter for YAML files
 brew "yamllint"
 # Process YAML documents from the CLI
@@ -69,22 +41,24 @@ brew "fluxcd/tap/flux"
 brew "go-task/tap/go-task"
 # MinIO Client for object storage and filesystems
 brew "minio/stable/mc"
-# Password manager that keeps all passwords secure behind one password
-cask "1password"
 # Tool to flash OS images to SD cards & USB drives
 cask "balenaetcher"
+# Browser for SQLite databases
+cask "db-browser-for-sqlite"
 # Voice and text chat software
 cask "discord"
+# App to build and share containerized applications and microservices
+cask "docker"
 # Control your Elgato Key Lights
 cask "elgato-control-center"
 # Assign keys, and then decorate and label them
 cask "elgato-stream-deck"
 # Calendar software
 cask "fantastical"
+# Web browser
+cask "google-chrome"
 # Set of tools to manage resources and applications hosted on Google Cloud
 cask "google-cloud-sdk"
-# Terminal emulator as alternative to Apple's Terminal app
-cask "iterm2"
 # Menu bar app for managing Kubernetes contexts
 cask "kubecontext"
 # Password manager
@@ -95,15 +69,19 @@ cask "lens"
 cask "microsoft-auto-update"
 # Spreadsheet software
 cask "microsoft-excel"
-# Orchestrates virtual Ubuntu instances
-cask "multipass"
+# Word processor
+cask "microsoft-word"
 # Collaboration platform for API development
 cask "postman"
 # Text editor for code, markup and prose
 cask "sublime-text"
+# Control windows and applications right from your trackpad
+cask "swish"
 # File transfer application
 cask "transmit"
 # Open-source code editor
 cask "visual-studio-code"
+# Easy-to-use MQTT client
 mas "MQTT Explorer", id: 1455214828
+# Your to-do list for Mac & iOS
 mas "Things", id: 904280696

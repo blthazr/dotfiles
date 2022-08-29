@@ -1,0 +1,20 @@
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/cask-drivers"
+tap "homebrew/core"
+# Manage your dotfiles across multiple diverse machines, securely
+brew "chezmoi"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# Popular GNU data compression program
+brew "gzip"
+# Mac App Store command-line interface
+brew "mas"
+# Cross-shell prompt for astronauts
+brew "starship"
+# Executes a program periodically, showing output fullscreen
+brew "watch"
+# Internet file retriever
+brew "wget"
+# Terminal emulator as alternative to Apple's Terminal app
+cask "iterm2"

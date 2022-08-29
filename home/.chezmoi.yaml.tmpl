@@ -17,6 +17,7 @@
 
 {{- $personal_git_user := "" -}}
 {{- $personal_git_email := "" -}}
+{{- $personal_lastpass_email := "" -}}
 {{- if $is_personal -}}
 {{-   if hasKey .personal.git "user" -}}
 {{-     $personal_git_user = .personal.git.user -}}
@@ -29,6 +30,13 @@
 {{-   else -}}
 {{-     $personal_git_email = promptString "Personal git email" $personal_git_email -}}
 {{-   end -}}
+
+{{-   if hasKey .personal.lastpass "email" -}}
+{{-     $personal_lastpass_email = .personal.lastpass.email -}}
+{{-   else -}}
+{{-     $personal_lastpass_email = promptString "Personal Lastpass email/username" $personal_lastpass_email -}}
+{{-   end -}}
+
 {{- end -}}
 
 {{- $is_work := false -}}{{/* true if this machine should have work config & secrets (1Password) */}}
@@ -72,6 +80,8 @@ data:
     git:
       user: {{ $personal_git_user | quote }}
       email: {{ $personal_git_email | quote }}
+    lastpass:
+      email: {{ $personal_lastpass_email | quote }}
 {{- end }}
 
 {{- if $is_work }}

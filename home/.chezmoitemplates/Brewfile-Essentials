@@ -1,3 +1,4 @@
+tap "artginzburg/tap"
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/cask-drivers"
@@ -16,5 +17,7 @@ brew "starship"
 brew "watch"
 # Internet file retriever
 brew "wget"
+# Permanent TouchID support for sudo
+brew "artginzburg/tap/sudo-touchid"
 # Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2"

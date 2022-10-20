@@ -1,0 +1,206 @@
+#!{{ lookPath "bash" }}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @file           :   
+#   @description    :   
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   macOS only
+# --------------------------------------------------------------------------------------------------
+{{ template "script_darwin_only" . }}
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Source libraries
+# --------------------------------------------------------------------------------------------------
+{{ template "script_shell_libraries" . }}
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight checks
+# --------------------------------------------------------------------------------------------------
+info "[🚛        Transmit] Setting log level to debug"
+LOG_LEVEL=7
+
+info "[🚛        Transmit] Closing Transmit, to prevent it from overriding changes"
+osascript -e 'tell application "Transmit" to quit'
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Transmit | Preferences | General
+# debug "[🍀       Sys Prefs] Preferences | General | "
+# --------------------------------------------------------------------------------------------------
+# debug "[🍀       Sys Prefs] Preferences | General | Default FTP Client"
+# default: Finder
+
+# debug "[🍀       Sys Prefs] Preferences | General | Terminal"
+# default: Terminal
+
+# debug "[🍀       Sys Prefs] Preferences | General | Windows open with:"
+# default: ${HOME}, "None"
+
+# debug "[🍀       Sys Prefs] Preferences | General | Connect to servers automatically"
+# default: unchecked
+
+# debug "[🍀       Sys Prefs] Preferences | General | Tab title shows"
+# default: Server
+
+# debug "[🍀       Sys Prefs] Preferences | General | File Editor Font"
+# default: Menlo Regular 11
+
+debug "[🍀       Sys Prefs] Preferences | General | Privacy: Automatically download S3 region updates"
+# default: checked
+#   option --> checked
+defaults write com.panic.Transmit DownloadS3RegionUpdates -bool true
+#   option --> unchecked
+# defaults write com.panic.Transmit DownloadS3RegionUpdates -bool false
+
+debug "[🍀       Sys Prefs] Preferences | General | Privacy: Send crash reports"
+# default: checked
+#   option --> checked
+defaults write com.panic.Transmit AllowCrashReportCollection -bool true
+#   option --> unchecked
+# defaults write com.panic.Transmit AllowCrashReportCollection -bool false
+
+debug "[🍀       Sys Prefs] Preferences | General | Privacy: Send anonymous usage statistics"
+# default: checked
+#   option --> checked
+defaults write com.panic.Transmit AllowDataCollection -bool true
+#   option --> unchecked
+# defaults write com.panic.Transmit AllowDataCollection -bool false
+
+debug "[🍀       Sys Prefs] Preferences | General | Privacy: Check for important announcements"
+# default: checked
+#   option --> checked
+defaults write com.panic.Transmit AllowSoapbox -bool true
+#   option --> unchecked
+# defaults write com.panic.Transmit AllowSoapbox -bool false
+
+# debug "[🍀       Sys Prefs] Preferences | General | Software Updates"
+# default: Automatically download and install
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Transmit | Preferences | Sync
+# --------------------------------------------------------------------------------------------------
+# debug "[🍀       Sys Prefs] Preferences | Sync | "
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Transmit | Preferences | Files
+# --------------------------------------------------------------------------------------------------
+# debug "[🍀       Sys Prefs] Preferences | Files | Ask before deleting items"
+# default: checked
+
+debug "[🍀       Sys Prefs] Preferences | Files | Double Click Action"
+# default: Transfer
+#   option --> Do Nothing
+#   option --> Transfer
+#   option --> Edit
+# defaults write com.panic.Transmit DoubleClickAction -int 2
+#   option --> Edit in External Editor
+defaults write com.panic.Transmit DoubleClickAction -int 3
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Transmit | Preferences | Transfers
+# --------------------------------------------------------------------------------------------------
+# debug "[🍀       Sys Prefs] Preferences | Transfers | When an item already exists...: Downloading files"
+# default: Ask me what to do
+
+# debug "[🍀       Sys Prefs] Preferences | Transfers | When an item already exists...: Downloading folders"
+# default: Ask me what to do
+
+# debug "[🍀       Sys Prefs] Preferences | Transfers | When an item already exists...: Uploading files"
+# default: Ask me what to do
+
+# debug "[🍀       Sys Prefs] Preferences | Transfers | When an item already exists...: Uploading folders"
+# default: Ask me what to do
+
+# debug "[🍀       Sys Prefs] Preferences | Transfers | Bandwidth: Limit uploads to:"
+# default: unchecked, 500 KB/s
+
+# debug "[🍀       Sys Prefs] Preferences | Transfers | Bandwidth: Limit downloads to:"
+# default: unchecked, 500 KB/s
+
+# debug "[🍀       Sys Prefs] Preferences | Transfers | Transfer up to <value> files simultaneously"
+# default: 5
+
+# debug "[🍀       Sys Prefs] Preferences | Transfers | Options: Use passive (PASV) mode for data transfers"
+# default: checked
+
+# debug "[🍀       Sys Prefs] Preferences | Transfers | Options: Play <value> when complete"
+# default: unchecked, System Alert
+
+# debug "[🍀       Sys Prefs] Preferences | Transfers | Options: Open files after downloading"
+# default: unchecked
+
+# debug "[🍀       Sys Prefs] Preferences | Transfers | Remove activity items"
+# default: manually
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Transmit | Preferences | Cloud
+# --------------------------------------------------------------------------------------------------
+# debug "[🍀       Sys Prefs] Preferences | Cloud | "
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Transmit | Preferences | Rules
+# --------------------------------------------------------------------------------------------------
+# debug "[🍀       Sys Prefs] Preferences | Rules | "
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Transmit | Preferences | Keys
+# --------------------------------------------------------------------------------------------------
+# debug "[🍀       Sys Prefs] Preferences | Keys | "
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Transmit | Preferences | Advanced
+# --------------------------------------------------------------------------------------------------
+# debug "[🍀       Sys Prefs] Preferences | Advanced | Proxy Server Type:"
+# default: null
+
+# debug "[🍀       Sys Prefs] Preferences | Advanced | Proxy Server"
+# default: null
+
+# debug "[🍀       Sys Prefs] Preferences | Advanced | Proxy Port"
+# default: null
+
+# debug "[🍀       Sys Prefs] Preferences | Advanced | Proxy User Name"
+# default: null
+
+# debug "[🍀       Sys Prefs] Preferences | Advanced | Proxy Password"
+# default: null
+
+# debug "[🍀       Sys Prefs] Preferences | Advanced | SFTP Proxy Password"
+# default: null
+
+# debug "[🍀       Sys Prefs] Preferences | Advanced | FTP Transfer Mode:"
+# default: Binary
+
+# debug "[🍀       Sys Prefs] Preferences | Advanced | FTP Transfer Mode: Try to keep idle connections alive"
+# default: unchecked
+
+# debug "[🍀       Sys Prefs] Preferences | Advanced | FTP Transfer Mode: Verbose logging"
+# default: unchecked
+
+# debug "[🍀       Sys Prefs] Preferences | Advanced | Advanced Server Settings:"
+# default: 
+# ==================================================================================================
+
+info "[🚛        Transmit] Configuration complete"

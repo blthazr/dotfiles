@@ -1,0 +1,70 @@
+#!{{ lookPath "bash" }}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @file           :   
+#   @description    :   
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   macOS only
+# --------------------------------------------------------------------------------------------------
+{{ template "script_darwin_only" . }}
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Source libraries
+# --------------------------------------------------------------------------------------------------
+{{ template "script_shell_libraries" . }}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   function :: skip_configuration
+# --------------------------------------------------------------------------------------------------
+function skip_configuration() {
+  osascript <<EOF
+    set alertTitle to "iTerm2 Configuration"
+    set alertMessage to "Skipping iTerm2 configuration"
+    display alert alertTitle message alertMessage buttons {"OK"} default button "OK"
+EOF
+  error "[🧾          iTerm2] Skipping configuration"
+  exit 0
+}
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight checks
+# --------------------------------------------------------------------------------------------------
+if [ "${TERM_PROGRAM}" == "iTerm.app" ]; then
+  error "[🧾          iTerm2] iTerm2 is unable to be configured while running. Re-run \`chezmoi apply\` from another terminal, such as Terminal.app"
+  exit 0
+fi
+
+info "[🧾          iTerm2] Setting log level to debug"
+LOG_LEVEL=7
+
+info "[🧾          iTerm2] Closing iTerm2, to prevent it from overriding changes"
+osascript -e 'tell application "iTerm" to quit'
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   iTerm2 | Preferences | General | Preferences
+# --------------------------------------------------------------------------------------------------
+debug "[🧾          iTerm2] Preferences | General | Preferences | Load preferences from a custom folder or URL"
+### Load preferences from a custom folder or URL
+# options:
+#   - unchecked, false
+#   - checked, true
+# default: unchecked
+defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
+
+debug "[🧾          iTerm2] Preferences | General | Preferences | Custom folder or url"
+### Load preferences from a custom folder or URL
+# default: null
+defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "{{ .chezmoi.sourceDir }}/dot_config/iterm2"
+# ==================================================================================================
+
+info "[🧾          iTerm2] Configuration complete"

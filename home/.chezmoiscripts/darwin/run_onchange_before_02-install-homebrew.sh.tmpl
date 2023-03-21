@@ -7,13 +7,6 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   macOS only
-# --------------------------------------------------------------------------------------------------
-{{ template "script_darwin_only" . }}
-# ==================================================================================================
-
-
-# --------------------------------------------------------------------------------------------------
 #   @description    :   Source libraries
 # --------------------------------------------------------------------------------------------------
 {{ template "script_shell_libraries" . }}
@@ -27,7 +20,7 @@ info "[🍺        Homebrew] Looking for Homebrew"
 
 if ! check_binary brew; then
   info "[🍺        Homebrew] Not installed"
-  info "[🍺        Homebrew] Installing Homebrew, a MacOS package manager. Follow the instructions!"
+  info "[🍺        Homebrew] Installing Homebrew, The Missing Package Manager for macOS (or Linux). Follow the instructions!"
 
   info "Administrator password needed to install Homebrew"
   {{ template "script_sudo" . }}
@@ -48,15 +41,21 @@ else
 fi
 # ==================================================================================================
 
+
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Install mas
 # --------------------------------------------------------------------------------------------------
+{{ if eq .osid "darwin" }}
 info "[🧺             mas] Looking for mas"
+
 if ! check_binary mas; then
   info "[🧺             mas] Not installed"
   info "[🧺             mas] Installing mas, Mac Apple Store CLI"
-  brew install mas
+  brew tap "mas-cli/tap"
+  brew install "mas-cli/tap/mas"
 else
   info "[🧺             mas] Already installed"
 fi
+
+{{ end }}
 # ==================================================================================================

@@ -41,12 +41,12 @@ typeset -U path
 export GPG_TTY=$(tty)
 # ==================================================================================================
 
-{{ if eq .chezmoi.os "darwin" -}}
+{{- if eq .osid "darwin" -}}
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Homebrew
 # --------------------------------------------------------------------------------------------------
 eval $(/opt/homebrew/bin/brew shellenv)
-export HOMEBREW_CASK_OPTS="--appdir=/Applications --fontdir=/Library/Fonts"
+export HOMEBREW_CASK_OPTS="--appdir=~/Applications --fontdir=~/Library/Fonts"
 export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_EMOJI=1

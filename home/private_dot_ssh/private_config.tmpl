@@ -1,8 +1,8 @@
-{{- if .flags.is_personal }}
+{{- if .personal }}
 Include config.d/home/*
 {{- end }}
 
-{{- if .flags.is_work }}
+{{- if .work }}
 Include config.d/work/*
 {{- end }}
 
@@ -18,21 +18,23 @@ Host *
   ServerAliveCountMax 10
   ServerAliveInterval 60
 
+{{- if .personal }}
   # accelerate connections by reusing existing connections to the same host
   ControlMaster auto
   ControlPath ~/.ssh/control-%h-%p-%r
   ControlPersist 5
+{{- end }}
 
-{{- if (eq .chezmoi.os "darwin") }}
-
+  {{- if eq .osid "darwin" }}
   # store passphrases in the macOS keychain
+{{-   if .personal }}
   AddKeysToAgent yes
+{{-   end }}
   IgnoreUnknown UseKeychain
   UseKeychain yes
 {{- end }}
 
-{{- if .flags.is_personal }}
-
+{{- if .personal }}
 Host 192.168.*.*
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null

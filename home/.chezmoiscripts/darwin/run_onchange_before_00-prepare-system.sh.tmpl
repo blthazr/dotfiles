@@ -14,24 +14,26 @@
 
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Homebrew Bundles
+#   @description    :   Apple Silicon CPU
 # --------------------------------------------------------------------------------------------------
-info "[🍺        Homebrew] Installing core Homebrew bundles"
-brew bundle install --no-upgrade --no-lock --file=/dev/stdin <<EOF
-{{ template "Brewfile-core.tmpl" . }}
-EOF
+{{ if (and (eq .osid "darwin") (eq .chezmoi.arch "arm64") (.workstation)) }}
 
-{{ if .personal }}
-info "[🍺        Homebrew] Installing personal Homebrew bundles"
-brew bundle install --no-upgrade --no-lock --file=/dev/stdin <<EOF
-{{ template "Brewfile-personal.tmpl" . }}
-EOF
-{{ end }}
+info "[🏵       Rosetta 2] Checking CPU type"
+cpu_brand_string="$(sysctl -n machdep.cpu.brand_string)"
 
-{{ if .kubernetes }}
-info "[🍺        Homebrew] Installing kubernetes Homebrew bundles"
-brew bundle install --no-upgrade --no-lock --file=/dev/stdin <<EOF
-{{ template "Brewfile-kubernetes.tmpl" . }}
-EOF
+if [[ "${cpu_brand_string}" =~ "Apple" ]]; then
+  info "[🏵       Rosetta 2] Apple arm-based CPU detected"
+
+  if /usr/bin/pgrep oahd >/dev/null 2>&1; then
+    info "[🏵       Rosetta 2] Rosetta is already installed"
+  else
+    info "[🏵       Rosetta 2] Installing Rosetta"
+    softwareupdate --install-rosetta --agree-to-license
+  fi
+
+else
+  fatal "[🏵       Rosetta 2] ${cpu_brand_string} is an unsupported CPU type"
+fi
+
 {{ end }}
 # ==================================================================================================

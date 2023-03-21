@@ -7,9 +7,10 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   macOS only
+#   @description    :   Pre-flight checks
 # --------------------------------------------------------------------------------------------------
-{{ template "script_darwin_only" . }}
+{{ template "script_check_darwin" . }}
+{{ template "script_check_workstation" . }}
 # ==================================================================================================
 
 
@@ -19,23 +20,9 @@
 {{ template "script_shell_libraries" . }}
 # ==================================================================================================
 
-# --------------------------------------------------------------------------------------------------
-#   @description    :   function :: skip_configuration
-# --------------------------------------------------------------------------------------------------
-function skip_configuration() {
-  osascript <<EOF
-    set alertTitle to "iTerm2 Configuration"
-    set alertMessage to "Skipping iTerm2 configuration"
-    display alert alertTitle message alertMessage buttons {"OK"} default button "OK"
-EOF
-  error "[🧾          iTerm2] Skipping configuration"
-  exit 0
-}
-# ==================================================================================================
-
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Pre-flight checks
+#   @description    :   Prepare iTerm2
 # --------------------------------------------------------------------------------------------------
 if [ "${TERM_PROGRAM}" == "iTerm.app" ]; then
   error "[🧾          iTerm2] iTerm2 is unable to be configured while running. Re-run \`chezmoi apply\` from another terminal, such as Terminal.app"
@@ -49,21 +36,20 @@ info "[🧾          iTerm2] Closing iTerm2, to prevent it from overriding chang
 osascript -e 'tell application "iTerm" to quit'
 # ==================================================================================================
 
-
 # --------------------------------------------------------------------------------------------------
 #   @description    :   iTerm2 | Preferences | General | Preferences
 # --------------------------------------------------------------------------------------------------
+### Load preferences from a custom folder or URL
+# default | unchecked
 debug "[🧾          iTerm2] Preferences | General | Preferences | Load preferences from a custom folder or URL"
-### Load preferences from a custom folder or URL
-# options:
-#   - unchecked, false
-#   - checked, true
-# default: unchecked
+#   option --> checked
 defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
+#   option --> unchecked
+# defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool false
 
-debug "[🧾          iTerm2] Preferences | General | Preferences | Custom folder or url"
 ### Load preferences from a custom folder or URL
-# default: null
+# default | null
+debug "[🧾          iTerm2] Preferences | General | Preferences | Custom folder or url"
 defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "{{ .chezmoi.sourceDir }}/dot_config/iterm2"
 # ==================================================================================================
 

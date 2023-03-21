@@ -1,0 +1,38 @@
+{{- if eq .osid "darwin" }}
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/cask-drivers"
+tap "homebrew/core"
+tap "homebrew/services"
+tap "mas-cli/tap"
+tap "artginzburg/tap"
+
+# Simple, modern, secure file encryption
+brew "age"
+# Manage your dotfiles across multiple diverse machines, securely
+brew "chezmoi"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# Load/unload environment variables based on $PWD
+brew "direnv"
+# Popular GNU data compression program
+brew "gzip"
+# Lightweight and flexible command-line JSON processor
+brew "jq"
+# Editor of encrypted files
+brew "sops"
+# Cross-shell prompt for astronauts
+brew "starship"
+# Display directories as trees (with optional color/HTML output)
+brew "tree"
+# Executes a program periodically, showing output fullscreen
+brew "watch"
+# Internet file retriever
+brew "wget"
+# Process YAML, JSON, XML, CSV and properties documents from the CLI
+brew "yq"
+# Mac App Store command-line interface
+brew "mas-cli/tap/mas"
+# Permanent TouchID support for sudo
+brew "artginzburg/tap/sudo-touchid"
+{{- end }}

@@ -15,12 +15,12 @@
   name = {{ .name | quote }}
   useConfigOnly = true
 
-{{ if .flags.is_personal -}}
-[includeIf "gitdir:~/Code/github.com/{{ .personal.git.user }}/"]
+{{ if .personal -}}
+[includeIf "gitdir:~/Code/github.com/{{ .personal_git_user }}/"]
   path = ~/.gitconfig_personal
 {{ end -}}
 
-{{ if .flags.is_work -}}
-[includeIf "gitdir:~/Code/bitbucket.org/{{ .work.git.user }}/"]
+{{ if .work -}}
+[includeIf "gitdir:~/Code/bitbucket.org/{{ .work_git_user }}/"]
   path = ~/.gitconfig_work
 {{ end -}}

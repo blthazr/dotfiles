@@ -7,13 +7,6 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   macOS only
-# --------------------------------------------------------------------------------------------------
-{{ template "script_darwin_only" . }}
-# ==================================================================================================
-
-
-# --------------------------------------------------------------------------------------------------
 #   @description    :   Source libraries
 # --------------------------------------------------------------------------------------------------
 {{ template "script_shell_libraries" . }}
@@ -21,27 +14,22 @@
 
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Apple Silicon CPU
+#   @description    :   Create user directories
 # --------------------------------------------------------------------------------------------------
-{{ if (eq .chezmoi.arch "arm64") }}
+info "[📂            User] Creating directory: ${HOME}/Code/"
+{{ if eq .osid "darwin" }}
+mkdir -p "${HOME}/Code"
 
-
-info "[🏵       Rosetta 2] Checking CPU type"
-cpu_brand_string="$(sysctl -n machdep.cpu.brand_string)"
-
-if [[ "${cpu_brand_string}" =~ "Apple" ]]; then
-  info "[🏵       Rosetta 2] Apple arm-based CPU detected"
-
-  if /usr/bin/pgrep oahd >/dev/null 2>&1; then
-    info "[🏵       Rosetta 2] Rosetta is already installed"
-  else
-    info "[🏵       Rosetta 2] Installing Rosetta"
-    softwareupdate --install-rosetta --agree-to-license
-  fi
-
-else
-  fatal "[🏵       Rosetta 2] ${cpu_brand_string} is an unsupported CPU type"
-fi
+{{   if .personal -}}
+info "[📂            User] Creating directory: ${HOME}/Code/github.com/"{{ .personal_git_user | quote }}
+mkdir -p "${HOME}/Code/github.com/"{{ .personal_git_user | quote }}
+{{   end }}
 
 {{ end }}
+
+info "[📂            User] Creating directory: ${HOME}/Projects/"
+mkdir -p "${HOME}/Projects"
+
+info "[📂            User] Creating directory: ${HOME}/tmp/"
+mkdir -p "${HOME}/tmp"
 # ==================================================================================================

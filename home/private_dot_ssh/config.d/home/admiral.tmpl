@@ -1,8 +1,8 @@
-{{- if .flags.is_personal -}}
+{{- if .personal -}}
 Host admiral
   Hostname 172.16.10.1
-  User kane
-  IdentityFile ~/.ssh/id_rsa_kane
+  User root
+  IdentityFile ~/.ssh/id_rsa_root
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
 {{ end -}}

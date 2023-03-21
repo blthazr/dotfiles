@@ -16,6 +16,11 @@ disabled = false
 
 [kubernetes]
 disabled = false
+format = '[$context](bold bright-green) '
 
 [status]
 disabled = false
+
+[username]
+disabled = false
+show_always = false

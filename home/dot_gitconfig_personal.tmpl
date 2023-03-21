@@ -1,4 +1,4 @@
-{{ if .flags.is_personal -}}
+{{ if .personal -}}
 [user]
-  email = {{ .personal.git.email | quote }}
+  email = {{ .personal_git_email | quote }}
 {{ end -}}

@@ -1,0 +1,35 @@
+{{- if eq .osid "darwin" }}
+tap "fluxcd/tap"
+tap "minio/stable"
+tap "weaveworks/tap"
+
+# Official Amazon AWS command-line interface
+brew "awscli"
+# Kubernetes package manager
+brew "helm"
+# Menu bar app for managing Kubernetes contexts
+cask "kubecontext"
+# Kubernetes command-line interface
+brew "kubernetes-cli"
+# Template-free customization of Kubernetes YAML manifests
+brew "kustomize"
+# Rsync for cloud storage
+brew "rclone"
+# Tool to build, change, and version infrastructure
+brew "terraform"
+# Linter for Terraform files
+brew "tflint"
+# Flux CLI
+brew "fluxcd/tap/flux"
+# MinIO Client for object storage and filesystems
+brew "minio/stable/mc"
+# GitOps support for Kubernetes
+brew "weaveworks/tap/gitops"
+
+# App to build and share containerized applications and microservices
+cask "docker"
+# Set of tools to manage resources and applications hosted on Google Cloud
+cask "google-cloud-sdk"
+# Kubernetes IDE
+cask "lens"
+{{- end }}

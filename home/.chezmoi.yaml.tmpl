@@ -1,95 +1,144 @@
+{{/* feature flags */}}
+{{- $personal := false -}}{{/* true if this machine should have personal config/secrets */}}
+{{- $work := false -}}{{/* true if this machine should have work config/secrets */}}
+{{- $kubernetes := false -}}{{/* true if this machine should have k8s config/utilities */}}
+{{- $workstation := false -}}{{/* true if this machine should have workstation apps/configs */}}
+{{- "" -}}
+
 {{- /* Checks if running interactively */ -}}
 {{- $interactive := stdinIsATTY -}}
 
 {{- $name := "Chris Burnham" -}}
 {{- if hasKey . "name" -}}
-{{-   $name = .name -}}
+{{-   $orig_name := .name -}}
+{{-   if $interactive -}}
+{{-     $name = promptString "Name" $orig_name -}}
+{{-   end -}}
 {{- else if $interactive -}}
 {{-   $name = promptString "Name" $name -}}
 {{- end -}}
 
-{{- $is_personal := false -}}{{/* true if this machine should have personal config & secrets (LastPass) */}}
-{{- if hasKey .flags "is_personal" -}}
-{{-   $is_personal = .flags.is_personal -}}
-{{- else -}}
-{{-   $is_personal = promptBool "Is this a personal machine" $is_personal -}}
+{{- $osID := .chezmoi.os -}}
+{{- if (and (eq .chezmoi.os "linux") (hasKey .chezmoi.osRelease "id")) -}}
+{{-   $osID = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
+{{- end -}}
+
+{{- if hasKey . "personal" -}}
+{{-   $orig_personal := .personal -}}
+{{-   if $interactive -}}
+{{-     $personal = promptBool "Enable personal configs/secrets [y|n]" $orig_personal -}}
+{{-   end -}}
+{{- else if $interactive -}}
+{{-   $personal = promptBool "Enable personal configs/secrets [y|n]" $personal -}}
 {{- end -}}
 
 {{- $personal_git_user := "" -}}
 {{- $personal_git_email := "" -}}
 {{- $personal_lastpass_email := "" -}}
-{{- if $is_personal -}}
-{{-   if hasKey .personal.git "user" -}}
-{{-     $personal_git_user = .personal.git.user -}}
-{{-   else -}}
-{{-     $personal_git_user = promptString "Personal git username" $personal_git_user -}}
+{{- if $personal -}}
+
+{{-   if hasKey . "personal_git_user" -}}
+{{-     $orig_personal_git_user := .personal_git_user -}}
+{{-     if $interactive -}}
+{{-       $personal_git_user = promptString "[Personal] git username" $orig_personal_git_user -}}
+{{-     end -}}
+{{-   else if $interactive -}}
+{{-     $personal_git_user = promptString "[Personal] git username" $personal_git_user -}}
 {{-   end -}}
 
-{{-   if hasKey .personal.git "email" -}}
-{{-     $personal_git_email = .personal.git.email -}}
-{{-   else -}}
-{{-     $personal_git_email = promptString "Personal git email" $personal_git_email -}}
+{{-   if hasKey . "personal_git_email" -}}
+{{-     $orig_personal_git_email := .personal_git_email -}}
+{{-     if $interactive -}}
+{{-       $personal_git_email = promptString "[Personal] git email" $orig_personal_git_email -}}
+{{-     end -}}
+{{-   else if $interactive -}}
+{{-     $personal_git_email = promptString "[Personal] git email" $personal_git_email -}}
 {{-   end -}}
 
-{{-   if hasKey .personal.lastpass "email" -}}
-{{-     $personal_lastpass_email = .personal.lastpass.email -}}
-{{-   else -}}
-{{-     $personal_lastpass_email = promptString "Personal Lastpass email/username" $personal_lastpass_email -}}
+{{-   if hasKey . "personal_lastpass_email" -}}
+{{-     $orig_personal_lastpass_email := .personal_lastpass_email -}}
+{{-     if $interactive -}}
+{{-       $personal_lastpass_email = promptString "[Personal] Lastpass email/username" $orig_personal_lastpass_email -}}
+{{-     end -}}
+{{-   else if $interactive -}}
+{{-     $personal_lastpass_email = promptString "[Personal] Lastpass email/username" $personal_lastpass_email -}}
 {{-   end -}}
 
 {{- end -}}
 
-{{- $is_work := false -}}{{/* true if this machine should have work config & secrets (1Password) */}}
-{{- if hasKey .flags "is_work" -}}
-{{-   $is_work = .flags.is_work -}}
-{{- else -}}
-{{-   $is_work = promptBool "Is this a work machine" $is_work -}}
+{{- if hasKey . "work" -}}
+{{-   $orig_work := .work -}}
+{{-   if $interactive -}}
+{{-     $work = promptBool "Enable work configs/secrets [y|n]" $orig_work -}}
+{{-   end -}}
+{{- else if $interactive -}}
+{{-   $work = promptBool "Enable work configs/secrets [y|n]" $work -}}
 {{- end -}}
 
 {{- $work_git_user := "" -}}
 {{- $work_git_email := "" -}}
-{{- if $is_work -}}
-{{-   if hasKey .work.git "user" -}}
-{{-     $work_git_user = .work.git.user -}}
-{{-   else -}}
-{{-     $work_git_user = promptString "Work git username" $work_git_user -}}
+{{- if $work -}}
+
+{{-   if hasKey . "work_git_user" -}}
+{{-     $orig_work_git_user := .work_git_user -}}
+{{-     if $interactive -}}
+{{-       $work_git_user = promptString "[Work] git username" $orig_work_git_user -}}
+{{-     end -}}
+{{-   else if $interactive -}}
+{{-     $work_git_user = promptString "[Work] git username" $work_git_user -}}
 {{-   end -}}
 
-{{-   if hasKey .work.git "email" -}}
-{{-     $work_git_email = .work.git.email -}}
-{{-   else -}}
-{{-     $work_git_email = promptString "Work git email" $work_git_email -}}
+{{-   if hasKey . "work_git_email" -}}
+{{-     $orig_work_git_email := .work_git_email -}}
+{{-     if $interactive -}}
+{{-       $work_git_email = promptString "[Work] git email" $orig_work_git_email -}}
+{{-     end -}}
+{{-   else if $interactive -}}
+{{-     $work_git_email = promptString "[Work] git email" $work_git_email -}}
 {{-   end -}}
+
 {{- end -}}
 
-{{- $hostname := get . "hostname" -}}
-{{- if not $hostname -}}
-{{-   $hostname = promptString "Hostname" $hostname -}}
+{{- if hasKey . "kubernetes" -}}
+{{-   $orig_kubernetes := .kubernetes -}}
+{{-   if $interactive -}}
+{{-     $kubernetes = promptBool "Enable k8s config/utilities [y|n]" $orig_kubernetes -}}
+{{-   end -}}
+{{- else if $interactive -}}
+{{-   $kubernetes = promptBool "Enable k8s config/utilities [y|n]" $kubernetes -}}
+{{- end -}}
+
+{{- if hasKey . "workstation" -}}
+{{-   $orig_workstation := .workstation -}}
+{{-   if $interactive -}}
+{{-     $workstation = promptBool "Enable workstation apps/configs [y|n]" $orig_workstation -}}
+{{-   end -}}
+{{- else if $interactive -}}
+{{-   $workstation = promptBool "Enable workstation apps/configs [y|n]" $workstation -}}
 {{- end -}}
 
 {{- if $interactive -}}
-{{-   writeToStdout "💡 Tip: you can re-enter your data with `chezmoi init --data=false`\n" -}}
+{{-   writeToStdout "💡 Tip: you can re-enter your data with `chezmoi init`\n" -}}
 {{- end -}}
+
+sourceDir: "{{ .chezmoi.sourceDir }}"
 
 data:
   name: {{ $name | quote }}
-  flags:
-    is_personal: {{ $is_personal }}
-    is_work: {{ $is_work }}
-  hostname: {{ $hostname | quote }}
+  osid: {{ $osID | quote }}
 
-{{- if $is_personal }}
-  personal:
-    git:
-      user: {{ $personal_git_user | quote }}
-      email: {{ $personal_git_email | quote }}
-    lastpass:
-      email: {{ $personal_lastpass_email | quote }}
+  personal: {{ $personal }}
+{{- if $personal }}
+  personal_git_user: {{ $personal_git_user | quote }}
+  personal_git_email: {{ $personal_git_email | quote }}
+  personal_lastpass_email: {{ $personal_lastpass_email | quote }}
 {{- end }}
 
-{{- if $is_work }}
-  work:
-    git:
-      user: {{ $work_git_user | quote }}
-      email: {{ $work_git_email | quote }}
+  work: {{ $work }}
+{{- if $work }}
+  work_git_user: {{ $work_git_user | quote }}
+  work_git_email: {{ $work_git_email | quote }}
 {{- end }}
+
+  kubernetes: {{ $kubernetes }}
+  workstation: {{ $workstation }}

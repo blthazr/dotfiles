@@ -1,0 +1,38 @@
+{{- if eq .osid "darwin" }}
+# LastPass command-line interface tool
+brew "lastpass-cli"
+
+{{-   if .workstation }}
+tap "go-task/tap"
+
+# Task runner / simpler Make alternative written in Go
+brew "go-task/tap/go-task"
+
+# Voice and text chat software
+cask "discord"
+# Control your Elgato Key Lights
+cask "elgato-control-center"
+# Assign keys, and then decorate and label them
+cask "elgato-stream-deck"
+# Calendar software
+cask "fantastical"
+# Web browser
+cask "google-chrome"
+# Terminal emulator as alternative to Apple's Terminal app
+cask "iterm2"
+# Password manager
+cask "lastpass"
+# Text editor for code, markup and prose
+cask "sublime-text"
+# Control windows and applications right from your trackpad
+cask "swish"
+# File transfer application
+cask "transmit"
+# Open-source code editor
+cask "visual-studio-code"
+
+# Your to-do list for Mac & iOS
+mas "Things", id: 904280696
+{{-   end }}
+
+{{- end }}

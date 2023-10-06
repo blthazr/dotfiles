@@ -1,6 +1,6 @@
 # dotfiles
 
-My dotfiles managed by chezmoi
+My personal dotfiles managed by chezmoi
 
 ## first time setup
 

@@ -18,21 +18,21 @@ Host *
   ServerAliveCountMax 10
   ServerAliveInterval 60
 
-{{- if .personal }}
+  {{- if .personal }}
   # accelerate connections by reusing existing connections to the same host
   ControlMaster auto
   ControlPath ~/.ssh/control-%h-%p-%r
   ControlPersist 5
-{{- end }}
+  {{- end }}
 
   {{- if eq .osid "darwin" }}
   # store passphrases in the macOS keychain
-{{-   if .personal }}
+    {{-   if .personal }}
   AddKeysToAgent yes
-{{-   end }}
+    {{-   end }}
   IgnoreUnknown UseKeychain
   UseKeychain yes
-{{- end }}
+  {{- end }}
 
 {{- if .personal }}
 Host 192.168.*.*

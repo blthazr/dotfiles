@@ -4,10 +4,5 @@
 # Microsoft Windows
 Thumbs.db
 
-# VS Code
-*.code-workspace
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+# sops
+.decrypted~*

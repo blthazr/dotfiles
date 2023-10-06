@@ -1,22 +1,23 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #   @author         :   Chris Burnham
-#   @date           :   2022-07-27
-#   @file           :   ~/.config/starship.toml
+#   @file           :   ~/.config/starship/config.toml
 #   @description    :   Starship cross-shell prompt configuration file
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+{{ if .workstation -}}
+
 [character]
-success_symbol = "\n[❯](bold green)"
-error_symbol = "\n[✖](bold red)"
+success_symbol = "[❯](bold green)"
+error_symbol = "[✖](bold red)"
 
 [hostname]
 ssh_only = true
 disabled = false
 
 [kubernetes]
-disabled = false
 format = '[$context](bold bright-green) '
+disabled = false
 
 [status]
 disabled = false
@@ -24,3 +25,5 @@ disabled = false
 [username]
 disabled = false
 show_always = false
+
+{{ end }}

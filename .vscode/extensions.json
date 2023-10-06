@@ -1,8 +1,10 @@
 {
-    "recommendations": [
-        "britesnow.vscode-toggle-quotes",
-        "mousavian.ssh-config-syntax-highlighter",
-        "oderwat.indent-rainbow",
-        "redhat.vscode-yaml"
-    ]
+  "recommendations": [
+    "mousavian.ssh-config-syntax-highlighter",
+    "redhat.vscode-yaml",
+    "samuelcolvin.jinjahtml",
+    "signageos.signageos-vscode-sops",
+    "tamasfe.even-better-toml",
+    "timonwong.shellcheck"
+  ]
 }

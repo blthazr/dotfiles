@@ -1,0 +1,8 @@
+# file shards
+*-shard
+*-shard*
+**/*-shard*
+
+{{ if ne .osid "darwin" }}
+Library
+{{ end }}

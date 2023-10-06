@@ -1,0 +1,62 @@
+{
+  /*+--- Core ---+*/
+  "editor.bracketPairColorization.enabled": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.stickyScroll.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "editor.guides.bracketPairsHorizontal": true,
+  "editor.guides.highlightActiveBracketPair": true,
+  "editor.tabSize": 2,
+  "explorer.compactFolders": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "files.associations": {
+    "*.json5": "jsonc"
+  },
+  "files.autoSave": "onFocusChange",
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "security.workspace.trust.untrustedFiles": "open",
+  "terminal.integrated.detectLocale": "off",
+  "update.showReleaseNotes": false,
+  "window.newWindowDimensions": "maximized",
+  "window.restoreWindows": "none",
+  "workbench.sideBar.location": "left",
+  "workbench.tree.renderIndentGuides": "none",
+
+  /*+--- Color Theme ---+*/
+
+  /*+--- Language Scopes ---+*/
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[python]": {
+    "editor.formatOnType": true,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4
+  },
+  "[terraform]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+
+  /*+--- Extensions ---+*/
+  "redhat.telemetry.enabled": false,
+  "sops.beta": false,
+  "yaml.format.enable": true
+}

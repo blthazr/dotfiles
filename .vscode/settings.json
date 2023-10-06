@@ -1,10 +1,12 @@
 {
+  /*+--- Core ---+*/
   "files.associations": {
     "*.json.tmpl": "jinja-json",
     "*.sh.tmpl": "jinja-shell",
     "*.toml.tmpl": "jinja-toml",
     "*.yaml.tmpl": "jinja-yaml",
     "*.yml.tmpl": "jinja-yaml",
+    "*.zsh.tmpl": "jinja-shell",
     "*.tmpl": "jinja"
   }
 }

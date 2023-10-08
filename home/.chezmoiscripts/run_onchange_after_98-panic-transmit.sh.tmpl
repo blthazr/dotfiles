@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @file           :
+#   @description    :
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Get script libraries
+# --------------------------------------------------------------------------------------------------
+{{ template "script-library" }}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight
+# --------------------------------------------------------------------------------------------------
+info "[🚛        Transmit] Setting log level to debug."
+LOG_LEVEL=7
+
+{{ if eq .osid "darwin" }}
+
+  {{ if .workstation }}
+debug "[🚛        Transmit] Verifying installation."
+
+if ! check_macos_app "Transmit.app"; then
+  info "[🚛        Transmit] Application is not installed."
+  exit 0
+
+else
+  debug "[🚛        Transmit] Application is installed."
+  info "[🚛        Transmit] Closing Transmit, to prevent it from overriding changes."
+  osascript -e 'tell application "Transmit" to quit'
+
+fi
+
+  {{ else }}
+debug "[🚛        Transmit] Skipping. Does not apply to this Chezmoi profile."
+exit 0
+
+  {{ end }}
+
+{{ else }}
+debug "[🚛        Transmit] Skipping. Does not apply to this operating system."
+exit 0
+
+{{ end }}
+# ==================================================================================================
+
+info "[🚛        Transmit] Configuration complete."

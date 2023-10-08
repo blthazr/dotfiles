@@ -1,35 +1,46 @@
-#!{{ lookPath "bash" }}
+#!/usr/bin/env bash
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #   @author         :   Chris Burnham
-#   @file           :   
-#   @description    :   
+#   @file           :
+#   @description    :
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Source libraries
+#   @description    :   Get script libraries
 # --------------------------------------------------------------------------------------------------
-{{ template "script_shell_libraries" . }}
+{{ template "script-library" }}
 # ==================================================================================================
 
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight
+# --------------------------------------------------------------------------------------------------
+info "[📂            User] Setting log level to debug."
+LOG_LEVEL=7
+# ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Create user directories
 # --------------------------------------------------------------------------------------------------
-info "[📂            User] Creating directory: ${HOME}/Code/"
 {{ if eq .osid "darwin" }}
+info "[📂            User] Creating directory: ${HOME}/Code/"
 mkdir -p "${HOME}/Code"
 
-{{   if .personal -}}
+  {{ if .personal -}}
 info "[📂            User] Creating directory: ${HOME}/Code/github.com/"{{ .personal_git_user | quote }}
 mkdir -p "${HOME}/Code/github.com/"{{ .personal_git_user | quote }}
-{{   end }}
 
-{{ end }}
+  {{ end }}
 
 info "[📂            User] Creating directory: ${HOME}/Projects/"
 mkdir -p "${HOME}/Projects"
 
 info "[📂            User] Creating directory: ${HOME}/tmp/"
 mkdir -p "${HOME}/tmp"
+
+{{ else }}
+debug "[📂            User] Skipping. Does not apply to this operating system."
+exit 0
+
+{{ end }}
 # ==================================================================================================

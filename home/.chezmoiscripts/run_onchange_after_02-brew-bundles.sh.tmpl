@@ -1,24 +1,44 @@
-#!{{ lookPath "bash" }}
+#!/usr/bin/env bash
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #   @author         :   Chris Burnham
-#   @file           :   
-#   @description    :   
+#   @file           :
+#   @description    :
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Source libraries
+#   @description    :   Get script libraries
 # --------------------------------------------------------------------------------------------------
-{{ template "script_shell_libraries" . }}
+{{ template "script-library" }}
 # ==================================================================================================
 
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight
+# --------------------------------------------------------------------------------------------------
+info "[🍺        Homebrew] Setting log level to debug"
+LOG_LEVEL=7
+
+{{ if eq .osid "darwin" }}
+if ! check_binary brew; then
+  info "[🍺        Homebrew] Application is not installed"
+  exit 0
+else
+  debug "[🍺        Homebrew] Application is installed"
+fi
+
+{{ else }}
+debug "[🍺        Homebrew] Skipping. Does not apply to this operating system"
+exit 0
+
+{{ end }}
+# ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Homebrew Bundles
+#   @description    :   Install Homebrew Bundles
 # --------------------------------------------------------------------------------------------------
 info "[🍺        Homebrew] Installing core Homebrew bundles"
 brew bundle install --no-upgrade --no-lock --file=/dev/stdin <<EOF
-{{ template "Brewfile-core.tmpl" . }}
+{{ template "Brewfile.tmpl" . }}
 EOF
 
 {{ if .personal }}
@@ -28,10 +48,10 @@ brew bundle install --no-upgrade --no-lock --file=/dev/stdin <<EOF
 EOF
 {{ end }}
 
-{{ if .kubernetes }}
-info "[🍺        Homebrew] Installing kubernetes Homebrew bundles"
+{{ if .work }}
+info "[🍺        Homebrew] Installing work Homebrew bundles"
 brew bundle install --no-upgrade --no-lock --file=/dev/stdin <<EOF
-{{ template "Brewfile-kubernetes.tmpl" . }}
+{{ template "Brewfile-work.tmpl" . }}
 EOF
 {{ end }}
 # ==================================================================================================

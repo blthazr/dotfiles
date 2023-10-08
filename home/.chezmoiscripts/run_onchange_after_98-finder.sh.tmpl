@@ -1,41 +1,48 @@
-#!{{ lookPath "bash" }}
+#!/usr/bin/env bash
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #   @author         :   Chris Burnham
-#   @file           :   
-#   @description    :   
+#   @file           :
+#   @description    :
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Pre-flight checks
+#   @description    :   Get script libraries
 # --------------------------------------------------------------------------------------------------
-{{ template "script_check_darwin" . }}
-{{ template "script_check_workstation" . }}
+{{ template "script-library" }}
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Source libraries
+#   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-{{ template "script_shell_libraries" . }}
-# ==================================================================================================
-
-
-# --------------------------------------------------------------------------------------------------
-#   @description    :   Prepare Finder
-# --------------------------------------------------------------------------------------------------
-info "[🔍          Finder] Setting log level to debug"
+info "[🔍          Finder] Setting log level to debug."
 LOG_LEVEL=7
 
-info "[🔍          Finder] Closing Finder, to prevent it from overriding changes"
+{{ if eq .osid "darwin" }}
+
+  {{ if .workstation }}
+info "[🔍          Finder] Closing Finder, to prevent it from overriding changes."
 osascript -e 'tell application "Finder" to quit'
+
+  {{ else }}
+debug "[🔍          Finder] Skipping. Does not apply to this Chezmoi profile."
+exit 0
+
+  {{ end }}
+
+{{ else }}
+debug "[🔍          Finder] Skipping. Does not apply to this operating system."
+exit 0
+
+{{ end }}
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Finder | Preferences | General
+#   @description    :   Finder | Settings | General
 # --------------------------------------------------------------------------------------------------
 ### Show these items on the desktop: Hard disks
 # default | unchecked
-debug "[🔍          Finder] Preferences | General | Show these items on the desktop: Hard disks"
+debug "[🔍          Finder] Settings | General | Show these items on the desktop: Hard disks"
 #   option --> unchecked
 defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
 #   option --> checked
@@ -43,7 +50,7 @@ defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
 
 ### Show these items on the desktop: External disks
 # default | checked
-debug "[🔍          Finder] Preferences | General | Show these items on the desktop: External disks"
+debug "[🔍          Finder] Settings | General | Show these items on the desktop: External disks"
 #   option --> unchecked
 defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
 #   option --> checked
@@ -51,7 +58,7 @@ defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
 
 ### Show these items on the desktop: CDs, DVDs, and iPods
 # default | checked
-debug "[🔍          Finder] Preferences | General | Show these items on the desktop: CDs, DVDs, and iPods"
+debug "[🔍          Finder] Settings | General | Show these items on the desktop: CDs, DVDs, and iPods"
 #   option --> unchecked
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
 #   option --> checked
@@ -59,7 +66,7 @@ defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
 
 ### Show these items on the desktop: Connected servers
 # default | unchecked
-debug "[🔍          Finder] Preferences | General | Show these items on the desktop: Connected servers"
+debug "[🔍          Finder] Settings | General | Show these items on the desktop: Connected servers"
 #   option --> unchecked
 defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
 #   option --> checked
@@ -67,7 +74,7 @@ defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
 
 ### New Finder windows show:
 # default | Recents
-debug "[🔍          Finder] Preferences | General | New Finder windows show:"
+debug "[🔍          Finder] Settings | General | New Finder windows show:"
 #   option --> ${HOME}
 defaults write com.apple.finder NewWindowTarget -string "PfHm"
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
@@ -89,120 +96,19 @@ defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
 
 ### Open folders in tabs instead of new windows
 # default | checked
-debug "[🔍          Finder] Preferences | General | Open folders in tabs instead of new windows"
+debug "[🔍          Finder] Settings | General | Open folders in tabs instead of new windows"
 #   option --> unchecked
 # defaults write com.apple.finder FinderSpawnTab -bool false
 #   option --> checked
 defaults write com.apple.finder FinderSpawnTab -bool true
 # ==================================================================================================
 
-
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Finder | Preferences | Tags
-# --------------------------------------------------------------------------------------------------
-### Show these tags in the sidebar: Red
-# default | partial
-
-### Show these tags in the sidebar: Orange
-# default | partial
-
-### Show these tags in the sidebar: Yellow
-# default | partial
-
-### Show these tags in the sidebar: Green
-# default | partial
-
-### Show these tags in the sidebar: Blue
-# default | partial
-
-### Show these tags in the sidebar: Purple
-# default | partial
-
-### Show these tags in the sidebar: Gray
-# default | partial
-
-### Show these tags in the sidebar: Work
-# default | partial
-
-### Show these tags in the sidebar: Home
-# default | partial
-
-### Show these tags in the sidebar: Important
-# default | partial
-# ==================================================================================================
-
-
-# --------------------------------------------------------------------------------------------------
-#   @description    :   Finder | Preferences | Sidebar
-# --------------------------------------------------------------------------------------------------
-### Show these items in the sidebar: Favorites: Recents
-# default | checked
-
-### Show these items in the sidebar: Favorites: AirDrop
-# default | checked
-
-### Show these items in the sidebar: Favorites: Applications
-# default | checked
-
-### Show these items in the sidebar: Favorites: Desktop
-# default | checked
-
-### Show these items in the sidebar: Favorites: Documents
-# default | checked
-
-### Show these items in the sidebar: Favorites: Downloads
-# default | checked
-
-### Show these items in the sidebar: Favorites: Movies
-# default | unchecked
-
-### Show these items in the sidebar: Favorites: Music
-# default | unchecked
-
-### Show these items in the sidebar: Favorites: Pictures
-# default | unchecked
-
-### Show these items in the sidebar: Favorites: ${HOME}
-# default | unchecked
-
-### Show these items in the sidebar: iCloud: iCloud Drive
-# default | checked
-
-### Show these items in the sidebar: iCloud: Shared
-# default | checked
-
-### Show these items in the sidebar: Locations: $(hostname)
-# default | checked
-
-### Show these items in the sidebar: Locations: Hard disks
-# default | partial
-
-### Show these items in the sidebar: Locations: External disks
-# default | checked
-
-### Show these items in the sidebar: Locations: CD's, DVD's, and iOS Devices
-# default | checked
-
-### Show these items in the sidebar: Locations: Cloud Storage
-# default | checked
-
-### Show these items in the sidebar: Locations: Bonjour computers
-# default | checked
-
-### Show these items in the sidebar: Locations: Connected servers
-# default | checked
-
-### Show these items in the sidebar: Tags: Recent Tags
-# default | checked
-# ==================================================================================================
-
-
-# --------------------------------------------------------------------------------------------------
-#   @description    :   Finder | Preferences | Advanced
+#   @description    :   Finder | Settings | Advanced
 # --------------------------------------------------------------------------------------------------
 ### Show all filename extensions
 # default | unchecked
-debug "[🔍          Finder] Preferences | Advanced | Show all filename extensions"
+debug "[🔍          Finder] Settings | Advanced | Show all filename extensions"
 #   option --> unchecked
 # defaults write NSGlobalDomain AppleShowAllExtensions -bool false
 #   option --> checked
@@ -210,7 +116,7 @@ defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
 ### Show warning before changing an extension
 # default | checked
-debug "[🔍          Finder] Preferences | Advanced | Show warning before changing an extension"
+debug "[🔍          Finder] Settings | Advanced | Show warning before changing an extension"
 #   option --> unchecked
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 #   option --> checked
@@ -218,7 +124,7 @@ defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
 ### Show warning before removing from iCloud Drive
 # default | checked
-debug "[🔍          Finder] Preferences | Advanced | Show warning before removing from iCloud Drive"
+debug "[🔍          Finder] Settings | Advanced | Show warning before removing from iCloud Drive"
 #   option --> unchecked
 # defaults write com.apple.finder FXEnableRemoveFromICloudDriveWarning -bool false
 #   option --> checked
@@ -226,7 +132,7 @@ defaults write com.apple.finder FXEnableRemoveFromICloudDriveWarning -bool true
 
 ### Show warning before emptying the Trash
 # default | checked
-debug "[🔍          Finder] Preferences | Advanced | Show warning before emptying the Trash"
+debug "[🔍          Finder] Settings | Advanced | Show warning before emptying the Trash"
 #   option --> unchecked
 # defaults write com.apple.finder WarnOnEmptyTrash -bool false
 #   option --> checked
@@ -234,7 +140,7 @@ defaults write com.apple.finder WarnOnEmptyTrash -bool true
 
 ### Remove items from the Trash after 30 days
 # default | unchecked
-debug "[🔍          Finder] Preferences | Advanced | Remove items from the Trash after 30 days"
+debug "[🔍          Finder] Settings | Advanced | Remove items from the Trash after 30 days"
 #   option --> unchecked
 defaults write com.apple.finder FXRemoveOldTrashItems -bool false
 #   option --> checked
@@ -242,7 +148,7 @@ defaults write com.apple.finder FXRemoveOldTrashItems -bool false
 
 ### Keep folders on top: In windows when sorting by name
 # default | unchecked
-debug "[🔍          Finder] Preferences | Advanced | Keep folders on top: In windows when sorting by name"
+debug "[🔍          Finder] Settings | Advanced | Keep folders on top: In windows when sorting by name"
 #   option --> unchecked
 # defaults write com.apple.finder _FXSortFoldersFirst -bool false
 #   option --> checked
@@ -250,7 +156,7 @@ defaults write com.apple.finder _FXSortFoldersFirst -bool true
 
 ### Keep folders on top: On Desktop
 # default | unchecked
-debug "[🔍          Finder] Preferences | Advanced | Keep folders on top: On Desktop"
+debug "[🔍          Finder] Settings | Advanced | Keep folders on top: On Desktop"
 #   option --> unchecked
 # defaults write com.apple.finder _FXSortFoldersFirstOnDesktop -bool false
 #   option --> checked
@@ -258,7 +164,7 @@ defaults write com.apple.finder _FXSortFoldersFirstOnDesktop -bool true
 
 ### When performing a search
 # default | Search This Mac
-debug "[🔍          Finder] Preferences | Advanced | When performing a search"
+debug "[🔍          Finder] Settings | Advanced | When performing a search"
 #   option --> Search This Mac
 # defaults write com.apple.finder FXDefaultSearchScope -string "SCev"
 #   option --> Search The Current Folder
@@ -266,7 +172,6 @@ defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
 #   option --> Use the Previous Search Scope
 # defaults write com.apple.finder FXDefaultSearchScope -string "SCsp"
 # ==================================================================================================
-
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Finder | Menu | View
@@ -299,9 +204,6 @@ debug "[🔍          Finder] Menu | View | Hide Preview"
 #   option --> Hide Preview
 defaults write com.apple.finder ShowPreviewPane -bool false
 
-### Show/Hide Toolbar
-# default | Show Toolbar
-
 ### Show/Hide Tab Bar
 # default | Hide Tab Bar
 debug "[🔍          Finder] Menu | View | Show Tab Bar"
@@ -321,112 +223,23 @@ defaults write com.apple.finder ShowPathbar -bool true
 ### Show/Hide Status Bar
 # default | Hide Status Bar
 debug "[🔍          Finder] Menu | View | Show Status Bar"
-# options:
 #   option --> Show Status Bar
 defaults write com.apple.finder ShowStatusBar -bool true
 #   option --> Hide Status Bar
 # defaults write com.apple.finder ShowStatusBar -bool false
-
-# debug "[🔍          Finder] Menu | View | View Options: Always open in list view"
-### View Options: Always open in list view
-# default | unchecked
-
-# debug "[🔍          Finder] Menu | View | View Options: Browse in list view"
-### View Options: Browse in list view
-# default | unchecked
-
-# debug "[🔍          Finder] Menu | View | View Options: Group By:"
-### View Options: Group By:
-# default | None
-
-# debug "[🔍          Finder] Menu | View | View Options: Sort By:"
-### View Options: Sort By:
-# default | Name
-
-# debug "[🔍          Finder] Menu | View | View Options: Icon size:"
-### View Options: Icon size:
-# default | small
-
-# debug "[🔍          Finder] Menu | View | View Options: Text size"
-### View Options: Text size
-# default | 13
-
-# debug "[🔍          Finder] Menu | View | View Options: Show Columns: iCloud Status"
-### View Options: Show Columns: iCloud Status
-# default | n/a
-
-# debug "[🔍          Finder] Menu | View | View Options: Show Columns: Last Modified By"
-### View Options: Show Columns: Last Modified By
-# default | n/a
-
-# debug "[🔍          Finder] Menu | View | View Options: Show Columns: Shared By"
-### View Options: Show Columns: Shared By
-# default | n/a
-
-# debug "[🔍          Finder] Menu | View | View Options: Show Columns: Date Modified"
-### View Options: Show Columns: Date Modified
-# default | checked
-
-# debug "[🔍          Finder] Menu | View | View Options: Show Columns: Date Created"
-### View Options: Show Columns: Date Created
-# default | unchecked
-
-# debug "[🔍          Finder] Menu | View | View Options: Show Columns: Date Last Opened"
-### View Options: Show Columns: Date Last Opened
-# default | unchecked
-
-# debug "[🔍          Finder] Menu | View | View Options: Show Columns: Date Added"
-### View Options: Show Columns: Date Added
-# default | unchecked
-
-# debug "[🔍          Finder] Menu | View | View Options: Show Columns: Size"
-### View Options: Show Columns: Size
-# default | checked
-
-# debug "[🔍          Finder] Menu | View | View Options: Show Columns: Kind"
-### View Options: Show Columns: Kind
-# default | checked
-
-# debug "[🔍          Finder] Menu | View | View Options: Show Columns: Version"
-### View Options: Show Columns: Version
-# default | unchecked
-
-# debug "[🔍          Finder] Menu | View | View Options: Show Columns: Comments"
-### View Options: Show Columns: Comments
-# default | unchecked
-
-# debug "[🔍          Finder] Menu | View | View Options: Show Columns: Tags"
-### View Options: Show Columns: Tags
-# default | unchecked
-
-# debug "[🔍          Finder] Menu | View | View Options: Use relative dates"
-### View Options: Use relative dates
-# default | checked
-
-# debug "[🔍          Finder] Menu | View | View Options: Calculate all sizes"
-### View Options: Calculate all sizes
-# default | unchecked
-
-# debug "[🔍          Finder] Menu | View | View Options: Show icon preview"
-### View Options: Show icon preview
-# default | checked
-
-# debug "[🔍          Finder] Menu | View | View Options: Show Library Folder"
-### View Options: Show Library Folder
-# default | unchecked
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Finder | Additional Finder Settings
 # --------------------------------------------------------------------------------------------------
 ### Show hidden files by default
-debug "[🔍          Finder] Preferences | Additional Finder Settings | Show hidden files by default"
+debug "[🔍          Finder] Settings | Additional Finder Settings | Show hidden files by default"
 defaults write com.apple.finder AppleShowAllFiles -bool true
 
 # Expand save panel by default
-debug "[🔍          Finder] Preferences | Additional Finder Settings | Expand save panel by default"
+debug "[🔍          Finder] Settings | Additional Finder Settings | Expand save panel by default"
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
 # ==================================================================================================
 
-info "[🔍          Finder] Configuration complete"
+info "[🔍          Finder] Configuration complete."

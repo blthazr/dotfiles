@@ -1,3 +1,0 @@
-{{ if ne .osid "darwin" }}
-exit 0
-{{ end }}

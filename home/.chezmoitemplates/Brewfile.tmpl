@@ -5,24 +5,21 @@ tap "homebrew/cask-drivers"
 tap "homebrew/core"
 tap "homebrew/services"
 tap "mas-cli/tap"
-tap "artginzburg/tap"
 
-# Simple, modern, secure file encryption
-brew "age"
 # Manage your dotfiles across multiple diverse machines, securely
 brew "chezmoi"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
+# Get a file from an HTTP, HTTPS or FTP server
+brew "curl"
 # Load/unload environment variables based on $PWD
 brew "direnv"
 # Popular GNU data compression program
 brew "gzip"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
-# Editor of encrypted files
-brew "sops"
-# Cross-shell prompt for astronauts
-brew "starship"
+# Autoformat shell script source code
+brew "shfmt"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
 # Executes a program periodically, showing output fullscreen
@@ -33,6 +30,14 @@ brew "wget"
 brew "yq"
 # Mac App Store command-line interface
 brew "mas-cli/tap/mas"
+
+  {{- if .workstation }}
+tap "artginzburg/tap"
+
+# Cross-shell prompt for astronauts
+brew "starship"
 # Permanent TouchID support for sudo
 brew "artginzburg/tap/sudo-touchid"
+  {{- end }}
+
 {{- end }}

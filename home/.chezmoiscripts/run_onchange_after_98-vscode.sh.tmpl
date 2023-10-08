@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @file           :
+#   @description    :
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Get script libraries
+# --------------------------------------------------------------------------------------------------
+{{ template "script-library" }}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight
+# --------------------------------------------------------------------------------------------------
+info "[🆚         VS Code] Setting log level to debug."
+LOG_LEVEL=7
+
+{{ if eq .osid "darwin" }}
+debug "[🆚         VS Code] Verifying installation."
+
+if ! check_macos_app "Code.app"; then
+  info "[🆚         VS Code] Application is not installed."
+  exit 0
+
+else
+  debug "[🆚         VS Code] Application is installed."
+
+  if [ "${TERM_PROGRAM}" == "vscode" ]; then
+    error "[🆚         VS Code] VS Code is unable to be configured while running. Re-run \`chezmoi apply\` from another terminal, such as Terminal.app."
+    exit 1
+  fi
+
+  info "[🆚         VS Code] Closing VS Code, to prevent it from overriding changes."
+  osascript -e 'tell application "Code" to quit'
+
+fi
+
+{{ else }}
+debug "[🆚         VS Code] Skipping. Does not apply to this operating system."
+exit 0
+
+{{ end }}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   VS Code | Extensions
+# --------------------------------------------------------------------------------------------------
+extensions_list=(
+  "albert.tabout"
+  "esbenp.prettier-vscode"
+  "gruntfuggly.todo-tree"
+  "hashicorp.terraform"
+  "mikestead.dotenv"
+  "oderwat.indent-rainbow"
+  "redhat.vscode-yaml"
+  "samuelcolvin.jinjahtml"
+  "signageos.signageos-vscode-sops"
+  "tamasfe.even-better-toml"
+  "tomoki1207.selectline-statusbar"
+)
+
+function get_vscode_extension_state() {
+  local extension="$1"
+  code --list-extensions 2>/dev/null | grep "${extension}" >/dev/null
+}
+
+for extension in "${extensions_list[@]}"; do
+
+  if ! get_vscode_extension_state "${extension}"; then
+    debug "[🆚         VS Code] Installing extension: ${extension}."
+    code --install-extension "${extension}" &> /dev/null
+
+  else
+    debug "[🆚         VS Code] Extension already installed: ${extension}."
+
+  fi
+
+done
+# ==================================================================================================
+
+info "[🆚         VS Code] Configuration complete."

@@ -1,3 +1,0 @@
-{{ if not .workstation }}
-exit 0
-{{ end }}

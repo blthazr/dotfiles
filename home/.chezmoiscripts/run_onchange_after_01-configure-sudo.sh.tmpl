@@ -1,44 +1,48 @@
-#!{{ lookPath "bash" }}
+#!/usr/bin/env bash
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #   @author         :   Chris Burnham
-#   @file           :   
-#   @description    :   
+#   @file           :
+#   @description    :
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Pre-flight checks
+#   @description    :   Get script libraries
 # --------------------------------------------------------------------------------------------------
-{{ template "script_check_darwin" . }}
-{{ template "script_check_workstation" . }}
+{{ template "script-library" }}
 # ==================================================================================================
 
-
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Source libraries
+#   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-{{ template "script_shell_libraries" . }}
+info "[👇        Touch ID] Setting log level to debug."
+LOG_LEVEL=7
 # ==================================================================================================
-
-
-# --------------------------------------------------------------------------------------------------
-#   @description    :   Sudo
-# --------------------------------------------------------------------------------------------------
-{{ template "script_sudo" . }}
-# ==================================================================================================
-
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   sudo-touchid
 # --------------------------------------------------------------------------------------------------
-{{ if .workstation }}
+{{ if eq .osid "darwin" }}
+
+  {{ if .personal -}}
+# info "[👇        Touch ID] Administrator password needed to install sudo-touchid"
+{{ template "script-sudo" }}
+
 info "[👇        Touch ID] Install sudo-touchid"
 brew install "artginzburg/tap/sudo-touchid"
 
 info "[👇        Touch ID] Enable sudo-touchid"
 sudo-touchid
 
-# info "[👇        Touch ID] Auto-run sudo-touchid on system launch"
-# sudo brew services start sudo-touchid
+  {{ else }}
+debug "[👇        Touch ID] Skipping. Does not apply to this Chezmoi profile."
+exit 0
+
+  {{ end }}
+
+{{ else }}
+debug "[👇        Touch ID] Skipping. Does not apply to this operating system."
+exit 0
+
 {{ end }}
 # ==================================================================================================

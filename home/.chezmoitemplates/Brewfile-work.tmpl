@@ -1,0 +1,26 @@
+{{- if eq .osid "darwin" }}
+
+  {{- if .workstation }}
+# Calendar software
+cask "fantastical"
+# Meet, chat, call, and collaborate in just one place
+cask "microsoft-teams"
+# Team communication and collaboration software
+cask "slack"
+# Microsoft Excel
+mas "Microsoft Excel", id: 462058435
+# Microsoft OneNote
+mas "Microsoft OneNote", id: 784801555
+# Microsoft Outlook
+mas "Microsoft Outlook", id: 985367838
+# Microsoft PowerPoint
+mas "Microsoft PowerPoint", id: 462062816
+# Microsoft Remote Desktop
+mas "Microsoft Remote Desktop", id: 1295203466
+# Microsoft Word
+mas "Microsoft Word", id: 462054704
+# Your to-do list for Mac & iOS
+mas "Things", id: 904280696
+  {{- end }}
+
+{{- end }}

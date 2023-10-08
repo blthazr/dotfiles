@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#   @author         :   Chris Burnham
-#   @description    :
-#   @references     :   https://alinex.gitlab.io/bash-lib/libs/log/
-#                       https://github.com/martinburger/bash-common-helpers/blob/master/bash-common-helpers.sh
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 # ╔══════════╦═══════╦═══════════════════════════════════════════════════════════════════════╗
 # ║    id    ║ level ║ usage                                                                 ║
 # ╠══════════╬═══════╬═══════════════════════════════════════════════════════════════════════╣
@@ -43,11 +36,11 @@ NO_COLOR="${NO_COLOR:-}"    # true = disable color. otherwise autodetected
 
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   
-#   @globals        :   
-#   @arguments      :   
-#   @outputs        :   
-#   @returns        :   
+#   @description    :
+#   @globals        :
+#   @arguments      :
+#   @outputs        :
+#   @returns        :
 # --------------------------------------------------------------------------------------------------
 function console_log() {
   local log_level="${1}"
@@ -97,10 +90,10 @@ function console_log() {
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   LOG_LEVEL = 5
-#   @globals        :   
-#   @arguments      :   
-#   @outputs        :   
-#   @returns        :   
+#   @globals        :
+#   @arguments      :
+#   @outputs        :
+#   @returns        :
 # --------------------------------------------------------------------------------------------------
 function log ()  { [[ "${LOG_LEVEL:-0}" -ge 4 ]] && console_log log "${@}"; true; }
 # ==================================================================================================
@@ -108,10 +101,10 @@ function log ()  { [[ "${LOG_LEVEL:-0}" -ge 4 ]] && console_log log "${@}"; true
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   LOG_LEVEL = 8
-#   @globals        :   
-#   @arguments      :   
-#   @outputs        :   
-#   @returns        :   
+#   @globals        :
+#   @arguments      :
+#   @outputs        :
+#   @returns        :
 # --------------------------------------------------------------------------------------------------
 function trace() { [[ "${LOG_LEVEL:-0}" -eq 8 ]] && console_log trace "${@}"; true; }
 # ==================================================================================================
@@ -119,10 +112,10 @@ function trace() { [[ "${LOG_LEVEL:-0}" -eq 8 ]] && console_log trace "${@}"; tr
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   LOG_LEVEL = 7
-#   @globals        :   
-#   @arguments      :   
-#   @outputs        :   
-#   @returns        :   
+#   @globals        :
+#   @arguments      :
+#   @outputs        :
+#   @returns        :
 # --------------------------------------------------------------------------------------------------
 function debug() { [[ "${LOG_LEVEL:-0}" -ge 7 ]] && console_log debug "${@}"; true; }
 # ==================================================================================================
@@ -130,10 +123,10 @@ function debug() { [[ "${LOG_LEVEL:-0}" -ge 7 ]] && console_log debug "${@}"; tr
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   LOG_LEVEL = 6
-#   @globals        :   
-#   @arguments      :   
-#   @outputs        :   
-#   @returns        :   
+#   @globals        :
+#   @arguments      :
+#   @outputs        :
+#   @returns        :
 # --------------------------------------------------------------------------------------------------
 function info() { [[ "${LOG_LEVEL:-0}" -ge 6 ]] && console_log info "${@}"; true; }
 # ==================================================================================================
@@ -141,10 +134,10 @@ function info() { [[ "${LOG_LEVEL:-0}" -ge 6 ]] && console_log info "${@}"; true
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   LOG_LEVEL = 5
-#   @globals        :   
-#   @arguments      :   
-#   @outputs        :   
-#   @returns        :   
+#   @globals        :
+#   @arguments      :
+#   @outputs        :
+#   @returns        :
 # --------------------------------------------------------------------------------------------------
 function notice() { [[ "${LOG_LEVEL:-0}" -ge 5 ]] && console_log notice "${@}"; true; }
 # ==================================================================================================
@@ -152,10 +145,10 @@ function notice() { [[ "${LOG_LEVEL:-0}" -ge 5 ]] && console_log notice "${@}"; 
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   LOG_LEVEL = 4
-#   @globals        :   
-#   @arguments      :   
-#   @outputs        :   
-#   @returns        :   
+#   @globals        :
+#   @arguments      :
+#   @outputs        :
+#   @returns        :
 # --------------------------------------------------------------------------------------------------
 function warning() { [[ "${LOG_LEVEL:-0}" -ge 4 ]] && console_log warning "${@}"; true; }
 # ==================================================================================================
@@ -163,10 +156,10 @@ function warning() { [[ "${LOG_LEVEL:-0}" -ge 4 ]] && console_log warning "${@}"
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   LOG_LEVEL = 3
-#   @globals        :   
-#   @arguments      :   
-#   @outputs        :   
-#   @returns        :   
+#   @globals        :
+#   @arguments      :
+#   @outputs        :
+#   @returns        :
 # --------------------------------------------------------------------------------------------------
 function error() { [[ "${LOG_LEVEL:-0}" -ge 3 ]] && console_log error "${@}"; true; }
 # ==================================================================================================
@@ -174,10 +167,10 @@ function error() { [[ "${LOG_LEVEL:-0}" -ge 3 ]] && console_log error "${@}"; tr
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   LOG_LEVEL = 2
-#   @globals        :   
-#   @arguments      :   
-#   @outputs        :   
-#   @returns        :   
+#   @globals        :
+#   @arguments      :
+#   @outputs        :
+#   @returns        :
 # --------------------------------------------------------------------------------------------------
 function critical() { [[ "${LOG_LEVEL:-0}" -ge 2 ]] && console_log critical "${@}"; true; }
 # ==================================================================================================
@@ -185,10 +178,10 @@ function critical() { [[ "${LOG_LEVEL:-0}" -ge 2 ]] && console_log critical "${@
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   LOG_LEVEL = 1
-#   @globals        :   
-#   @arguments      :   
-#   @outputs        :   
-#   @returns        :   
+#   @globals        :
+#   @arguments      :
+#   @outputs        :
+#   @returns        :
 # --------------------------------------------------------------------------------------------------
 function alert() { [[ "${LOG_LEVEL:-0}" -ge 2 ]] && console_log alert "${@}"; true; }
 # ==================================================================================================
@@ -196,10 +189,46 @@ function alert() { [[ "${LOG_LEVEL:-0}" -ge 2 ]] && console_log alert "${@}"; tr
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   LOG_LEVEL = 0
-#   @globals        :   
-#   @arguments      :   
-#   @outputs        :   
-#   @returns        :   
+#   @globals        :
+#   @arguments      :
+#   @outputs        :
+#   @returns        :
 # --------------------------------------------------------------------------------------------------
 function fatal() { [[ "${LOG_LEVEL:-0}" -ge 0 ]] && console_log fatal "${@}"; exit 1; }
 # ==================================================================================================
+
+
+
+function check_binary() {
+  if [[ $# -lt 1 ]]; then
+    fatal "Missing required argument for function check_binary()"
+  fi
+
+  if ! command -v "$1" > /dev/null 2>&1; then
+
+    if [[ -n ${2-} ]]; then
+      fatal "Missing dependency: Couldn't locate $1."
+    else
+      # debug "Missing dependency: $1"
+      return 1
+    fi
+
+  fi
+
+  # debug "Dependency found: $1"
+  return 0
+}
+
+function check_macos_app() {
+  if [[ $# -lt 1 ]]; then
+    fatal "Missing required argument for function check_macos_app()"
+  fi
+
+  if ! echo $(mdfind "kMDItemKind == 'Application'") | grep -q "$1"; then
+    # debug "Missing dependency: $1"
+    return 1
+  fi
+
+  # debug "Dependency found: $1"
+  return 0
+}

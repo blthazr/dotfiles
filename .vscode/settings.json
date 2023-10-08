@@ -7,6 +7,7 @@
     "*.yaml.tmpl": "jinja-yaml",
     "*.yml.tmpl": "jinja-yaml",
     "*.zsh.tmpl": "jinja-shell",
+    "Brewfile*.tmpl": "jinja-rb",
     "*.tmpl": "jinja"
   }
 }

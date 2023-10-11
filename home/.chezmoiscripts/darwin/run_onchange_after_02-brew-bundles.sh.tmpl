@@ -18,19 +18,12 @@
 info "[🍺        Homebrew] Setting log level to debug"
 LOG_LEVEL=7
 
-{{ if eq .osid "darwin" }}
 if ! check_binary brew; then
   info "[🍺        Homebrew] Application is not installed"
   exit 0
 else
   debug "[🍺        Homebrew] Application is installed"
 fi
-
-{{ else }}
-debug "[🍺        Homebrew] Skipping. Does not apply to this operating system"
-exit 0
-
-{{ end }}
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
@@ -40,18 +33,4 @@ info "[🍺        Homebrew] Installing core Homebrew bundles"
 brew bundle install --no-upgrade --no-lock --file=/dev/stdin <<EOF
 {{ template "Brewfile.tmpl" . }}
 EOF
-
-{{ if .personal }}
-info "[🍺        Homebrew] Installing personal Homebrew bundles"
-brew bundle install --no-upgrade --no-lock --file=/dev/stdin <<EOF
-{{ template "Brewfile-personal.tmpl" . }}
-EOF
-{{ end }}
-
-{{ if .work }}
-info "[🍺        Homebrew] Installing work Homebrew bundles"
-brew bundle install --no-upgrade --no-lock --file=/dev/stdin <<EOF
-{{ template "Brewfile-work.tmpl" . }}
-EOF
-{{ end }}
 # ==================================================================================================

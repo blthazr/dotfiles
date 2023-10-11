@@ -4,7 +4,6 @@ tap "homebrew/cask"
 tap "homebrew/cask-drivers"
 tap "homebrew/core"
 tap "homebrew/services"
-tap "mas-cli/tap"
 
 # Manage your dotfiles across multiple diverse machines, securely
 brew "chezmoi"
@@ -18,8 +17,9 @@ brew "direnv"
 brew "gzip"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
-# Autoformat shell script source code
-brew "shfmt"
+# Mac App Store command-line interface
+tap "mas-cli/tap"
+brew "mas-cli/tap/mas"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
 # Executes a program periodically, showing output fullscreen
@@ -28,16 +28,67 @@ brew "watch"
 brew "wget"
 # Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew "yq"
-# Mac App Store command-line interface
-brew "mas-cli/tap/mas"
 
-  {{- if .workstation }}
-tap "artginzburg/tap"
+  {{- if .personal }}
+  # Simple, modern, secure file encryption
+  brew "age"
+  # Permanent TouchID support for sudo
+  tap "artginzburg/tap"
+  brew "artginzburg/tap/sudo-touchid"
+  # Perl lib for reading and writing EXIF metadata
+  brew "exiftool"
+  # Task runner / simpler Make alternative written in Go
+  tap "go-task/tap"
+  brew "go-task/tap/go-task"
+  # LastPass command-line interface tool
+  brew "lastpass-cli"
+  # Editor of encrypted files
+  brew "sops"
+  # Cross-shell prompt for astronauts
+  brew "starship"
 
-# Cross-shell prompt for astronauts
-brew "starship"
-# Permanent TouchID support for sudo
-brew "artginzburg/tap/sudo-touchid"
+  # Tool to flash OS images to SD cards & USB drives
+  cask "balenaetcher"
+  # Code snippet organizer
+  cask "cacher"
+  # Browser for SQLite databases
+  cask "db-browser-for-sqlite"
+  # Voice and text chat software
+  cask "discord"
+  # Control your Elgato Key Lights
+  cask "elgato-control-center"
+  # Assign keys, and then decorate and label them
+  cask "elgato-stream-deck"
+  # Calendar software
+  cask "fantastical"
+  # Web browser
+  cask "google-chrome"
+  # Terminal emulator as alternative to Apple's Terminal app
+  cask "iterm2"
+  # Password manager
+  cask "lastpass"
+  # Open-source music notation software
+  cask "musescore"
+  # Team communication and collaboration software
+  cask "slack"
+  # Text editor for code, markup and prose
+  cask "sublime-text"
+  # Control windows and applications right from your trackpad
+  cask "swish"
+  # File transfer application
+  cask "transmit"
+  # Open-source code editor
+  cask "visual-studio-code"
+  # Microsoft Excel
+  mas "Microsoft Excel", id: 462058435
+  # Microsoft Word
+  mas "Microsoft Word", id: 462054704
+  # Easy-to-use MQTT client
+  mas "MQTT Explorer", id: 1455214828
+  # Smart duplicate photos cleaner
+  mas "PhotoSweeper", id: 463362050
+  # Your to-do list for Mac & iOS
+  mas "Things", id: 904280696
   {{- end }}
 
 {{- end }}

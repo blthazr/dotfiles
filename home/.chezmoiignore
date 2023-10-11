@@ -3,6 +3,7 @@
 *-shard*
 **/*-shard*
 
-{{ if ne .osid "darwin" }}
-Library
+{{ if ne .chezmoi.os "darwin" }}
+.chezmoiscripts/darwin/**
+Library/
 {{ end }}

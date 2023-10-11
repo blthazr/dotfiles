@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @file           :
+#   @description    :
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Get script libraries
+# --------------------------------------------------------------------------------------------------
+{{ template "script-library" }}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight
+# --------------------------------------------------------------------------------------------------
+info "[🚛        Transmit] Setting log level to debug."
+LOG_LEVEL=7
+
+debug "[🚛        Transmit] Verifying installation."
+
+if ! check_macos_app "Transmit.app"; then
+  info "[🚛        Transmit] Application is not installed."
+  exit 0
+
+else
+  debug "[🚛        Transmit] Application is installed."
+  info "[🚛        Transmit] Closing Transmit, to prevent it from overriding changes."
+  osascript -e 'tell application "Transmit" to quit'
+  killall "cfprefsd"
+
+fi
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Transmit | Settings | General
+# --------------------------------------------------------------------------------------------------
+### Privacy: Automatically download S3 region updates
+debug "[🚛        Transmit] Settings | General | Privacy: Automatically download S3 region updates"
+#   option [default] --> checked
+defaults write com.panic.Transmit DownloadS3RegionUpdates -bool true
+#   option --> unchecked
+# defaults write com.panic.Transmit DownloadS3RegionUpdates -bool false
+
+### Privacy: Send crash reports
+debug "[🚛        Transmit] Settings | General | Privacy: Send crash reports"
+#   option [default] --> checked
+defaults write com.panic.Transmit AllowCrashReportCollection -bool true
+#   option --> unchecked
+# defaults write com.panic.Transmit AllowCrashReportCollection -bool false
+
+### Privacy: Send anonymous usage statistics
+debug "[🚛        Transmit] Settings | General | Privacy: Send anonymous usage statistics"
+#   option [default] --> checked
+defaults write com.panic.Transmit AllowDataCollection -bool true
+#   option --> unchecked
+# defaults write com.panic.Transmit AllowDataCollection -bool false
+
+### Privacy: Check for important announcements
+debug "[🚛        Transmit] Settings | General | Privacy: Check for important announcements"
+#   option [default] --> checked
+defaults write com.panic.Transmit AllowSoapbox -bool true
+#   option --> unchecked
+# defaults write com.panic.Transmit AllowSoapbox -bool false
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Transmit | Settings | Files
+# --------------------------------------------------------------------------------------------------
+### Double Click Action
+debug "[🚛        Transmit] Settings | Files | Double Click Action"
+#   option --> Do Nothing
+# defaults write com.panic.Transmit DoubleClickAction -int 0
+#   option [default] --> Transfer
+# defaults delete com.panic.Transmit DoubleClickAction
+#   option --> Edit
+# defaults write com.panic.Transmit DoubleClickAction -int 2
+#   option --> Edit in External Editor
+defaults write com.panic.Transmit DoubleClickAction -int 3
+# ==================================================================================================
+
+info "[🚛        Transmit] Configuration complete."

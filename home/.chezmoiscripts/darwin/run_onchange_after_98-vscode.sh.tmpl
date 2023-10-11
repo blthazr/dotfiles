@@ -17,8 +17,6 @@
 # --------------------------------------------------------------------------------------------------
 info "[🆚         VS Code] Setting log level to debug."
 LOG_LEVEL=7
-
-{{ if eq .osid "darwin" }}
 debug "[🆚         VS Code] Verifying installation."
 
 if ! check_macos_app "Code.app"; then
@@ -35,14 +33,9 @@ else
 
   info "[🆚         VS Code] Closing VS Code, to prevent it from overriding changes."
   osascript -e 'tell application "Code" to quit'
+  killall "cfprefsd"
 
 fi
-
-{{ else }}
-debug "[🆚         VS Code] Skipping. Does not apply to this operating system."
-exit 0
-
-{{ end }}
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
@@ -50,6 +43,7 @@ exit 0
 # --------------------------------------------------------------------------------------------------
 extensions_list=(
   "albert.tabout"
+  "editorconfig.editorconfig"
   "esbenp.prettier-vscode"
   "gruntfuggly.todo-tree"
   "hashicorp.terraform"

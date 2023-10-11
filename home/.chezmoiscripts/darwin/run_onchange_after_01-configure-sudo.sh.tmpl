@@ -15,52 +15,26 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "[🔐        Lastpass] Setting log level to debug."
+info "[👇        Touch ID] Setting log level to debug."
 LOG_LEVEL=7
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Lastpass
+#   @description    :   sudo-touchid
 # --------------------------------------------------------------------------------------------------
-{{ if eq .osid "darwin" }}
+{{ if .personal -}}
+# info "[👇        Touch ID] Administrator password needed to install sudo-touchid"
+{{ template "script-sudo" }}
 
-  {{ if .personal }}
-debug "[🔐        Lastpass] Verifying installation."
+info "[👇        Touch ID] Install sudo-touchid"
+brew install "artginzburg/tap/sudo-touchid"
 
-if ! check_binary lpass; then
-  info "[🔐        Lastpass] Application is not installed."
-  info "[🔐        Lastpass] Installing lastpass-cli, the Lastpass command line interface tool."
-  brew install "lastpass-cli"
-
-else
-  debug "[🔐        Lastpass] Application is installed."
-
-fi
-
-info "[🔐        Lastpass] Setting up lastpass-cli."
-lastpass_email={{- .personal_lastpass_email }}
-
-debug "[🔐        Lastpass] Checking lastpass-cli status."
-lpass_status="$(lpass status)"
-
-if [[ "${lpass_status}" =~ "Logged in as ${lastpass_email}" ]]; then
-  debug "[🔐        Lastpass] Already logged into lastpass-cli."
-
-else
-  info "[🔐        Lastpass] Logging into lastpass-cli."
-  lpass login "${lastpass_email}"
-
-fi
-
-debug "[🔐        Lastpass] lastpass-cli configured."
-
-  {{ else }}
-debug "[🔐        Lastpass] Skipping. Does not apply to this Chezmoi profile."
-
-  {{ end }}
+info "[👇        Touch ID] Enable sudo-touchid"
+sudo-touchid
 
 {{ else }}
-debug "[🔐        Lastpass] Skipping. Does not apply to this operating system."
+debug "[👇        Touch ID] Skipping. Does not apply to this Chezmoi profile."
+exit 0
 
 {{ end }}
 # ==================================================================================================

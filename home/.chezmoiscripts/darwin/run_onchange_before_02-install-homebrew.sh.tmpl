@@ -18,7 +18,6 @@
 info "[🍺        Homebrew] Setting log level to debug."
 LOG_LEVEL=7
 
-{{ if eq .osid "darwin" }}
 debug "[🍺        Homebrew] Verifying installation"
 
 if check_binary brew; then
@@ -29,12 +28,6 @@ else
   info "[🍺        Homebrew] Application is not installed"
 
 fi
-
-{{ else }}
-debug "[🍺        Homebrew] Skipping. Does not apply to this operating system"
-exit 0
-
-{{ end }}
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------

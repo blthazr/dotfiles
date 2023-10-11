@@ -15,33 +15,36 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "[👇        Touch ID] Setting log level to debug."
+info "[🏵        Rosetta 2] Setting log level to debug."
 LOG_LEVEL=7
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   sudo-touchid
+#   @description    :   Apple Silicon CPU
 # --------------------------------------------------------------------------------------------------
-{{ if eq .osid "darwin" }}
+{{ if eq .chezmoi.arch "arm64" }}
+debug "[🏵        Rosetta 2] Checking CPU type."
+cpu_brand_string="$(sysctl -n machdep.cpu.brand_string)"
 
-  {{ if .personal -}}
-# info "[👇        Touch ID] Administrator password needed to install sudo-touchid"
-{{ template "script-sudo" }}
+if [[ "${cpu_brand_string}" =~ "Apple" ]]; then
+  debug "[🏵        Rosetta 2] Apple arm-based CPU detected."
+  debug "[🏵        Rosetta 2] Verifying installation."
 
-info "[👇        Touch ID] Install sudo-touchid"
-brew install "artginzburg/tap/sudo-touchid"
+  if /usr/bin/pgrep oahd >/dev/null 2>&1; then
+    debug "[🏵        Rosetta 2] Rosetta is installed."
+    exit 0
+  else
+    info "[🏵        Rosetta 2] Installing Rosetta."
+    softwareupdate --install-rosetta --agree-to-license
+  fi
 
-info "[👇        Touch ID] Enable sudo-touchid"
-sudo-touchid
+else
+  fatal "[🏵        Rosetta 2] ${cpu_brand_string} is an unsupported CPU type."
 
-  {{ else }}
-debug "[👇        Touch ID] Skipping. Does not apply to this Chezmoi profile."
-exit 0
-
-  {{ end }}
+fi
 
 {{ else }}
-debug "[👇        Touch ID] Skipping. Does not apply to this operating system."
+debug "[🏵        Rosetta 2] Skipping. Does not apply to this CPU architecture."
 exit 0
 
 {{ end }}

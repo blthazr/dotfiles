@@ -91,4 +91,41 @@ brew "yq"
   mas "Things", id: 904280696
   {{- end }}
 
+  {{- if .devops }}
+  # Automate deployment, configuration, and upgrading
+  brew "ansible"
+  #
+  brew "ansible-lint"
+  # Cloudflare Tunnel
+  tap "cloudflare/cloudflare"
+  brew "cloudflare/cloudflare/cloudflared"
+  # Flux CLI
+  tap "fluxcd/tap"
+  brew "fluxcd/tap/flux"
+  # Kubernetes package manager
+  brew "helm"
+  # Kubernetes command-line interface
+  brew "kubernetes-cli"
+  # Template-free customization of Kubernetes YAML manifests
+  brew "kustomize"
+  # Framework for managing multi-language pre-commit hooks
+  brew "pre-commit"
+  # Tool to build, change, and version infrastructure
+  brew "terraform"
+  # GitOps support for Kubernetes
+  tap "weaveworks/tap"
+  brew "weaveworks/tap/gitops"
+
+  # App to build and share containerized applications and microservices
+  cask "docker"
+  # Kubernetes IDE
+  cask "lens"
+  # Menu bar app for managing Kubernetes contexts
+  cask "kubecontext"
+  # Administration and development platform for PostgreSQL
+  cask "pgadmin4"
+  # Collaboration platform for API development
+  cask "postman"
+  {{- end }}
+
 {{- end }}

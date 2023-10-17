@@ -7,7 +7,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Get script libraries
+#   @description    :   Load script libraries
 # --------------------------------------------------------------------------------------------------
 {{ template "script-library" }}
 # ==================================================================================================
@@ -15,25 +15,27 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "[👇        Touch ID] Setting log level to debug."
-LOG_LEVEL=7
+LOG_CATEGORY="Touch ID"
+LOG_CATEGORY_ICON="👇"
+info "Setting log level to debug."
+LOG_LEVEL=5
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   sudo-touchid
 # --------------------------------------------------------------------------------------------------
 {{ if .personal -}}
-# info "[👇        Touch ID] Administrator password needed to install sudo-touchid"
+# info "Administrator password needed to install sudo-touchid"
 {{ template "script-sudo" }}
 
-info "[👇        Touch ID] Install sudo-touchid"
+info "Install sudo-touchid"
 brew install "artginzburg/tap/sudo-touchid"
 
-info "[👇        Touch ID] Enable sudo-touchid"
+info "Enable sudo-touchid"
 sudo-touchid
 
 {{ else }}
-debug "[👇        Touch ID] Skipping. Does not apply to this Chezmoi profile."
+debug "Skipping. Does not apply to this Chezmoi profile."
 exit 0
 
 {{ end }}

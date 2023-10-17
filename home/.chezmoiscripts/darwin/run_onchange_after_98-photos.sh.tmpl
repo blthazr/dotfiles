@@ -7,7 +7,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Get script libraries
+#   @description    :   Load script libraries
 # --------------------------------------------------------------------------------------------------
 {{ template "script-library" }}
 # ==================================================================================================
@@ -15,10 +15,12 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "[📷          Photos] Setting log level to debug."
-LOG_LEVEL=7
+LOG_CATEGORY="Photos"
+LOG_CATEGORY_ICON="📷"
+info "Setting log level to debug."
+LOG_LEVEL=5
 
-info "[📷          Photos] Closing Photos, to prevent it from overriding changes."
+info "Closing Photos, to prevent it from overriding changes."
 osascript -e 'tell application "Photos" to quit'
 killall "cfprefsd"
 # ==================================================================================================
@@ -27,49 +29,49 @@ killall "cfprefsd"
 #   @description    :   Apple Photos | Settings | General
 # --------------------------------------------------------------------------------------------------
 ### Photos: Autoplay Videos and Live Photos
-debug "[📷          Photos] Settings | General | Photos: Autoplay Videos and Live Photos"
+debug "Settings | General | Photos: Autoplay Videos and Live Photos"
 #   option [default] --> checked
 defaults delete com.apple.Photos IPXDefaultAutoplayVideos 2>/dev/null
 #   option --> unchecked
 # defaults write com.apple.Photos IPXDefaultAutoplayVideos -int 0
 
 ### Memories: Show Featured Content
-debug "[📷          Photos] Settings | General | Memories: Show Featured Content"
+debug "Settings | General | Memories: Show Featured Content"
 #   option [default] --> checked
 defaults write com.apple.photos.shareddefaults FeaturedContentAllowed -int 1
 #   option --> unchecked
 # defaults write com.apple.photos.shareddefaults FeaturedContentAllowed -int 0
 
 ### Memories: Show Holiday Events
-debug "[📷          Photos] Settings | General | Memories: Show Holiday Events"
+debug "Settings | General | Memories: Show Holiday Events"
 #   option --> checked
 # defaults write com.apple.photoanalysisd showHolidayCalendarEvents -bool true
 #   option [default] --> unchecked
 defaults write com.apple.photoanalysisd showHolidayCalendarEvents -bool false
 
 ### Memories: Show Memories Notification
-debug "[📷          Photos] Settings | General | Memories: Show Memories Notification"
+debug "Settings | General | Memories: Show Memories Notification"
 #   option [default] --> checked
 defaults write com.apple.photoanalysisd notificationDisabled -int 0
 #   option --> unchecked
 # defaults write com.apple.photoanalysisd notificationDisabled -int 1
 
 ### Importing: Copy items to the Photos library
-debug "[📷          Photos] Settings | General | Importing: Copy items to the Photos library"
+debug "Settings | General | Importing: Copy items to the Photos library"
 #   option [default] --> checked
 defaults write com.apple.Photos IPXDefaultImportUseReferencedImport -int 0
 #   option --> unchecked
 # defaults write com.apple.Photos IPXDefaultImportUseReferencedImport -int 1
 
 ### Sharing: include location information
-debug "[📷          Photos] Settings | General | Sharing: include location information"
+debug "Settings | General | Sharing: include location information"
 #   option --> checked
 # defaults write com.apple.Photos IPXDefaultPlacesPublishPlaceInfo -int 1
 #   option [default] --> unchecked
 defaults write com.apple.Photos IPXDefaultPlacesPublishPlaceInfo -int 0
 
 ### Sharing: Memories
-debug "[📷          Photos] Settings | General | Sharing: Memories"
+debug "Settings | General | Sharing: Memories"
 #   option [default] --> Landscape, 16:9
 defaults write com.apple.Photos StoryExportAspectRatio -string "16x9"
 #   option --> Landscape, 4:3
@@ -84,18 +86,18 @@ defaults write com.apple.Photos StoryExportAspectRatio -string "16x9"
 # defaults write com.apple.Photos StoryExportAspectRatio -string "1x1"
 
 ### Privacy: Use Touch ID or password
-debug "[📷          Photos] Settings | General | Privacy: Use Touch ID or password"
+debug "Settings | General | Privacy: Use Touch ID or password"
 #   option [default] --> checked
 defaults write com.apple.photos.shareddefaults ContentPrivacyEnabled -int 1
 #   option --> unchecked
 # defaults write com.apple.photos.shareddefaults ContentPrivacyEnabled -int 0
 
 ### HDR: View Full HDR
-debug "[📷          Photos] Settings | General | HDR: View Full HDR"
+debug "Settings | General | HDR: View Full HDR"
 #   option [default] --> checked
 defaults write com.apple.Photos IPXDefaultViewFullHDR -int 1
 #   option --> unchecked
 # defaults write com.apple.Photos IPXDefaultViewFullHDR -int 0
 # ==================================================================================================
 
-info "[📷          Photos] Configuration complete."
+info "Configuration complete."

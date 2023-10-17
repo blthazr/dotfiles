@@ -7,7 +7,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Get script libraries
+#   @description    :   Load script libraries
 # --------------------------------------------------------------------------------------------------
 {{ template "script-library" }}
 # ==================================================================================================
@@ -15,17 +15,19 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "[🍺        Homebrew] Setting log level to debug."
-LOG_LEVEL=7
+LOG_CATEGORY="Homebrew"
+LOG_CATEGORY_ICON="🍺"
+info "Setting log level to debug."
+LOG_LEVEL=5
 
-debug "[🍺        Homebrew] Verifying installation"
+debug "Verifying installation"
 
 if check_binary brew; then
-  debug "[🍺        Homebrew] Application is installed"
+  debug "Application is installed"
   exit 0
 
 else
-  info "[🍺        Homebrew] Application is not installed"
+  info "Application is not installed"
 
 fi
 # ==================================================================================================
@@ -33,9 +35,9 @@ fi
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Install Homebrew
 # --------------------------------------------------------------------------------------------------
-info "[🍺        Homebrew] Installing Homebrew, The Missing Package Manager for macOS (or Linux). Follow the instructions!"
+info "Installing Homebrew, The Missing Package Manager for macOS (or Linux). Follow the instructions!"
 
-# info "[🍺        Homebrew] Administrator password needed to install Homebrew"
+# info "Administrator password needed to install Homebrew"
 {{ template "script-sudo" }}
 
 cpu_brand_string="$(sysctl -n machdep.cpu.brand_string)"
@@ -47,7 +49,7 @@ elif [[ "${cpu_brand_string}" =~ "Intel" ]]; then
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 else
-  fatal "[🍺        Homebrew] Unable to install. ${cpu_brand_string} is an unsupported CPU type"
+  fatal "Unable to install. ${cpu_brand_string} is an unsupported CPU type"
 
 fi
 # ==================================================================================================
@@ -55,23 +57,26 @@ fi
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Install mas
 # --------------------------------------------------------------------------------------------------
+LOG_CATEGORY="mas"
+LOG_CATEGORY_ICON="🧺"
+
 {{ if eq .osid "darwin" }}
-debug "[🧺             mas] Verifying installation"
+debug "Verifying installation"
 
 if check_binary mas; then
-  debug "[🧺             mas] Application is installed"
+  debug "Application is installed"
   exit 0
 
 else
-  info "[🧺             mas] Application is not installed"
-  info "[🧺             mas] Installing mas, Mac Apple Store CLI"
+  info "Application is not installed"
+  info "Installing mas, Mac Apple Store CLI"
   brew tap "mas-cli/tap"
   brew install "mas-cli/tap/mas"
 
 fi
 
 {{ else }}
-debug "[🧺             mas] Skipping. Does not apply to this operating system"
+debug "Skipping. Does not apply to this operating system"
 exit 0
 
 {{ end }}

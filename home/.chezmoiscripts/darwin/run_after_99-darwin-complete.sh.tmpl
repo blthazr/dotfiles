@@ -7,10 +7,17 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Get script libraries
+#   @description    :   Load script libraries
 # --------------------------------------------------------------------------------------------------
 {{ template "script-library" }}
 # ==================================================================================================
 
-info "[✅        Dotfiles] Installation and configuration successfully completed."
-info "[✅        Dotfiles] If this is a first time installation, please logout and log back in to get started."
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight
+# --------------------------------------------------------------------------------------------------
+LOG_CATEGORY="Dotfiles"
+LOG_CATEGORY_ICON="✅"
+# ==================================================================================================
+
+info "Installation and configuration successfully completed."
+info "If this is a first time installation, please logout and log back in to get started."

@@ -7,7 +7,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Get script libraries
+#   @description    :   Load script libraries
 # --------------------------------------------------------------------------------------------------
 {{ template "script-library" }}
 # ==================================================================================================
@@ -15,10 +15,12 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "[🔍          Finder] Setting log level to debug."
-LOG_LEVEL=7
+LOG_CATEGORY="Finder"
+LOG_CATEGORY_ICON="🔍"
+info "Setting log level to debug."
+LOG_LEVEL=5
 
-info "[🔍          Finder] Closing Finder, to prevent it from overriding changes."
+info "Closing Finder, to prevent it from overriding changes."
 osascript -e 'tell application "Finder" to quit'
 killall "cfprefsd"
 # ==================================================================================================
@@ -27,35 +29,35 @@ killall "cfprefsd"
 #   @description    :   Finder | Settings | General
 # --------------------------------------------------------------------------------------------------
 ### Show these items on the desktop: Hard disks
-debug "[🔍          Finder] Settings | General | Show these items on the desktop: Hard disks"
+debug "Settings | General | Show these items on the desktop: Hard disks"
 #   option --> checked
 # defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
 #   option [default] --> unchecked
 defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
 
 ### Show these items on the desktop: External disks
-debug "[🔍          Finder] Settings | General | Show these items on the desktop: External disks"
+debug "Settings | General | Show these items on the desktop: External disks"
 #   option [default] --> checked
 # defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
 #   option --> unchecked
 defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
 
 ### Show these items on the desktop: CDs, DVDs, and iPods
-debug "[🔍          Finder] Settings | General | Show these items on the desktop: CDs, DVDs, and iPods"
+debug "Settings | General | Show these items on the desktop: CDs, DVDs, and iPods"
 #   option [default] --> checked
 # defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 #   option --> unchecked
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
 
 ### Show these items on the desktop: Connected servers
-debug "[🔍          Finder] Settings | General | Show these items on the desktop: Connected servers"
+debug "Settings | General | Show these items on the desktop: Connected servers"
 #   option --> checked
 # defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 #   option [default] --> unchecked
 defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
 
 ### New Finder windows show:
-debug "[🔍          Finder] Settings | General | New Finder windows show:"
+debug "Settings | General | New Finder windows show:"
 #   option --> ${HOME}
 defaults write com.apple.finder NewWindowTarget -string "PfHm"
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
@@ -76,7 +78,7 @@ defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
 # defaults write com.apple.finder NewWindowTargetPath -string "file:///${HOME}/Downloads"
 
 ### Open folders in tabs instead of new windows
-debug "[🔍          Finder] Settings | General | Open folders in tabs instead of new windows"
+debug "Settings | General | Open folders in tabs instead of new windows"
 #   option [default] --> checked
 defaults write com.apple.finder FinderSpawnTab -bool true
 #   option --> unchecked
@@ -87,56 +89,56 @@ defaults write com.apple.finder FinderSpawnTab -bool true
 #   @description    :   Finder | Settings | Advanced
 # --------------------------------------------------------------------------------------------------
 ### Show all filename extensions
-debug "[🔍          Finder] Settings | Advanced | Show all filename extensions"
+debug "Settings | Advanced | Show all filename extensions"
 #   option --> checked
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 #   option [default] --> unchecked
 # defaults write NSGlobalDomain AppleShowAllExtensions -bool false
 
 ### Show warning before changing an extension
-debug "[🔍          Finder] Settings | Advanced | Show warning before changing an extension"
+debug "Settings | Advanced | Show warning before changing an extension"
 #   option [default] --> checked
 # defaults write com.apple.finder FXEnableExtensionChangeWarning -bool true
 #   option --> unchecked
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
 ### Show warning before removing from iCloud Drive
-debug "[🔍          Finder] Settings | Advanced | Show warning before removing from iCloud Drive"
+debug "Settings | Advanced | Show warning before removing from iCloud Drive"
 #   option [default] --> checked
 defaults write com.apple.finder FXEnableRemoveFromICloudDriveWarning -bool true
 #   option --> unchecked
 # defaults write com.apple.finder FXEnableRemoveFromICloudDriveWarning -bool false
 
 ### Show warning before emptying the Trash
-debug "[🔍          Finder] Settings | Advanced | Show warning before emptying the Trash"
+debug "Settings | Advanced | Show warning before emptying the Trash"
 #   option [default] --> checked
 defaults write com.apple.finder WarnOnEmptyTrash -bool true
 #   option --> unchecked
 # defaults write com.apple.finder WarnOnEmptyTrash -bool false
 
 ### Remove items from the Trash after 30 days
-debug "[🔍          Finder] Settings | Advanced | Remove items from the Trash after 30 days"
+debug "Settings | Advanced | Remove items from the Trash after 30 days"
 #   option --> checked
 # defaults write com.apple.finder FXRemoveOldTrashItems -bool true
 #   option [default] --> unchecked
 defaults write com.apple.finder FXRemoveOldTrashItems -bool false
 
 ### Keep folders on top: In windows when sorting by name
-debug "[🔍          Finder] Settings | Advanced | Keep folders on top: In windows when sorting by name"
+debug "Settings | Advanced | Keep folders on top: In windows when sorting by name"
 #   option --> checked
 defaults write com.apple.finder _FXSortFoldersFirst -bool true
 #   option [default] --> unchecked
 # defaults write com.apple.finder _FXSortFoldersFirst -bool false
 
 ### Keep folders on top: On Desktop
-debug "[🔍          Finder] Settings | Advanced | Keep folders on top: On Desktop"
+debug "Settings | Advanced | Keep folders on top: On Desktop"
 #   option --> checked
 defaults write com.apple.finder _FXSortFoldersFirstOnDesktop -bool true
 #   option [default] --> unchecked
 # defaults write com.apple.finder _FXSortFoldersFirstOnDesktop -bool false
 
 ### When performing a search
-debug "[🔍          Finder] Settings | Advanced | When performing a search"
+debug "Settings | Advanced | When performing a search"
 #   option [default] --> Search This Mac
 # defaults write com.apple.finder FXDefaultSearchScope -string "SCev"
 #   option --> Search The Current Folder
@@ -149,7 +151,7 @@ defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
 #   @description    :   Finder | Menu | View
 # --------------------------------------------------------------------------------------------------
 ### View Options
-debug "[🔍          Finder] Menu | View | View Options"
+debug "Menu | View | View Options"
 #   option [default] --> as Icons
 # defaults write com.apple.Finder FXPreferredViewStyle -string "icnv"
 #   option --> as List
@@ -160,35 +162,35 @@ defaults write com.apple.Finder FXPreferredViewStyle -string "Nlsv"
 # defaults write com.apple.Finder FXPreferredViewStyle -string "Flwv"
 
 ### Show/Hide Sidebar
-debug "[🔍          Finder] Menu | View | Show Sidebar"
+debug "Menu | View | Show Sidebar"
 #   option [default] --> Show Sidebar
 defaults write com.apple.finder ShowSidebar -bool true
 #   option --> Hide Sidebar
 # defaults write com.apple.finder ShowSidebar -bool false
 
 ### Show/Hide Preview
-debug "[🔍          Finder] Menu | View | Hide Preview"
+debug "Menu | View | Hide Preview"
 #   option --> Show Preview
 # defaults write com.apple.finder ShowPreviewPane -bool true
 #   option [default] --> Hide Preview
 defaults write com.apple.finder ShowPreviewPane -bool false
 
 ### Show/Hide Tab Bar
-debug "[🔍          Finder] Menu | View | Show Tab Bar"
+debug "Menu | View | Show Tab Bar"
 #   option --> Show Tab Bar
 defaults write com.apple.finder NSWindowTabbingShoudShowTabBarKey-com.apple.finder.TBrowserWindow -bool true
 #   option [default] --> Hide Tab Bar
 # defaults write com.apple.finder NSWindowTabbingShoudShowTabBarKey-com.apple.finder.TBrowserWindow -bool false
 
 ### Show/Hide Path Bar
-debug "[🔍          Finder] Menu | View | Show Path Bar"
+debug "Menu | View | Show Path Bar"
 #   option --> Show Path Bar
 defaults write com.apple.finder ShowPathbar -bool true
 #   option [default] --> Hide Path Bar
 # defaults write com.apple.finder ShowPathbar -bool false
 
 ### Show/Hide Status Bar
-debug "[🔍          Finder] Menu | View | Show Status Bar"
+debug "Menu | View | Show Status Bar"
 #   option --> Show Status Bar
 defaults write com.apple.finder ShowStatusBar -bool true
 #   option [default] --> Hide Status Bar
@@ -199,13 +201,13 @@ defaults write com.apple.finder ShowStatusBar -bool true
 #   @description    :   Finder | Additional Finder Settings
 # --------------------------------------------------------------------------------------------------
 ### Show hidden files by default
-debug "[🔍          Finder] Settings | Additional Finder Settings | Show hidden files by default"
+debug "Settings | Additional Finder Settings | Show hidden files by default"
 defaults write com.apple.finder AppleShowAllFiles -bool true
 
 # Expand save panel by default
-debug "[🔍          Finder] Settings | Additional Finder Settings | Expand save panel by default"
+debug "Settings | Additional Finder Settings | Expand save panel by default"
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
 # ==================================================================================================
 
-info "[🔍          Finder] Configuration complete."
+info "Configuration complete."

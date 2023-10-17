@@ -7,7 +7,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Get script libraries
+#   @description    :   Load script libraries
 # --------------------------------------------------------------------------------------------------
 {{ template "script-library" }}
 # ==================================================================================================
@@ -15,36 +15,38 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "[🏵        Rosetta 2] Setting log level to debug."
-LOG_LEVEL=7
+LOG_CATEGORY="Rosetta 2"
+LOG_CATEGORY_ICON="🏵"
+info "Setting log level to debug."
+LOG_LEVEL=5
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Apple Silicon CPU
 # --------------------------------------------------------------------------------------------------
 {{ if eq .chezmoi.arch "arm64" }}
-debug "[🏵        Rosetta 2] Checking CPU type."
+debug "Checking CPU type."
 cpu_brand_string="$(sysctl -n machdep.cpu.brand_string)"
 
 if [[ "${cpu_brand_string}" =~ "Apple" ]]; then
-  debug "[🏵        Rosetta 2] Apple arm-based CPU detected."
-  debug "[🏵        Rosetta 2] Verifying installation."
+  debug "Apple arm-based CPU detected."
+  debug "Verifying installation."
 
   if /usr/bin/pgrep oahd >/dev/null 2>&1; then
-    debug "[🏵        Rosetta 2] Rosetta is installed."
+    debug "Rosetta is installed."
     exit 0
   else
-    info "[🏵        Rosetta 2] Installing Rosetta."
+    info "Installing Rosetta."
     softwareupdate --install-rosetta --agree-to-license
   fi
 
 else
-  fatal "[🏵        Rosetta 2] ${cpu_brand_string} is an unsupported CPU type."
+  fatal "${cpu_brand_string} is an unsupported CPU type."
 
 fi
 
 {{ else }}
-debug "[🏵        Rosetta 2] Skipping. Does not apply to this CPU architecture."
+debug "Skipping. Does not apply to this CPU architecture."
 exit 0
 
 {{ end }}

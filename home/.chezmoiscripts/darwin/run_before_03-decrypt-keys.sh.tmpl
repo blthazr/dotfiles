@@ -7,7 +7,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Get script libraries
+#   @description    :   Load script libraries
 # --------------------------------------------------------------------------------------------------
 {{ template "script-library" }}
 # ==================================================================================================
@@ -15,45 +15,49 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-# info "[🔐        Lastpass] Setting log level to debug."
-# LOG_LEVEL=7
+LOG_CATEGORY="Decryption"
+LOG_CATEGORY_ICON="🔐"
+info "Setting log level to debug."
+LOG_LEVEL=5
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Lastpass
 # --------------------------------------------------------------------------------------------------
+LOG_CATEGORY="Decryption"
+
 {{ if .personal }}
-debug "[🔐        Lastpass] Verifying installation."
+debug "Verifying installation."
 
 if ! check_binary lpass; then
-  info "[🔐        Lastpass] Application is not installed."
-  info "[🔐        Lastpass] Installing lastpass-cli, the Lastpass command line interface tool."
+  info "Application is not installed."
+  info "Installing lastpass-cli, the Lastpass command line interface tool."
   brew install "lastpass-cli"
 
 else
-  debug "[🔐        Lastpass] Application is installed."
+  debug "Application is installed."
 
 fi
 
-info "[🔐        Lastpass] Configuring lastpass-cli."
+info "Configuring lastpass-cli."
 lastpass_email={{- .personal_lastpass_email }}
 
-debug "[🔐        Lastpass] Checking lastpass-cli status."
+debug "Checking lastpass-cli status."
 lpass_status="$(lpass status)"
 
 if [[ "${lpass_status}" =~ "Logged in as ${lastpass_email}" ]]; then
-  debug "[🔐        Lastpass] Already logged into lastpass-cli."
+  debug "Already logged into lastpass-cli."
 
 else
-  info "[🔐        Lastpass] Logging into lastpass-cli."
+  info "Logging into lastpass-cli."
   lpass login "${lastpass_email}"
 
 fi
 
-debug "[🔐        Lastpass] lastpass-cli configured."
+debug "lastpass-cli configured."
 
 {{ else }}
-debug "[🔐        Lastpass] Skipping. Does not apply to this Chezmoi profile."
+debug "Skipping. Does not apply to this Chezmoi profile."
 
 {{ end }}
 # ==================================================================================================

@@ -7,7 +7,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Get script libraries
+#   @description    :   Load script libraries
 # --------------------------------------------------------------------------------------------------
 {{ template "script-library" }}
 # ==================================================================================================
@@ -15,18 +15,20 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "[📅     Fantastical] Setting log level to debug."
-LOG_LEVEL=7
+LOG_CATEGORY="Fantastical"
+LOG_CATEGORY_ICON="📅"
+info "Setting log level to debug."
+LOG_LEVEL=5
 
-debug "[📅     Fantastical] Verifying installation."
+debug "Verifying installation."
 
 if ! check_macos_app "Fantastical.app"; then
-  info "[📅     Fantastical] Application is not installed."
+  info "Application is not installed."
   exit 0
 
 else
-  debug "[📅     Fantastical] Application is installed."
-  info "[📅     Fantastical] Closing Fantastical, to prevent it from overriding changes."
+  debug "Application is installed."
+  info "Closing Fantastical, to prevent it from overriding changes."
   osascript -e 'tell application "Fantastical" to quit'
   killall "cfprefsd"
 
@@ -37,18 +39,18 @@ fi
 #   @description    :   Fantastical | Settings | Advanced
 # --------------------------------------------------------------------------------------------------
 ### Automatically check for updates
-debug "[📅     Fantastical] Settings | Advanced | Automatically check for updates"
+debug "Settings | Advanced | Automatically check for updates"
 #   option [default] --> checked
 defaults write com.flexibits.fantastical2.mac SUEnableAutomaticChecks -bool true
 #   option --> unchecked
 # defaults write com.flexibits.fantastical2.mac SUEnableAutomaticChecks -bool false
 
 ### Include anonymous system profile
-debug "[📅     Fantastical] Settings | Advanced | Include anonymous system profile"
+debug "Settings | Advanced | Include anonymous system profile"
 #   option [default] --> checked
 # defaults write com.flexibits.fantastical2.mac SUSendProfileInfo -bool true
 #   option --> unchecked
 defaults write com.flexibits.fantastical2.mac SUSendProfileInfo -bool false
 # ==================================================================================================
 
-info "[📅     Fantastical] Configuration complete."
+info "Configuration complete."

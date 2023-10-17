@@ -1,4 +1,4 @@
-info "[✅        Dotfiles] Administrator password is required for \`sudo\` operations in this script."
+info "Administrator password is required for \`sudo\` operations in this script."
 sudo -v
 
 # sudo keep-alive: update existing `sudo` time stamp until has finished

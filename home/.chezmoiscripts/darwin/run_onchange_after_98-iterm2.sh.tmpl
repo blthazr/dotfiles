@@ -7,7 +7,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Get script libraries
+#   @description    :   Load script libraries
 # --------------------------------------------------------------------------------------------------
 {{ template "script-library" }}
 # ==================================================================================================
@@ -15,24 +15,26 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "[🧾          iTerm2] Setting log level to debug."
-LOG_LEVEL=7
+LOG_CATEGORY="iTerm2"
+LOG_CATEGORY_ICON="🧾"
+info "Setting log level to debug."
+LOG_LEVEL=5
 
-debug "[🧾          iTerm2] Verifying installation."
+debug "Verifying installation."
 
 if ! check_macos_app "iTerm.app"; then
-  info "[🧾          iTerm2] Application is not installed."
+  info "Application is not installed."
   exit 0
 
 else
-  debug "[🧾          iTerm2] Application is installed."
+  debug "Application is installed."
 
   if [ "${TERM_PROGRAM}" == "iTerm.app" ]; then
-    error "[🧾          iTerm2] iTerm2 is unable to be configured while running. Re-run \`chezmoi apply\` from another terminal, such as Terminal.app."
-    exit 1
+    error "iTerm2 is unable to be configured while running. Re-run \`chezmoi apply\` from another terminal, such as Terminal.app."
+    exit 0
   fi
 
-  info "[🧾          iTerm2] Closing iTerm2, to prevent it from overriding changes."
+  info "Closing iTerm2, to prevent it from overriding changes."
   osascript -e 'tell application "iTerm" to quit'
   killall "cfprefsd"
 
@@ -43,16 +45,16 @@ fi
 #   @description    :   iTerm2 | Settings | General | Preferences
 # --------------------------------------------------------------------------------------------------
 ### Load preferences from a custom folder or URL
-debug "[🧾          iTerm2] iTerm2 | Settings | General | Preferences | Load preferences from a custom folder or URL"
+debug "iTerm2 | Settings | General | Preferences | Load preferences from a custom folder or URL"
 #   option --> checked
 defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
 #   option [default] --> unchecked
 # defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool false
 
 ### Load preferences from a custom folder or URL | Path
-debug "[🧾          iTerm2] iTerm2 | Settings | General | Preferences | Load preferences from a custom folder or URL | Path"
+debug "iTerm2 | Settings | General | Preferences | Load preferences from a custom folder or URL | Path"
 # default | null
 defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "{{ .chezmoi.sourceDir }}/dot_config/iterm2"
 # ==================================================================================================
 
-info "[🧾          iTerm2] Configuration complete."
+info "Configuration complete."

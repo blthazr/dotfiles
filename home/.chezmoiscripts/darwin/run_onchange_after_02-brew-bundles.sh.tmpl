@@ -7,7 +7,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Get script libraries
+#   @description    :   Load script libraries
 # --------------------------------------------------------------------------------------------------
 {{ template "script-library" }}
 # ==================================================================================================
@@ -15,22 +15,22 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "[🍺        Homebrew] Setting log level to debug"
-LOG_LEVEL=7
+LOG_CATEGORY="Homebrew"
+LOG_CATEGORY_ICON="🍺"
+info "Setting log level to debug."
+LOG_LEVEL=5
 
 if ! check_binary brew; then
-  info "[🍺        Homebrew] Application is not installed"
+  info "Application is not installed"
   exit 0
 else
-  debug "[🍺        Homebrew] Application is installed"
+  debug "Application is installed"
 fi
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Install Homebrew Bundles
 # --------------------------------------------------------------------------------------------------
-info "[🍺        Homebrew] Installing core Homebrew bundles"
-brew bundle install --no-upgrade --no-lock --file=/dev/stdin <<EOF
-{{ template "Brewfile.tmpl" . }}
-EOF
+info "Installing Homebrew packages"
+brew bundle install --no-lock --file="${HOME}/.config/homebrew/Brewfile"
 # ==================================================================================================

@@ -7,7 +7,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Get script libraries
+#   @description    :   Load script libraries
 # --------------------------------------------------------------------------------------------------
 {{ template "script-library" }}
 # ==================================================================================================
@@ -15,10 +15,12 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "[💾       App Store] Setting log level to debug."
-LOG_LEVEL=7
+LOG_CATEGORY="App Store"
+LOG_CATEGORY_ICON="💾"
+info "Setting log level to debug."
+LOG_LEVEL=5
 
-info "[💾       App Store] Closing App Store, to prevent it from overriding changes."
+info "Closing App Store, to prevent it from overriding changes."
 osascript -e 'tell application "App Store" to quit'
 killall "cfprefsd"
 # ==================================================================================================
@@ -27,32 +29,32 @@ killall "cfprefsd"
 #   @description    :   App Store | Settings
 # --------------------------------------------------------------------------------------------------
 ### Automatic Updates
-debug "[💾       App Store] Settings | Automatic Updates"
+debug "Settings | Automatic Updates"
 #   option [default] --> checked
 sudo defaults write /Library/Preferences/com.apple.commerce AutoUpdate -bool true
 #   option --> unchecked
 # sudo defaults write /Library/Preferences/com.apple.commerce AutoUpdate -bool false
 
 ### Automatically download in-app content
-debug "[💾       App Store] Settings | Automatically download in-app content"
+debug "Settings | Automatically download in-app content"
 #   option [default] --> checked
 defaults write com.apple.appstored BackgroundAssetDownloadsEnabled -int 1
 #   option --> unchecked
 # defaults write com.apple.appstored BackgroundAssetDownloadsEnabled -int 0
 
 ### Video Autoplay
-debug "[💾       App Store] Settings | Video Autoplay"
+debug "Settings | Video Autoplay"
 #   option [default] --> checked
 defaults write com.apple.AppStore AutoPlayVideoSetting -string "on"
 #   option --> unchecked
 # defaults write com.apple.AppStore AutoPlayVideoSetting -string "off"
 
 ### In-App Ratings & Reviews
-debug "[💾       App Store] Settings | In-App Ratings & Reviews"
+debug "Settings | In-App Ratings & Reviews"
 #   option [default] --> checked
 defaults write com.apple.AppStore InAppReviewEnabled -int 1
 #   option --> unchecked
 # defaults write com.apple.AppStore InAppReviewEnabled -int 0
 # ==================================================================================================
 
-info "[💾       App Store] Configuration complete."
+info "Configuration complete."

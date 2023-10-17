@@ -7,7 +7,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Get script libraries
+#   @description    :   Load script libraries
 # --------------------------------------------------------------------------------------------------
 {{ template "script-library" }}
 # ==================================================================================================
@@ -15,25 +15,27 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "[📂            User] Setting log level to debug."
-LOG_LEVEL=7
+LOG_CATEGORY="User"
+LOG_CATEGORY_ICON="📂"
+info "Setting log level to debug."
+LOG_LEVEL=5
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Create user directories
 # --------------------------------------------------------------------------------------------------
-info "[📂            User] Creating directory: ${HOME}/Code/"
+info "Creating directory: ${HOME}/Code/"
 mkdir -p "${HOME}/Code"
 
 {{ if .personal -}}
-info "[📂            User] Creating directory: ${HOME}/Code/github.com/"{{ .personal_git_user | quote }}
+info "Creating directory: ${HOME}/Code/github.com/"{{ .personal_git_user | quote }}
 mkdir -p "${HOME}/Code/github.com/"{{ .personal_git_user | quote }}
 
 {{ end }}
 
-info "[📂            User] Creating directory: ${HOME}/Projects/"
+info "Creating directory: ${HOME}/Projects/"
 mkdir -p "${HOME}/Projects"
 
-info "[📂            User] Creating directory: ${HOME}/tmp/"
+info "Creating directory: ${HOME}/tmp/"
 mkdir -p "${HOME}/tmp"
 # ==================================================================================================

@@ -11,7 +11,8 @@
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
   "files.associations": {
-    "*.json5": "jsonc"
+    "*.json5": "jsonc",
+    "*.yaml": "yaml"
   },
   "files.autoSave": "onFocusChange",
   "files.eol": "\n",
@@ -29,6 +30,7 @@
   "workbench.tree.renderIndentGuides": "none",
 
   /*+--- Color Theme ---+*/
+  "workbench.colorTheme": "Flexoki Dark",
 
   /*+--- Language Scopes ---+*/
   "[javascript]": {
@@ -56,6 +58,7 @@
   },
 
   /*+--- Extensions ---+*/
+  "python.defaultInterpreterPath": "/opt/homebrew/bin/python3",
   "redhat.telemetry.enabled": false,
   "sops.beta": false,
   "yaml.format.enable": true

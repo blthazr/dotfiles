@@ -32,5 +32,7 @@ fi
 #   @description    :   Install Homebrew Bundles
 # --------------------------------------------------------------------------------------------------
 info "Installing Homebrew packages"
-brew bundle install --no-lock --file="${HOME}/.config/homebrew/Brewfile"
+brew bundle install --no-upgrade --no-lock --file=/dev/stdin <<EOF
+{{ template "Brewfile.tmpl" . }}
+EOF
 # ==================================================================================================

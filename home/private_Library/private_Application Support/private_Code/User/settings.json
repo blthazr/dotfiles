@@ -53,13 +53,23 @@
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[yaml]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
-  },
-
   /*+--- Extensions ---+*/
   "python.defaultInterpreterPath": "/opt/homebrew/bin/python3",
   "redhat.telemetry.enabled": false,
   "sops.beta": false,
-  "yaml.format.enable": true
+  "todo-tree.highlights.useColourScheme": true,
+  "todo-tree.tree.expanded": true,
+  "vs-kubernetes": {
+    "vs-kubernetes.crd-code-completion": "disabled"
+  },
+  "yaml.format.enable": true,
+  "yaml.schemas": {
+    "http://json.schemastore.org/github-workflow.json": [
+      ".github/workflows/*.yaml"
+    ],
+    "https://json.schemastore.org/taskfile.json": [
+      "Taskfile.yaml",
+      ".taskfiles/*.yaml"
+    ]
+  }
 }

@@ -5,6 +5,7 @@
 
 {{/* feature flags */}}
 {{- $personal := false -}}{{/* true if this machine should have personal config/secrets */}}
+{{- $work := false -}}{{/* true if this machine should have work config/secrets */}}
 {{- "" -}}
 
 {{- if not stdinIsATTY -}}
@@ -50,6 +51,16 @@
 
   {{- end -}}
 
+  {{- if hasKey . "work" -}}
+    {{- $orig_work := .work -}}
+    {{- $work = promptBool "Enable work configs/secrets [y|n]" $orig_work -}}
+  {{- else -}}
+    {{- $work = promptBool "Enable work configs/secrets [y|n]" $work -}}
+  {{- end -}}
+
+  {{- if $work -}}
+  {{- end -}}
+
 {{- end -}}
 
 {{- $osID := .chezmoi.os -}}
@@ -66,6 +77,10 @@ data:
   personal_git_user: {{ $personal_git_user | quote }}
   personal_git_email: {{ $personal_git_email | quote }}
   personal_lastpass_email: {{ $personal_lastpass_email | quote }}
+  {{- end }}
+
+  work: {{ $work }}
+  {{- if $work }}
   {{- end }}
 
 sourceDir: "{{ .chezmoi.sourceDir }}"

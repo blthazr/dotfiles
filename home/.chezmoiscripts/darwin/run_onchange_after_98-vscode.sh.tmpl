@@ -26,62 +26,36 @@ if ! check_macos_app "Code.app"; then
 else
   debug "[🆚         VS Code] Application is installed."
 
-  if [ "${TERM_PROGRAM}" == "vscode" ]; then
-    error "[🆚         VS Code] VS Code is unable to be configured while running. Re-run \`chezmoi apply\` from another terminal, such as Terminal.app."
-    exit 0
-  fi
-
-  info "[🆚         VS Code] Closing VS Code, to prevent it from overriding changes."
-  osascript -e 'tell application "Code" to quit'
-  killall "cfprefsd"
-
 fi
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   VS Code | Extensions
 # --------------------------------------------------------------------------------------------------
-extensions_list=(
-  "albert.tabout"
-  "eamodio.gitlens"
-  "editorconfig.editorconfig"
-  "esbenp.prettier-vscode"
-  "gruntfuggly.todo-tree"
-  "hashicorp.terraform"
-  "mikestead.dotenv"
-  "ms-azuretools.vscode-docker"
-  "ms-python.python"
-  "ms-python.vscode-pylance"
-  "ms-vscode-remote.remote-containers"
-  "ms-vscode-remote.remote-ssh"
-  "ms-vscode-remote.remote-ssh-edit"
-  "oderwat.indent-rainbow"
-  "raillyhugo.one-hunter"
-  "redhat.vscode-yaml"
-  "samuelcolvin.jinjahtml"
-  "signageos.signageos-vscode-sops"
-  "tamasfe.even-better-toml"
-  "tomoki1207.selectline-statusbar"
-  "usernamehw.errorlens"
-)
-
 function get_vscode_extension_state() {
   local extension="$1"
-  code --list-extensions 2>/dev/null | grep "${extension}" >/dev/null
+  code --list-extensions 2>/dev/null | grep -i "${extension}" >/dev/null
 }
 
-for extension in "${extensions_list[@]}"; do
+while IFS= read -r extension_id; do
+  if [[ "${extension_id}" == \#* ]] || test -z "${extension_id}"; then
+    debug "[🆚         VS Code] Skipping commented out or empty line: ${extension_id}"
+    continue
+  fi
 
-  if ! get_vscode_extension_state "${extension}"; then
-    debug "[🆚         VS Code] Installing extension: ${extension}."
-    code --install-extension "${extension}" &> /dev/null
+  if ! get_vscode_extension_state "${extension_id}"; then
+    info "[🆚         VS Code] Installing extension: ${extension_id}."
+    code --install-extension "${extension_id}" &> /dev/null
 
   else
-    debug "[🆚         VS Code] Extension already installed: ${extension}."
+    debug "[🆚         VS Code] Extension already installed: ${extension_id}."
 
   fi
 
-done
+done <<< "$(cat <<EOF
+{{ template "vscode_plugins.tmpl" . -}}
+EOF
+)"
 # ==================================================================================================
 
 info "[🆚         VS Code] Configuration complete."

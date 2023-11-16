@@ -6,6 +6,7 @@
     "*.toml.tmpl": "jinja-toml",
     "*.yaml.tmpl": "jinja-yaml",
     "*.yml.tmpl": "jinja-yaml",
+    "dot_zshrc*.tmpl": "jinja-shell",
     "*.zsh.tmpl": "jinja-shell",
     "Brewfile*.tmpl": "jinja-rb",
     "*.tmpl": "jinja"

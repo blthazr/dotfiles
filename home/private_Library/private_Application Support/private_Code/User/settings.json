@@ -7,6 +7,7 @@
   "editor.guides.bracketPairsHorizontal": true,
   "editor.guides.highlightActiveBracketPair": true,
   "editor.tabSize": 2,
+  "editor.wordWrap": "off",
   "explorer.compactFolders": false,
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
@@ -25,7 +26,7 @@
   "terminal.integrated.detectLocale": "off",
   "update.showReleaseNotes": false,
   "window.newWindowDimensions": "maximized",
-  "window.restoreWindows": "none",
+  "window.restoreWindows": "all",
   "workbench.sideBar.location": "left",
   "workbench.tree.renderIndentGuides": "none",
 
@@ -33,6 +34,9 @@
   "workbench.colorTheme": "Flexoki Dark",
 
   /*+--- Language Scopes ---+*/
+  "[dockercompose]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -54,6 +58,15 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   /*+--- Extensions ---+*/
+  "linter.linters": {
+    "yamllint": {
+      "configFiles": [
+        ".yamllint.yml",
+        ".yamllint.yaml",
+        ".yamllint"
+      ]
+    }
+  },
   "python.defaultInterpreterPath": "/opt/homebrew/bin/python3",
   "redhat.telemetry.enabled": false,
   "sops.beta": false,

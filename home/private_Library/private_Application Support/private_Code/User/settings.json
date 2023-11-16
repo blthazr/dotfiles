@@ -1,5 +1,5 @@
 {
-  /*+--- Core ---+*/
+  /*+--- Text Editor ---+*/
   "editor.bracketPairColorization.enabled": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.stickyScroll.enabled": true,
@@ -8,9 +8,6 @@
   "editor.guides.highlightActiveBracketPair": true,
   "editor.tabSize": 2,
   "editor.wordWrap": "off",
-  "explorer.compactFolders": false,
-  "explorer.confirmDelete": false,
-  "explorer.confirmDragAndDrop": false,
   "files.associations": {
     "*.json5": "jsonc",
     "*.yaml": "yaml"
@@ -20,19 +17,59 @@
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
-  "git.autofetch": true,
-  "git.confirmSync": false,
-  "security.workspace.trust.untrustedFiles": "open",
-  "terminal.integrated.detectLocale": "off",
-  "update.showReleaseNotes": false,
-  "window.newWindowDimensions": "maximized",
-  "window.restoreWindows": "all",
+
+  /*+--- Workbench ---+*/
+  "workbench.colorTheme": "Flexoki Dark",
   "workbench.sideBar.location": "left",
   "workbench.tree.renderIndentGuides": "none",
 
-  /*+--- Color Theme ---+*/
-  "workbench.colorTheme": "Flexoki Dark",
+  /*+--- Window ---+*/
+  "window.newWindowDimensions": "maximized",
+  "window.restoreWindows": "all",
 
+  /*+--- Features ---+*/
+  "explorer.compactFolders": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "terminal.integrated.detectLocale": "off",
+
+  /*+--- Application ---+*/
+  "update.showReleaseNotes": false,
+
+  /*+--- Security ---+*/
+  "security.workspace.trust.untrustedFiles": "open",
+
+  /*+--- Extensions ---+*/
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "linter.linters": {
+    "yamllint": {
+      "configFiles": [
+        ".yamllint.yml",
+        ".yamllint.yaml",
+        ".yamllint"
+      ]
+    }
+  },
+
+  "python.defaultInterpreterPath": "/opt/homebrew/bin/python3",
+  "redhat.telemetry.enabled": false,
+  "sops.beta": false,
+  "todo-tree.highlights.useColourScheme": true,
+  "todo-tree.tree.expanded": true,
+  "vs-kubernetes": {
+    "vs-kubernetes.crd-code-completion": "disabled"
+  },
+  "yaml.format.enable": true,
+  "yaml.schemas": {
+    "http://json.schemastore.org/github-workflow.json": [
+      ".github/workflows/*.yaml"
+    ],
+    "https://json.schemastore.org/taskfile.json": [
+      "Taskfile.yaml",
+      ".taskfiles/*.yaml"
+    ]
+  },
   /*+--- Language Scopes ---+*/
   "[dockercompose]": {
     "editor.defaultFormatter": "ms-azuretools.vscode-docker"
@@ -56,33 +93,5 @@
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  /*+--- Extensions ---+*/
-  "linter.linters": {
-    "yamllint": {
-      "configFiles": [
-        ".yamllint.yml",
-        ".yamllint.yaml",
-        ".yamllint"
-      ]
-    }
-  },
-  "python.defaultInterpreterPath": "/opt/homebrew/bin/python3",
-  "redhat.telemetry.enabled": false,
-  "sops.beta": false,
-  "todo-tree.highlights.useColourScheme": true,
-  "todo-tree.tree.expanded": true,
-  "vs-kubernetes": {
-    "vs-kubernetes.crd-code-completion": "disabled"
-  },
-  "yaml.format.enable": true,
-  "yaml.schemas": {
-    "http://json.schemastore.org/github-workflow.json": [
-      ".github/workflows/*.yaml"
-    ],
-    "https://json.schemastore.org/taskfile.json": [
-      "Taskfile.yaml",
-      ".taskfiles/*.yaml"
-    ]
   }
 }

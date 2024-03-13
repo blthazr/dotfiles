@@ -1,9 +1,0 @@
-{
-  "recommendations": [
-    "mousavian.ssh-config-syntax-highlighter",
-    "redhat.vscode-yaml",
-    "samuelcolvin.jinjahtml",
-    "signageos.signageos-vscode-sops",
-    "tamasfe.even-better-toml"
-  ]
-}

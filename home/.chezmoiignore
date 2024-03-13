@@ -1,9 +1,0 @@
-# file shards
-*-shard
-*-shard*
-**/*-shard*
-
-{{ if ne .chezmoi.os "darwin" }}
-.chezmoiscripts/darwin/**
-Library/
-{{ end }}

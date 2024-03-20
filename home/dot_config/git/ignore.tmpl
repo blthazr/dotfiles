@@ -1,0 +1,12 @@
+{{- if eq .osid "darwin" -}}
+
+# Apple MacOS
+.DS_Store
+
+# Microsoft Windows
+Thumbs.db
+
+# sops
+.decrypted~*
+
+{{- end }}

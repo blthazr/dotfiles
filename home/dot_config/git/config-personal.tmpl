@@ -1,0 +1,6 @@
+{{- if eq .osid "darwin" -}}
+  {{- if .personal }}
+[user]
+  email = {{ .personal_git_email | quote }}
+  {{- end -}}
+{{- end }}

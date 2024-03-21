@@ -1,5 +1,3 @@
-{{- if eq .osid "darwin" -}}
-
 [user]
   name = {{ .name | quote }}
 [core]
@@ -8,9 +6,7 @@
 [init]
   defaultBranch = main
 
-  {{- if .personal }}
+{{- if .personal }}
 [includeIf "gitdir:~/Code/github.com/{{ .personal_git_user }}/"]
   path = ~/.config/git/config-personal
-  {{- end -}}
-
 {{- end }}

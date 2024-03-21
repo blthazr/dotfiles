@@ -44,19 +44,12 @@
   {{- end -}}
 {{- end -}}
 
-{{/* os detection */}}
-{{- $osID := .chezmoi.os -}}
-{{- if (and (eq .chezmoi.os "linux") (hasKey .chezmoi.osRelease "id")) -}}
-  {{- $osID = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
-{{- end -}}
-
 {{- if $interactive -}}
   {{- writeToStdout "💡 Tip: you can re-enter your data with `chezmoi init --data=false`.\n" -}}
 {{- end -}}
 
 data:
   name: {{ $name | quote }}
-  osid: {{ $osID | quote }}
   {{- if $personal }}
   personal: {{ $personal }}
   personal_git_user: {{ $personal_git_user | quote }}

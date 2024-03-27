@@ -1,0 +1,46 @@
+#!{{ lookPath "bash" }}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @file           :
+#   @description    :
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Load script libraries
+# --------------------------------------------------------------------------------------------------
+{{ template "script-library" }}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight
+# --------------------------------------------------------------------------------------------------
+info "Setting log level to debug."
+LOG_LEVEL=5
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Apple Silicon CPU
+# --------------------------------------------------------------------------------------------------
+{{ if (eq .chezmoi.arch "arm64") }}
+debug "Checking CPU type" -category "Rosetta 2" -icon "🏵"
+cpu_brand_string="$(sysctl -n machdep.cpu.brand_string)"
+
+if [[ "${cpu_brand_string}" =~ "Apple" ]]; then
+  debug "Apple arm-based CPU detected" -category "Rosetta 2" -icon "🏵"
+  debug "Verifying installation." -category "Rosetta 2" -icon "🏵"
+
+  if /usr/bin/pgrep oahd >/dev/null 2>&1; then
+    debug "Application is installed." -category "Rosetta 2" -icon "🏵"
+    exit 0
+  else
+    info "Installing Rosetta." -category "Rosetta 2" -icon "🏵"
+    softwareupdate --install-rosetta --agree-to-license
+  fi
+
+else
+  critical "${cpu_brand_string} is an unsupported CPU type" -category "Rosetta 2" -icon "🏵"
+fi
+
+{{ end }}
+# ==================================================================================================

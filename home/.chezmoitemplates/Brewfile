@@ -47,6 +47,9 @@ brew "artginzburg/tap/sudo-touchid"
   # Command-line helper for the 1Password password manager
   cask "1password-cli"
   # --------------------------------------------------------------------------------------------------
+  # Calendar software
+  cask "fantastical"
+  # --------------------------------------------------------------------------------------------------
   {{- end }}
 
 {{- end }}

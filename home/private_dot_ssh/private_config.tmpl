@@ -1,0 +1,48 @@
+{{ if .personal }}
+Include config.d/home/*
+{{- end }}
+
+# default options that apply to all connections
+Host *
+  # default port
+  port 22
+
+  # enable compression
+  Compression yes
+
+  # keep the connection alive by sending a null packet every minute
+  ServerAliveCountMax 10
+  ServerAliveInterval 60
+
+{{- if .personal }}
+
+  # accelerate connections by reusing existing connections to the same host
+  ControlMaster auto
+  ControlPath ~/.ssh/control-%h-%p-%r
+  ControlPersist 5
+{{- end }}
+
+{{- if eq .chezmoi.os "darwin" }}
+
+  # store passphrases in the macOS keychain
+  {{- if .personal }}
+  AddKeysToAgent yes
+  {{- end }}
+  IgnoreUnknown UseKeychain
+  UseKeychain yes
+ {{- end }}
+
+{{- if .personal }}
+
+Host 192.168.*.*
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+Host 172.16.*.*
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+Host 10.*.*.*
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+{{- end }}

@@ -1,0 +1,72 @@
+#!{{ lookPath "bash" }}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @file           :
+#   @description    :
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Load script libraries
+# --------------------------------------------------------------------------------------------------
+{{ template "script-library" }}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight
+# --------------------------------------------------------------------------------------------------
+info "Setting log level to debug." -category "Homebrew" -icon "🍺"
+LOG_LEVEL=5
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Install Homebrew
+# --------------------------------------------------------------------------------------------------
+debug "Verifying installation." -category "Homebrew" -icon "🍺"
+
+if ! check_binary brew; then
+  info "Application is not installed." -category "Homebrew" -icon "🍺"
+  info "Installing Homebrew, a MacOS package manager. Follow the instructions!" -category "Homebrew" -icon "🍺"
+  {{ template "script-sudo" . }}
+
+  cpu_brand_string="$(sysctl -n machdep.cpu.brand_string)"
+  if [[ "${cpu_brand_string}" =~ "Apple" ]]; then
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ "${cpu_brand_string}" =~ "Intel" ]]; then
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  else
+    critical "Unable to install. ${cpu_brand_string} is an unsupported CPU type." -category "Homebrew" -icon "🍺"
+  fi
+
+  debug "Validating installation." -category "Homebrew" -icon "🍺"
+  if ! check_binary brew; then
+    critical "Homebrew is not installed." -category "Homebrew" -icon "🍺"
+  fi
+
+else
+  debug "Application is installed." -category "Homebrew" -icon "🍺"
+
+fi
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Install mas
+# --------------------------------------------------------------------------------------------------
+debug "Verifying installation." -category "mas" -icon "🧺"
+
+if ! check_binary mas; then
+  info "Application is not installed." -category "mas" -icon "🧺"
+  info "Installing mas, Mac Apple Store CLI." -category "mas" -icon "🧺"
+  brew install mas
+
+  debug "Validating installation." -category "mas" -icon "🧺"
+  if ! check_binary mas; then
+    critical "mas is not installed." -category "mas" -icon "🧺"
+  fi
+
+else
+  debug "Application is installed." -category "mas" -icon "🧺"
+
+fi
+# ==================================================================================================

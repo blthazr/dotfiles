@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @description    :
+#   @references     :   https://alinex.gitlab.io/bash-lib/libs/log/
+#                       https://github.com/martinburger/bash-common-helpers/blob/master/bash-common-helpers.sh
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Script Variables
+# --------------------------------------------------------------------------------------------------
+LOG_LEVEL="${LOG_LEVEL:-4}"
+NO_COLOR="${NO_COLOR:-}"    # true = disable color, otherwise autodetected
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Console Logging Functions
+# --------------------------------------------------------------------------------------------------
+function console_log () {
+  local log_level="${1}"
+  shift
+
+  local param
+  while [[ $# -gt 0 ]]; do
+    param="$1"
+    case $param in
+      -category)
+        if [[ -n "${2:-}" ]]; then
+          local local_log_category="${2}"
+          shift
+        fi
+        ;;
+      -icon)
+        if [[ -n "${2:-}" ]]; then
+          local local_log_category_icon="${2}"
+          shift
+        fi
+        ;;
+      *)
+        local_positional_param+=("${1}") # save positional parameters
+        ;;
+    esac
+    shift
+  done
+
+    # restore positional parameters
+  if ! [[ -z ${local_positional_param+x} ]]; then
+    set -- "${local_positional_param[@]}"
+    unset local_positional_param
+  fi
+
+  local_log_category="${local_log_category:-false}"
+  local_log_category_icon="${local_log_category_icon:-🌐}"
+
+  # shellcheck disable=SC2034
+  local color_debug="\\x1b[34m"
+  # shellcheck disable=SC2034
+  local color_info="\\x1b[32m"
+  # shellcheck disable=SC2034
+  local color_warning="\\x1b[33m"
+  # shellcheck disable=SC2034
+  local color_error="\\x1b[31m"
+  # shellcheck disable=SC2034
+  local color_critical="\\x1b[1;4;37;41m"
+
+  local colorvar="color_${log_level}"
+  local color="${!colorvar:-${color_error}}"
+  local color_reset="\\x1b[0m"
+
+  if [[ "${NO_COLOR:-}" = "true" ]] || { [[ "${TERM:-}" != "xterm"* ]] && [[ "${TERM:-}" != "screen"* ]]; } || [[ ! -t 2 ]]; then
+    if [[ "${NO_COLOR:-}" != "false" ]]; then
+      # Don't use colors on pipes or non-recognized terminals
+      color=""; color_reset=""
+    fi
+  fi
+
+  # all remaining arguments are to be printed
+  local log_level_block="${color}$(printf "[%9s]" "${log_level}")${color_reset}"
+  local log_line=""
+
+  while IFS=$'\n' read -r log_line; do
+    if test "$local_log_category" = false; then
+      echo -e "$(date -u +"%Y-%m-%d %H:%M:%S UTC") ${color}${log_level_block}${color_reset} ${log_line}" 1>&2
+    else
+      local log_category="$(printf "[${local_log_category_icon}%17s]" "${local_log_category:0:16}")"
+      echo -e "$(date -u +"%Y-%m-%d %H:%M:%S UTC") ${log_level_block} ${log_category} ${log_line}" 1>&2
+    fi
+  done <<< "${@:-}"
+}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Debug level logging
+# --------------------------------------------------------------------------------------------------
+function debug()    { [[ "${LOG_LEVEL:-0}" -ge 5 ]] && console_log debug "${@}"; true; }
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Info level logging
+# --------------------------------------------------------------------------------------------------
+function info()     { [[ "${LOG_LEVEL:-0}" -ge 4 ]] && console_log info "${@}"; true; }
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Warn level logging
+# --------------------------------------------------------------------------------------------------
+function warning()  { [[ "${LOG_LEVEL:-0}" -ge 3 ]] && console_log warning "${@}"; true; }
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Error level logging
+# --------------------------------------------------------------------------------------------------
+function error()    { [[ "${LOG_LEVEL:-0}" -ge 2 ]] && console_log error "${@}"; true; }
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Critical level logging
+# --------------------------------------------------------------------------------------------------
+function critical() { [[ "${LOG_LEVEL:-0}" -ge 1 ]] && console_log critical "${@}"; exit 1; }
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Check if binary is available
+# --------------------------------------------------------------------------------------------------
+function check_binary() {
+  if [[ $# -lt 1 ]]; then
+    critical "Missing required argument for function::check_binary()."
+  fi
+
+  if ! command -v "$1" > /dev/null 2>&1; then
+
+    if [[ -n ${2-} ]]; then
+      critical "Missing dependency: Could not locate $1." -category "function::check_binary"
+    else
+      # debug "Missing dependency: $1." -category "function::check_binary"
+      return 1
+    fi
+
+  fi
+
+  # debug "Dependency found: $1" -category "function::check_binary"
+  return 0
+}
+# ==================================================================================================

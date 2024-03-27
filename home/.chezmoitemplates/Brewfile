@@ -1,0 +1,41 @@
+{{ if eq .chezmoi.os "darwin" }}
+tap "homebrew/bundle"
+# --------------------------------------------------------------------------------------------------
+# Manage your dotfiles across multiple diverse machines, securely
+brew "chezmoi"
+# --------------------------------------------------------------------------------------------------
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# --------------------------------------------------------------------------------------------------
+# Get a file from an HTTP, HTTPS or FTP server
+brew "curl"
+# --------------------------------------------------------------------------------------------------
+# Load/unload environment variables based on $PWD
+brew "direnv"
+# --------------------------------------------------------------------------------------------------
+# Popular GNU data compression program
+brew "gzip"
+# --------------------------------------------------------------------------------------------------
+# Lightweight and flexible command-line JSON processor
+brew "jq"
+# --------------------------------------------------------------------------------------------------
+# Mac App Store command-line interface
+brew "mas"
+# --------------------------------------------------------------------------------------------------
+# Display directories as trees (with optional color/HTML output)
+brew "tree"
+# --------------------------------------------------------------------------------------------------
+# Executes a program periodically, showing output fullscreen
+brew "watch"
+# --------------------------------------------------------------------------------------------------
+# Internet file retriever
+brew "wget"
+# --------------------------------------------------------------------------------------------------
+# Process YAML, JSON, XML, CSV and properties documents from the CLI
+brew "yq"
+# --------------------------------------------------------------------------------------------------
+# Permanent TouchID support for sudo
+tap "artginzburg/tap"
+brew "artginzburg/tap/sudo-touchid"
+# --------------------------------------------------------------------------------------------------
+{{- end }}

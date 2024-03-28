@@ -15,17 +15,17 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "Setting log level to debug." -category "Homebrew" -icon "🍺"
+info "setting log level to debug." -category "Homebrew" -icon "🍺"
 LOG_LEVEL=5
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Install Homebrew
 # --------------------------------------------------------------------------------------------------
-debug "Verifying installation." -category "Homebrew" -icon "🍺"
+debug "verifying installation of homebrew." -category "Homebrew" -icon "🍺"
 
 if ! check_binary brew; then
-  info "Application is not installed." -category "Homebrew" -icon "🍺"
+  info "homebrew is not installed." -category "Homebrew" -icon "🍺"
   info "Installing Homebrew, a MacOS package manager. Follow the instructions!" -category "Homebrew" -icon "🍺"
   {{ template "script-sudo" . }}
 
@@ -36,16 +36,16 @@ if ! check_binary brew; then
   elif [[ "${cpu_brand_string}" =~ "Intel" ]]; then
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   else
-    critical "Unable to install. ${cpu_brand_string} is an unsupported CPU type." -category "Homebrew" -icon "🍺"
+    critical "unable to install homebrew. ${cpu_brand_string} is an unsupported CPU type." -category "Homebrew" -icon "🍺"
   fi
 
-  debug "Validating installation." -category "Homebrew" -icon "🍺"
+  debug "validating installation of homebrew." -category "Homebrew" -icon "🍺"
   if ! check_binary brew; then
-    critical "Homebrew is not installed." -category "Homebrew" -icon "🍺"
+    critical "homebrew is not installed." -category "Homebrew" -icon "🍺"
   fi
 
 else
-  debug "Application is installed." -category "Homebrew" -icon "🍺"
+  debug "homebrew is installed." -category "Homebrew" -icon "🍺"
 
 fi
 # ==================================================================================================
@@ -53,20 +53,20 @@ fi
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Install mas
 # --------------------------------------------------------------------------------------------------
-debug "Verifying installation." -category "mas" -icon "🧺"
+debug "verifying installation of mas." -category "mas" -icon "🧺"
 
 if ! check_binary mas; then
-  info "Application is not installed." -category "mas" -icon "🧺"
+  info "mas is not installed." -category "mas" -icon "🧺"
   info "Installing mas, Mac Apple Store CLI." -category "mas" -icon "🧺"
   brew install mas
 
-  debug "Validating installation." -category "mas" -icon "🧺"
+  debug "validating installation of mas." -category "mas" -icon "🧺"
   if ! check_binary mas; then
     critical "mas is not installed." -category "mas" -icon "🧺"
   fi
 
 else
-  debug "Application is installed." -category "mas" -icon "🧺"
+  debug "mas is installed." -category "mas" -icon "🧺"
 
 fi
 # ==================================================================================================

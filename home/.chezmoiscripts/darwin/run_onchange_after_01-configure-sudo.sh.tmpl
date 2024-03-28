@@ -15,7 +15,7 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "Setting log level to debug." -category "TouchID" -icon "👇"
+info "setting log level to debug." -category "TouchID" -icon "👇"
 LOG_LEVEL=5
 # ==================================================================================================
 
@@ -23,10 +23,14 @@ LOG_LEVEL=5
 #   @description    :   sudo-touchid
 # --------------------------------------------------------------------------------------------------
 {{ if .personal }}
-info "Installing sudo-touchid." -category "TouchID" -icon "👇"
+debug "Administrator password is required for \`sudo\` operations in this script." -category "TouchID" -icon "👇"
+{{ template "script-sudo" }}
+
+info "installing sudo-touchid." -category "TouchID" -icon "👇"
 brew install "artginzburg/tap/sudo-touchid"
 
-info "Enabling sudo-touchid." -category "TouchID" -icon "👇"
+info "enabling sudo-touchid." -category "TouchID" -icon "👇"
 sudo-touchid
+# sudo brew services start sudo-touchid
 {{ end }}
 # ==================================================================================================

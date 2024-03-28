@@ -15,7 +15,7 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "Setting log level to debug."
+info "setting log level to debug." -category "System"
 LOG_LEVEL=5
 # ==================================================================================================
 
@@ -23,23 +23,30 @@ LOG_LEVEL=5
 #   @description    :   Apple Silicon CPU
 # --------------------------------------------------------------------------------------------------
 {{ if (eq .chezmoi.arch "arm64") }}
-debug "Checking CPU type" -category "Rosetta 2" -icon "🏵"
+debug "checking cpu type" -category "Rosetta 2" -icon "🏵"
 cpu_brand_string="$(sysctl -n machdep.cpu.brand_string)"
 
 if [[ "${cpu_brand_string}" =~ "Apple" ]]; then
-  debug "Apple arm-based CPU detected" -category "Rosetta 2" -icon "🏵"
-  debug "Verifying installation." -category "Rosetta 2" -icon "🏵"
+  debug "apple arm-based cpu detected." -category "Rosetta 2" -icon "🏵"
+  debug "verifying installation of rosetta 2." -category "Rosetta 2" -icon "🏵"
 
-  if /usr/bin/pgrep oahd >/dev/null 2>&1; then
-    debug "Application is installed." -category "Rosetta 2" -icon "🏵"
-    exit 0
+  if ! /usr/bin/pgrep oahd >/dev/null 2>&1; then
+    debug "Administrator password is required for \`sudo\` operations in this script." -category "Rosetta 2" -icon "🏵"
+    {{ template "script-sudo" }}
+
+    info "installing rosetta 2." -category "Rosetta 2" -icon "🏵"
+    sudo softwareupdate --install-rosetta --agree-to-license
   else
-    info "Installing Rosetta." -category "Rosetta 2" -icon "🏵"
-    softwareupdate --install-rosetta --agree-to-license
+    debug "rosetta 2 is installed." -category "Rosetta 2" -icon "🏵"
+  fi
+
+  debug "validating installation of rosetta 2." -category "Rosetta 2" -icon "🏵"
+  if ! /usr/bin/pgrep oahd >/dev/null 2>&1; then
+    critical "rosetta 2 is not installed." -category "Rosetta 2" -icon "🏵"
   fi
 
 else
-  critical "${cpu_brand_string} is an unsupported CPU type" -category "Rosetta 2" -icon "🏵"
+  critical "${cpu_brand_string} is an unsupported cpu type." -category "Rosetta 2" -icon "🏵"
 fi
 
 {{ end }}

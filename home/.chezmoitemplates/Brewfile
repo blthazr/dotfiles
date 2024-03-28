@@ -50,6 +50,9 @@ brew "artginzburg/tap/sudo-touchid"
   # Calendar software
   cask "fantastical"
   # --------------------------------------------------------------------------------------------------
+  # Fill and save your passwords
+  mas "1Password for Safari", id: 1569813296
+  # --------------------------------------------------------------------------------------------------
   {{- end }}
 
 {{- end }}

@@ -19,6 +19,7 @@
 
   /*+--- Workbench ---+*/
   "workbench.sideBar.location": "left",
+  "workbench.startupEditor": "none",
   "workbench.tree.renderIndentGuides": "none",
 
   /*+--- Window ---+*/

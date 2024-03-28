@@ -143,3 +143,21 @@ function check_binary() {
   return 0
 }
 # ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Check if MacOS app is installed
+# --------------------------------------------------------------------------------------------------
+function check_macos_app() {
+  if [[ $# -lt 1 ]]; then
+    critical "Missing required argument for function::check_macos_app()."
+  fi
+
+  if ! echo $(mdfind "kMDItemKind == 'Application'") | grep -q "$1"; then
+    # debug "Missing dependency: $1." -category "function::check_macos_app"
+    return 1
+  fi
+
+  # debug "Dependency found: $1" -category "function::check_binary"
+  return 0
+}
+# ==================================================================================================

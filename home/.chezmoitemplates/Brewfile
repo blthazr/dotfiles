@@ -41,6 +41,9 @@ brew "artginzburg/tap/sudo-touchid"
 
   {{- if .personal }}
   # --------------------------------------------------------------------------------------------------
+  # Cross-shell prompt for astronauts
+  brew "starship"
+  # --------------------------------------------------------------------------------------------------
   # Password manager that keeps all passwords secure behind one password
   cask "1password"
   # --------------------------------------------------------------------------------------------------

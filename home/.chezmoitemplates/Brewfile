@@ -50,6 +50,12 @@ brew "artginzburg/tap/sudo-touchid"
   # Command-line helper for the 1Password password manager
   cask "1password-cli"
   # --------------------------------------------------------------------------------------------------
+  # Control your Elgato key lights
+  cask "elgato-control-center"
+  # --------------------------------------------------------------------------------------------------
+  # Assign keys, and then decorate and label them
+  cask "elgato-stream-deck"
+  # --------------------------------------------------------------------------------------------------
   # Calendar software
   cask "fantastical"
   # --------------------------------------------------------------------------------------------------

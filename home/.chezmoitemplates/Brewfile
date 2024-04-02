@@ -67,4 +67,58 @@ brew "artginzburg/tap/sudo-touchid"
   # --------------------------------------------------------------------------------------------------
   {{- end }}
 
+  {{- if .devops }}
+  # --------------------------------------------------------------------------------------------------
+  # Simple, modern, secure file encryption
+  brew "age"
+  # --------------------------------------------------------------------------------------------------
+  # Automate deployment, configuration, and upgrading
+  brew "ansible"
+  # --------------------------------------------------------------------------------------------------
+  # Checks ansible playbooks for practices and behaviour
+  brew "ansible-lint"
+  # --------------------------------------------------------------------------------------------------
+  # Cloudflare Tunnel
+  brew "cloudflared"
+  # --------------------------------------------------------------------------------------------------
+  # Kubernetes package manager
+  brew "helm"
+  # --------------------------------------------------------------------------------------------------
+  # Flux CLI
+  tap "fluxcd/tap"
+  brew "fluxcd/tap/flux"
+  # --------------------------------------------------------------------------------------------------
+  # Task runner / simpler Make alternative written in Go
+  tap "go-task/tap"
+  brew "go-task/tap/go-task"
+  # --------------------------------------------------------------------------------------------------
+  # Kubernetes command-line interface
+  brew "kubernetes-cli"
+  # --------------------------------------------------------------------------------------------------
+  # Template-free customization of Kubernetes YAML manifests
+  brew "kustomize"
+  # --------------------------------------------------------------------------------------------------
+  # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
+  brew "prettier"
+  # --------------------------------------------------------------------------------------------------
+  # Framework for managing multi-language pre-commit hooks
+  brew "pre-commit"
+  # --------------------------------------------------------------------------------------------------
+  # Editor of encrypted files
+  brew "sops"
+  # --------------------------------------------------------------------------------------------------
+  # Tool to build, change, and version infrastructure
+  brew "terraform"
+  # --------------------------------------------------------------------------------------------------
+  # App to build and share containerized applications and microservices
+  cask "docker"
+  # --------------------------------------------------------------------------------------------------
+  # Kubernetes IDE
+  cask "lens"
+  # --------------------------------------------------------------------------------------------------
+  # Administration and development platform for PostgreSQL
+  cask "pgadmin4"
+  # --------------------------------------------------------------------------------------------------
+  {{- end }}
+
 {{- end }}

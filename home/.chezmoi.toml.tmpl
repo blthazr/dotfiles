@@ -19,6 +19,7 @@
 
 {{/* feature flags */}}
 {{- $personal := false -}}{{/* true if this machine should have personal config/secrets */}}
+{{- $devops := false -}}{{/* true if this machine should have devops tools */}}
 {{- "" -}}
 
 {{- /* initialize the personal variable */ -}}
@@ -56,6 +57,13 @@
 
   {{- end -}}
 
+  {{- if hasKey . "devops" -}}
+    {{- $orig_devops := .devops -}}
+    {{- $devops = promptBool "Enable devops utilities [y|n]" $orig_devops -}}
+  {{- else -}}
+    {{- $devops = promptBool "Enable devops utilities [y|n]" $devops -}}
+  {{- end -}}
+
 {{- end -}}
 
 {{- if $interactive -}}
@@ -72,3 +80,5 @@ sourceDir = {{ .chezmoi.sourceDir | quote }}
   personal_git_email = {{ $personal_git_email | quote }}
   personal_op_email = {{ $personal_op_email | quote }}
   {{- end }}
+
+  devops = {{ $devops }}

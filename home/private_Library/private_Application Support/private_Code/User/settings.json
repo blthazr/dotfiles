@@ -23,6 +23,7 @@
   "workbench.tree.renderIndentGuides": "none",
 
   /*+--- Window ---+*/
+  "window.confirmSaveUntitledWorkspace": false,
   "window.newWindowDimensions": "maximized",
   "window.restoreWindows": "all",
   /*+--- Features ---+*/

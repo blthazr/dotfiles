@@ -38,7 +38,12 @@
   /*+--- Security ---+*/
 
   /*+--- Extensions ---+*/
-  "git.confirmSync": false
+  "git.confirmSync": false,
+  "redhat.telemetry.enabled": false,
+  "yaml.schemaStore.enable": true,
 
   /*+--- Language Scopes ---+*/
+  "[yaml]": {
+    "editor.defaultFormatter": "PascalReitermann93.vscode-yaml-sort"
+  }
 }

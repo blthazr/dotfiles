@@ -62,11 +62,45 @@ brew "artginzburg/tap/sudo-touchid"
   # Terminal emulator as alternative to Apple's Terminal app
   cask "iterm2"
   # --------------------------------------------------------------------------------------------------
+  # Control windows and applications right from your trackpad
+  cask "swish"
+  # --------------------------------------------------------------------------------------------------
   # Open-source code editor
   cask "visual-studio-code"
   # --------------------------------------------------------------------------------------------------
   # Fill and save your passwords
   mas "1Password for Safari", id: 1569813296
+  # --------------------------------------------------------------------------------------------------
+  # Your to-do list for Mac & iOS
+  mas "Things", id: 904280696
+  # --------------------------------------------------------------------------------------------------
+  {{- end }}
+
+  {{- if .work }}
+  # --------------------------------------------------------------------------------------------------
+  # Meet, chat, call, and collaborate in just one place
+  cask "microsoft-teams"
+  # --------------------------------------------------------------------------------------------------
+  # Team communication and collaboration software
+  cask "slack"
+  # --------------------------------------------------------------------------------------------------
+  # Video communication and virtual meeting platform
+  cask "zoom"
+  # --------------------------------------------------------------------------------------------------
+  # Microsoft Excel
+  mas "Microsoft Excel", id: 462058435
+  # --------------------------------------------------------------------------------------------------
+  # Microsoft OneDrive
+  mas "OneDrive", id: 823766827
+  # --------------------------------------------------------------------------------------------------
+  # Microsoft OneNote
+  mas "Microsoft OneNote", id: 784801555
+  # --------------------------------------------------------------------------------------------------
+  # Microsoft PowerPoint
+  mas "Microsoft PowerPoint", id: 462062816
+  # --------------------------------------------------------------------------------------------------
+  # Microsoft Word
+  mas "Microsoft Word", id: 462054704
   # --------------------------------------------------------------------------------------------------
   {{- end }}
 
@@ -87,6 +121,9 @@ brew "artginzburg/tap/sudo-touchid"
   # Kubernetes package manager
   brew "helm"
   # --------------------------------------------------------------------------------------------------
+  # Deploy Kubernetes Helm Charts
+  brew "helmfile"
+  # --------------------------------------------------------------------------------------------------
   # Flux CLI
   tap "fluxcd/tap"
   brew "fluxcd/tap/flux"
@@ -94,6 +131,9 @@ brew "artginzburg/tap/sudo-touchid"
   # Task runner / simpler Make alternative written in Go
   tap "go-task/tap"
   brew "go-task/tap/go-task"
+  # --------------------------------------------------------------------------------------------------
+  # FAST Kubernetes manifests validator, with support for Custom Resources!
+  brew "kubeconform"
   # --------------------------------------------------------------------------------------------------
   # Kubernetes command-line interface
   brew "kubernetes-cli"
@@ -109,6 +149,16 @@ brew "artginzburg/tap/sudo-touchid"
   # --------------------------------------------------------------------------------------------------
   # Editor of encrypted files
   brew "sops"
+  # --------------------------------------------------------------------------------------------------
+  # Tail multiple Kubernetes pods & their containers
+  brew "stern"
+  # --------------------------------------------------------------------------------------------------
+  # Configuration helper for talos clusters
+  brew "talhelper"
+  # --------------------------------------------------------------------------------------------------
+  # CLI for out-of-band management of Kubernetes nodes created by Talos
+  tap "siderolabs/talos"
+  brew "siderolabs/talos/talosctl"
   # --------------------------------------------------------------------------------------------------
   # Tool to build, change, and version infrastructure
   brew "terraform"

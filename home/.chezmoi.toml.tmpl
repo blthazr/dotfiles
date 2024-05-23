@@ -19,6 +19,7 @@
 
 {{/* feature flags */}}
 {{- $personal := false -}}{{/* true if this machine should have personal config/secrets */}}
+{{- $work := false -}}{{/* true if this machine should have work config/secrets */}}
 {{- $devops := false -}}{{/* true if this machine should have devops tools */}}
 {{- "" -}}
 
@@ -57,6 +58,13 @@
 
   {{- end -}}
 
+  {{- if hasKey . "work" -}}
+    {{- $orig_work := .work -}}
+    {{- $work = promptBool "Enable work configs/secrets [y|n]" $orig_work -}}
+  {{- else -}}
+    {{- $work = promptBool "Enable work configs/secrets [y|n]" $work -}}
+  {{- end -}}
+
   {{- if hasKey . "devops" -}}
     {{- $orig_devops := .devops -}}
     {{- $devops = promptBool "Enable devops utilities [y|n]" $orig_devops -}}
@@ -74,11 +82,11 @@ sourceDir = {{ .chezmoi.sourceDir | quote }}
 
 [data]
   name = {{ $name | quote }}
-  {{- if $personal }}
   personal = {{ $personal }}
+  {{- if $personal }}
   personal_git_user = {{ $personal_git_user | quote }}
   personal_git_email = {{ $personal_git_email | quote }}
   personal_op_email = {{ $personal_op_email | quote }}
   {{- end }}
-
+  work = {{ $work }}
   devops = {{ $devops }}

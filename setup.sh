@@ -38,6 +38,8 @@ GIT_HOST="github.com"
 GIT_USER="blthazr"
 GIT_URL="https://${GIT_HOST}/${GIT_USER}/"
 GIT_REPO="dotfiles"
+CODE_REPO=false
+CODE_REPO_PATH="~/Code/${GIT_HOST}/${GIT_USER}/${GIT_REPO}"
 # ==================================================================================================
 
 
@@ -234,6 +236,9 @@ function parse_params() {
       -nc | --no-color)
         NO_COLOR=true
         ;;
+      -r | --repository)
+        CODE_REPO=true
+        ;;
       -*|--*)
         error "unknown parameter \"${param}\""
         usage
@@ -375,6 +380,15 @@ function main() {
 
   # perform preflight checks
   preflight_checks
+
+  # apply dotfiles
+  info "Applying Chezmoi configuration." -category "Chezmoi" -icon "🧰"
+  
+  if [[ "${CODE_REPO:-}" = "true" ]]; then
+    echo chezmoi --source ${CODE_REPO_PATH} init "${GIT_URL}${GIT_REPO}" --apply
+  else
+    echo chezmoi init "${GIT_URL}${GIT_REPO}" --apply
+  fi
 
 }
 # ==================================================================================================

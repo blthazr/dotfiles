@@ -386,9 +386,9 @@ function main() {
   info "Applying Chezmoi configuration." -category "Chezmoi" -icon "🧰"
   
   if [[ "${CODE_REPO:-}" = "true" ]]; then
-    echo chezmoi --source ${CODE_REPO_PATH} init "${GIT_URL}${GIT_REPO}" --apply
+   chezmoi --source ${CODE_REPO_PATH} init "${GIT_URL}${GIT_REPO}" --apply
   else
-    echo chezmoi init "${GIT_URL}${GIT_REPO}" --apply
+   chezmoi init "${GIT_URL}${GIT_REPO}" --apply
   fi
 
 }

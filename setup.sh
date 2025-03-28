@@ -55,6 +55,7 @@ Dotfiles Setup
 Options:
   -h, --help            show this help message and exit
   -nc, --no-color       don't use colors for logging
+  -r, --repository      save repo in ~/Code directory
   -v, --verbose         verbose console logging
 EOF
 }

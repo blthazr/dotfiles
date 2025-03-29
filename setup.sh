@@ -199,7 +199,7 @@ function check_command() {
 function init() {
   readonly orig_cwd="$PWD"
   readonly script_params="$*"
-  readonly script_path="${BASH_SOURCE[0]}"
+  readonly script_path="${BASH_SOURCE}"
   script_dir="$(dirname "$script_path")"
   script_name="$(basename "$script_path")"
   readonly script_dir script_name

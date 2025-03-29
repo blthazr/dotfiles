@@ -67,22 +67,20 @@ EOF
 # --------------------------------------------------------------------------------------------------
 function display_logo() {
 # https://patorjk.com/software/taag/
-# Font | Doom
-# Width | Full
-# Height | Full
+# Font | Larry 3D
   echo -e "${GREEN}
-     _         _     __  _  _
-    | |       | |   / _|(_)| |
-  __| |  ___  | |_ | |_  _ | |  ___  ___
- / _\` | / _ \ | __||  _|| || | / _ \/ __|
-| (_| || (_) || |_ | |  | || ||  __/\__ \\
- \__,_| \___/  \__||_|  |_||_| \___||___/
+  __              __         ___          ___
+ /\ \            /\ \__    /'___\  __    /\_ \\
+ \_\ \     ___   \ \ ,_\  /\ \__/ /\_\   \//\ \       __     ____
+ /'_\` \   / __\`\  \ \ \/  \ \ ,__ \\/\ \    \ \ \    /'__\`\  /',__\\
+/\ \L\ \ /\ \L\ \  \ \ \_  \ \ \_/ \ \ \    \_\ \_ /\  __/ /\__, \`\\
+\ \___,_\\\\\\ \____/   \ \__\  \ \_\   \ \_\   /\____\\\\\\ \____\\\\\\/\____/
+ \/__,_ / \/___/     \/__/   \/_/    \/_/   \/____/ \/____/ \/___/
 ${VIOLET}
-            BOOTSTRAP SCRIPT${WHITE}
+          *** This is bootstrap script for my dotfiles ***${WHITE}
+                ${GIT_URL}${GIT_REPO}${NOFORMAT}
 
-    ${GIT_URL}${GIT_REPO}${NOFORMAT}
-
-  " >&1
+ " >&1
 }
 # ==================================================================================================
 
@@ -379,17 +377,17 @@ function main() {
   # display script logo
   display_logo
 
-  # perform preflight checks
-  preflight_checks
+  # # perform preflight checks
+  # preflight_checks
 
-  # apply dotfiles
-  info "Applying Chezmoi configuration." -category "Chezmoi" -icon "🧰"
+  # # apply dotfiles
+  # info "Applying Chezmoi configuration." -category "Chezmoi" -icon "🧰"
   
-  if [[ "${CODE_REPO:-}" = "true" ]]; then
-   chezmoi --source ${CODE_REPO_PATH} init "${GIT_URL}${GIT_REPO}" --apply
-  else
-   chezmoi init "${GIT_URL}${GIT_REPO}" --apply
-  fi
+  # if [[ "${CODE_REPO:-}" = "true" ]]; then
+  #  chezmoi --source ${CODE_REPO_PATH} init "${GIT_URL}${GIT_REPO}" --apply
+  # else
+  #  chezmoi init "${GIT_URL}${GIT_REPO}" --apply
+  # fi
 
 }
 # ==================================================================================================

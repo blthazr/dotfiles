@@ -377,16 +377,16 @@ function main() {
   display_logo
 
   # # perform preflight checks
-  # preflight_checks
+  preflight_checks
 
   # # apply dotfiles
-  # info "Applying Chezmoi configuration." -category "Chezmoi" -icon "🧰"
+  info "Applying Chezmoi configuration." -category "Chezmoi" -icon "🧰"
   
-  # if [[ "${CODE_REPO:-}" = "true" ]]; then
-  #  chezmoi --source ${CODE_REPO_PATH} init "${GIT_URL}${GIT_REPO}" --apply
-  # else
-  #  chezmoi init "${GIT_URL}${GIT_REPO}" --apply
-  # fi
+  if [[ "${CODE_REPO:-}" = "true" ]]; then
+   chezmoi --source ${CODE_REPO_PATH} init "${GIT_URL}${GIT_REPO}" --apply
+  else
+   chezmoi init "${GIT_URL}${GIT_REPO}" --apply
+  fi
 
 }
 # ==================================================================================================

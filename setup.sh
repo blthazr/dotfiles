@@ -424,10 +424,10 @@ function main() {
   
   if [[ "${LOCAL_REPO:-}" = "true" ]]; then
     debug "Initializing Chezmoi as local repo." -category "Chezmoi" -icon "🧰"
-    echo chezmoi --source ${LOCAL_REPO_PATH} init "${GIT_URL}${GIT_REPO}" --apply
+    chezmoi --source ${LOCAL_REPO_PATH} init "${GIT_URL}${GIT_REPO}" --apply
   else
     debug "Initializing Chezmoi." -category "Chezmoi" -icon "🧰"
-    echo chezmoi init "${GIT_URL}${GIT_REPO}" --apply
+    chezmoi init "${GIT_URL}${GIT_REPO}" --apply
   fi
 
 }

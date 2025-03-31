@@ -2,7 +2,7 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #   @author         :   Chris Burnham
-#   @date           :   2024-08-08
+#   @file           :   setup.sh
 #   @description    :   Setup dotfiles
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -37,8 +37,8 @@ GIT_HOST="github.com"
 GIT_USER="blthazr"
 GIT_URL="https://${GIT_HOST}/${GIT_USER}/"
 GIT_REPO="dotfiles"
-CODE_REPO=false
-CODE_REPO_PATH="~/Code/${GIT_HOST}/${GIT_USER}/${GIT_REPO}"
+LOCAL_REPO=false
+LOCAL_REPO_PATH="~/Code/${GIT_HOST}/${GIT_USER}/${GIT_REPO}"
 # ==================================================================================================
 
 
@@ -54,7 +54,7 @@ Dotfiles Setup
 Options:
   -h, --help            show this help message and exit
   -nc, --no-color       don't use colors for logging
-  -r, --repository      save repo in ~/Code directory
+  -l, --local-repo      save repo in ~/Code directory
   -v, --verbose         verbose console logging
 EOF
 }
@@ -76,7 +76,7 @@ function display_logo() {
 \ \___,_\\\\\\ \____/   \ \__\  \ \_\   \ \_\   /\____\\\\\\ \____\\\\\\/\____/
  \/__,_ / \/___/     \/__/   \/_/    \/_/   \/____/ \/____/ \/___/
 ${VIOLET}
-          *** This is bootstrap script for my dotfiles ***${WHITE}
+        *** This is the bootstrap script for my dotfiles ***${WHITE}
                 ${GIT_URL}${GIT_REPO}${NOFORMAT}
 
  " >&1
@@ -234,8 +234,8 @@ function parse_params() {
       -nc | --no-color)
         NO_COLOR=true
         ;;
-      -r | --repository)
-        CODE_REPO=true
+      -l | --local-repo)
+        LOCAL_REPO=true
         ;;
       -*|--*)
         error "unknown parameter \"${param}\""
@@ -266,17 +266,14 @@ function preflight_checks() {
   [[ "${LOG_LEVEL:-}" ]] || critical "Cannot continue without LOG_LEVEL."
 
   # verify OS Type
-  case "$OSTYPE" in
-    darwin*)
-      initialize_macos
-      ;;
-    # linux*)
-    #   initialize_linux
-    #   ;;
-    *)
-      critical "Unsupported OS type: $OSTYPE"
-      ;;
-  esac
+  declare -r ostype="$(uname)"
+  if [[ "${ostype}" == "Darwin" ]]; then
+    initialize_macos
+  # elif [[ "${ostype}" == "Linux" ]]; then
+  #   initialize_linux
+  else
+    critical "Unsupported OS type: $OSTYPE"
+  fi
 }
 # ==================================================================================================
 
@@ -293,6 +290,31 @@ function initialize_macos() {
     xcode-select --install &>/dev/null
   else
     debug "Application is installed." -category "xcode-cli"
+  fi
+
+  # installation | Rosetta 2
+  if [[ "$(uname -m)" =~ "arm64" ]]; then
+    debug "Arm-based CPU detected" -category "Rosetta 2" -icon "🏵"
+    debug "Checking CPU type" -category "Rosetta 2" -icon "🏵"
+    cpu_brand_string="$(sysctl -n machdep.cpu.brand_string)"
+
+    if [[ "${cpu_brand_string}" =~ "Apple" ]]; then
+      debug "Apple arm-based CPU detected" -category "Rosetta 2" -icon "🏵"
+      debug "Verifying installation." -category "Rosetta 2" -icon "🏵"
+
+      if /usr/bin/pgrep oahd >/dev/null 2>&1; then
+        debug "Application is installed." -category "Rosetta 2" -icon "🏵"
+      else
+        info "Installing Rosetta." -category "Rosetta 2" -icon "🏵"
+        sudo softwareupdate --install-rosetta --agree-to-license
+      fi
+
+    else
+      critical "${cpu_brand_string} is an unsupported CPU type" -category "Rosetta 2" -icon "🏵"
+    fi
+
+  else
+    debug "Rosetta 2 is not supported on this system." -category "Rosetta 2" -icon "🏵"
   fi
 
   # installation | Homebrew
@@ -328,6 +350,24 @@ function initialize_macos() {
   debug "Verifying installation of application." -category "xcode-cli"
   if ! xcode-select --print-path &>/dev/null; then
     critical "Xcode Command Line Tools are not installed." -category "xcode-cli"
+  else
+    debug "Xcode Command Line Tools are installed." -category "xcode-cli"
+  fi
+
+  # verification | Rosetta 2
+  debug "Verifying installation of application." -category "Rosetta 2" -icon "🏵"
+  if [[ "$(uname -m)" =~ "arm64" ]]; then
+    if [[ "${cpu_brand_string}" =~ "Apple" ]]; then
+      if ! /usr/bin/pgrep oahd >/dev/null 2>&1; then
+        critical "Rosetta 2 is not installed." -category "Rosetta 2" -icon "🏵"
+      else
+        debug "Rosetta 2 is installed." -category "Rosetta 2" -icon "🏵"
+      fi
+    else
+      debug "Rosetta 2 is not supported on this system." -category "Rosetta 2" -icon "🏵"
+    fi
+  else
+    debug "Rosetta 2 is not supported on this system." -category "Rosetta 2" -icon "🏵"
   fi
 
   # verification | Homebrew
@@ -374,18 +414,20 @@ function main() {
   parse_params "$@"
 
   # display script logo
-  display_logo
+  # display_logo
 
-  # # perform preflight checks
+  # perform preflight checks
   preflight_checks
 
-  # # apply dotfiles
+  # apply dotfiles
   info "Applying Chezmoi configuration." -category "Chezmoi" -icon "🧰"
   
-  if [[ "${CODE_REPO:-}" = "true" ]]; then
-   chezmoi --source ${CODE_REPO_PATH} init "${GIT_URL}${GIT_REPO}" --apply
+  if [[ "${LOCAL_REPO:-}" = "true" ]]; then
+    debug "Initializing Chezmoi as local repo." -category "Chezmoi" -icon "🧰"
+    echo chezmoi --source ${LOCAL_REPO_PATH} init "${GIT_URL}${GIT_REPO}" --apply
   else
-   chezmoi init "${GIT_URL}${GIT_REPO}" --apply
+    debug "Initializing Chezmoi." -category "Chezmoi" -icon "🧰"
+    echo chezmoi init "${GIT_URL}${GIT_REPO}" --apply
   fi
 
 }

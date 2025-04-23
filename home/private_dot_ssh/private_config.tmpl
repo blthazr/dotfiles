@@ -1,0 +1,47 @@
+{{- if .personal }}
+Include config.d/home/*
+{{- end }}
+
+# default options that apply to all connections
+Host *
+  # default port
+  port 22
+
+  # enable compression
+  Compression yes
+
+  # keep the connection alive by sending a null packet every minute
+  ServerAliveCountMax 10
+  ServerAliveInterval 60
+
+  # accelerate connections by reusing existing connections to the same host
+  ControlMaster auto
+  ControlPath "${HOME}/.ssh/control-%h-%p-%r"
+  ControlPersist 5
+
+  AddKeysToAgent yes
+{{- if (eq .chezmoi.os "darwin") }}
+
+  # store passphrases in the macOS keychain
+  # https://developer.apple.com/library/archive/technotes/tn2449/_index.html
+  UseKeychain yes
+
+  # This will require 1Password to be unlocked to perform as the identity agent.
+  # With TouchId, not easily done when remoting in.
+  IdentityAgent "${HOME}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+{{- end }}
+
+{{- if .personal }}
+
+Host 192.168.*.*
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+Host 172.16.*.*
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+Host 10.*.*.*
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+{{- end }}

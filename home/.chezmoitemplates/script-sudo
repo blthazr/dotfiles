@@ -1,0 +1,4 @@
+#debug "Administrator password is required for \`sudo\` operations in this script." -category "sudo" -icon "🌐"
+sudo -v
+# sudo keep-alive: update existing `sudo` time stamp until has finished
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &

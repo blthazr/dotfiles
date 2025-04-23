@@ -6,7 +6,7 @@
 #   @usage          :   brew bundle --file "$HOME/.config/Homebrew/Brewfile"
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-{{- if (eq .chezmoi.os "darwin") }}
+{{ if (eq .chezmoi.os "darwin") -}}
 # --------------------------------------------------------------------------------------------------
 # Manage your dotfiles across multiple diverse machines, securely
 brew "chezmoi"

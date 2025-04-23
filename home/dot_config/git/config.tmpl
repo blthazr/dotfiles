@@ -2,10 +2,10 @@
   editor = code --wait
   excludesfile = "${HOME}/.config/git/ignore"
 
-{{ if (eq .chezmoi.os "darwin") }}
+{{ if (eq .chezmoi.os "darwin") -}}
 [credential]
   helper = osxkeychain
-{{ end }}
+{{- end }}
 
 [init]
   defaultBranch = main
@@ -14,7 +14,7 @@
   name = {{ .name }}
   email = {{ .git_email | quote }}
 
-{{ if .personal }}
+{{ if .personal -}}
 [includeIf "gitdir:~/Code/github.com/{{ .personal_git_user }}/"]
   path = config.d/personal.conf
-{{ end }}
+{{ end -}}

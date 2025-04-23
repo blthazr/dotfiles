@@ -1,5 +1,8 @@
-{{- /* initialize the variable defaults */ -}}
+{{- /* initialize variable defaults */ -}}
 {{- $name := "Chris Burnham" -}}
+{{- $git_email := "" -}}
+{{- $personal_git_user := "" -}}
+{{- $private_git_email := "" -}}
 
 {{/* feature flags */}}
 {{- $personal    := false -}}{{/* true if this machine should have personal config/secrets */}}
@@ -20,11 +23,35 @@
 {{-     $name = promptString "Name" $name -}}
 {{-   end -}}
 
+{{-   if hasKey . "git_email" -}}
+{{-     $orig_git_email := .git_email -}}
+{{-     $git_email = promptString "[Default] git email" $orig_git_email -}}
+{{-   else -}}
+{{-     $git_email = promptString "[Default] git email" $git_email -}}
+{{-   end -}}
+
 {{-   if hasKey . "personal" -}}
 {{-     $orig_personal := .personal -}}
 {{-     $personal = promptBool "Enable personal configs/secrets [y|n]" $orig_personal -}}
 {{-   else -}}
 {{-     $personal = promptBool "Enable personal configs/secrets [y|n]" $personal -}}
+{{-   end -}}
+
+{{-   if $personal -}}
+{{-     if hasKey . "personal_git_user" -}}
+{{-       $orig_personal_git_user := .personal_git_user -}}
+{{-       $personal_git_user = promptString "[Personal] git username" $orig_personal_git_user -}}
+{{-     else -}}
+{{-       $personal_git_user = promptString "[Personal] git username" $personal_git_user -}}
+{{-     end -}}
+
+{{-     if hasKey . "private_git_email" -}}
+{{-       $orig_private_git_email := .private_git_email -}}
+{{-       $private_git_email = promptString "[Personal] git email" $orig_private_git_email -}}
+{{-     else -}}
+{{-       $private_git_email = promptString "[Personal] git email" $private_git_email -}}
+{{-     end -}}
+
 {{-   end -}}
 
 {{-   if hasKey . "work" -}}
@@ -49,6 +76,11 @@ sourceDir: {{ .chezmoi.sourceDir | quote }}
 
 data:
   name: {{ $name | quote }}
+  git_email: {{ $git_email | quote }}
   personal: {{ $personal }}
+  {{- if $personal }}
+  personal_git_user: {{ $personal_git_user | quote }}
+  private_git_email: {{ $private_git_email | quote }}
+  {{- end }}
   work: {{ $work }}
   devops: {{ $devops }}

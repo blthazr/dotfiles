@@ -1,6 +1,12 @@
 {{- /* initialize the variable defaults */ -}}
 {{- $name := "Chris Burnham" -}}
 
+{{/* feature flags */}}
+{{- $personal    := false -}}{{/* true if this machine should have personal config/secrets */}}
+{{- $work        := false -}}{{/* true if this machine should have work config/secrets */}}
+{{- $devops      := false -}}{{/* true if this machine should have devops utilities */}}
+{{- "" -}}
+
 {{- if not stdinIsATTY -}}
 {{-   writeToStdout "🛑 Error: Container environment detected. Exiting.\n" -}}
 {{-   exit 1 -}}
@@ -14,6 +20,27 @@
 {{-     $name = promptString "Name" $name -}}
 {{-   end -}}
 
+{{-   if hasKey . "personal" -}}
+{{-     $orig_personal := .personal -}}
+{{-     $personal = promptBool "Enable personal configs/secrets [y|n]" $orig_personal -}}
+{{-   else -}}
+{{-     $personal = promptBool "Enable personal configs/secrets [y|n]" $personal -}}
+{{-   end -}}
+
+{{-   if hasKey . "work" -}}
+{{-     $orig_work := .work -}}
+{{-     $work = promptBool "Enable work configs/secrets [y|n]" $orig_work -}}
+{{-   else -}}
+{{-     $work = promptBool "Enable work configs/secrets [y|n]" $work -}}
+{{-   end -}}
+
+{{-   if hasKey . "devops" -}}
+{{-     $orig_devops := .devops -}}
+{{-     $devops = promptBool "Enable devops utilities [y|n]" $orig_devops -}}
+{{-   else -}}
+{{-     $devops = promptBool "Enable devops utilities [y|n]" $devops -}}
+{{-   end -}}
+
 {{-   writeToStdout "💡 Tip: you can re-enter your data with `chezmoi init --data=false`.\n" -}}
 
 {{- end -}}
@@ -22,3 +49,6 @@ sourceDir: {{ .chezmoi.sourceDir | quote }}
 
 data:
   name: {{ $name | quote }}
+  personal: {{ $personal }}
+  work: {{ $work }}
+  devops: {{ $devops }}

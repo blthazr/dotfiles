@@ -1,0 +1,15 @@
+{
+  /*+--- Text Editor ---+*/
+  "files.associations": {
+    "**/.chezmoiignore*": "ignore",
+    "**/*.json.tmpl": "jsonc",
+    "**/*.yaml.tmpl": "yaml",
+    "**/Brewfile*.tmpl": "ruby",
+    "**/zsh/**/*.zsh.tmpl": "shellscript",
+    "**/private_dot_ssh/config.d/**/*.tmpl": "ssh-config",
+    "**/private_dot_ssh/private_config*.tmpl": "ssh-config",
+    "dot_zprofile.tmpl": "shellscript",
+    "dot_zshenv.tmpl": "shellscript",
+    "dot_zshrc.tmpl": "shellscript",
+  }
+}

@@ -1,24 +1,23 @@
-{{- /* check if running interactively */ -}}
-{{- $interactive := stdinIsATTY -}}
+# {{- /* check if running interactively */ -}}
+# {{- $interactive := stdinIsATTY -}}
 
-{{- /* initialize the variable defaults */ -}}
-{{- $name := "Chris Burnham" -}}
 
-{{- /* initialize the name variable */ -}}
-{{- if $interactive -}}
-  {{- if hasKey . "name" -}}
-    {{- $orig_name := .name -}}
-    {{- $name = promptString "Name" $orig_name -}}
-  {{- else -}}
-    {{- $name = promptString "Name" $name -}}
-  {{- end -}}
-{{- end -}}
 
-{{- if $interactive -}}
-  {{- writeToStdout "💡 Tip: you can re-enter your data with `chezmoi init --data=false`.\n" -}}
-{{- end -}}
+# {{- /* initialize the name variable */ -}}
+# {{- if $interactive -}}
+#   {{- if hasKey . "name" -}}
+#     {{- $orig_name := .name -}}
+#     {{- $name = promptString "Name" $orig_name -}}
+#   {{- else -}}
+#     {{- $name = promptString "Name" $name -}}
+#   {{- end -}}
+# {{- end -}}
 
-sourceDir = {{ .chezmoi.sourceDir | quote }}
+# {{- if $interactive -}}
+#   {{- writeToStdout "💡 Tip: you can re-enter your data with `chezmoi init --data=false`.\n" -}}
+# {{- end -}}
 
-[data]
-  name = {{ $name | quote }}
+# sourceDir = {{ .chezmoi.sourceDir | quote }}
+
+# [data]
+#   name = {{ $name | quote }}

@@ -1,0 +1,257 @@
+#!{{ lookPath "bash" }}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @file           :
+#   @description    :   Configure Transmit
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Load script libraries
+# --------------------------------------------------------------------------------------------------
+{{ template "script-library" }}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight
+# --------------------------------------------------------------------------------------------------
+info "Setting log level to debug." -category "Transmit" -icon "🚛"
+LOG_LEVEL=5
+
+debug "Validating installation of Transmit." -category "Transmit" -icon "🚛"
+if ! check_macos_app "Transmit.app"; then
+  error "Transmit is not installed." -category "Transmit" -icon "🚛"
+  exit 0
+else
+  debug "Transmit is installed." -category "Transmit" -icon "🚛"
+  info "Closing Transmit, to prevent it from overriding changes." -category "Transmit" -icon "🚛"
+  osascript -e 'tell application "Transmit" to quit'
+  killall "cfprefsd"
+fi
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Transmit | Settings | General
+# --------------------------------------------------------------------------------------------------
+### Terminal
+debug "Settings | General | Terminal | iTerm" -category "Transmit" -icon "🚛"
+#   option [default] --> Terminal
+# defaults write com.panic.Transmit DefaultTerminal -int 0
+#   option --> iTerm
+defaults write com.panic.Transmit DefaultTerminal -int 2
+
+### Windows open with
+debug "Settings | General | Windows open with | ${HOME}, None" -category "Transmit" -icon "🚛"
+#   option [default] --> ${HOME}, "None"
+defaults write com.panic.Transmit LeftBrowserIsRemote -int 0
+defaults write com.panic.Transmit LeftBrowserDefaultValue -string "~"
+defaults write com.panic.Transmit RightBrowserIsRemote -int 1
+
+### Connect to servers automatically
+debug "Settings | General | Connect to servers automatically | unchecked" -category "Transmit" -icon "🚛"
+#   option --> checked
+# defaults write com.panic.Transmit ConnectOnStartup2 -bool true
+#   option [default] --> unchecked
+defaults write com.panic.Transmit ConnectOnStartup2 -bool false
+
+### Tab title shows
+debug "Settings | General | Tab title shows | Server" -category "Transmit" -icon "🚛"
+#   option [default] --> Server
+defaults delete com.panic.Transmit TitleStyle
+#   option --> Folder
+# defaults write com.panic.Transmit TitleStyle -bool true
+
+### Privacy: Automatically download S3 region updates
+debug "Settings | General | Privacy: Automatically download S3 region updates | checked" -category "Transmit" -icon "🚛"
+#   option [default] --> checked
+defaults write com.panic.Transmit DownloadS3RegionUpdates -bool true
+#   option --> unchecked
+# defaults write com.panic.Transmit DownloadS3RegionUpdates -bool false
+
+### Privacy: Send crash reports
+debug "Settings | General | Privacy: Send crash reports | checked" -category "Transmit" -icon "🚛"
+#   option [default] --> checked
+defaults write com.panic.Transmit AllowCrashReportCollection -bool true
+#   option --> unchecked
+# defaults write com.panic.Transmit AllowCrashReportCollection -bool false
+
+### Privacy: Send anonymous usage statistics
+debug "Settings | General | Privacy: Send anonymous usage statistics | unchecked" -category "Transmit" -icon "🚛"
+#   option [default] --> checked
+# defaults write com.panic.Transmit AllowDataCollection -bool true
+#   option --> unchecked
+defaults write com.panic.Transmit AllowDataCollection -bool false
+
+### Privacy: Check for important announcements
+debug "Settings | General | Privacy: Check for important announcements | checked" -category "Transmit" -icon "🚛"
+#   option [default] --> checked
+defaults write com.panic.Transmit AllowSoapbox -bool true
+#   option --> unchecked
+# defaults write com.panic.Transmit AllowSoapbox -bool false
+
+### Software Updates
+debug "Settings | General | Software Updates | Automatically download and install" -category "Transmit" -icon "🚛"
+#   option [default] --> Automatically download and install
+defaults write com.panic.Transmit SUAutomaticallyUpdate -bool true
+defaults write com.panic.Transmit SUEnableAutomaticChecks -bool true
+#   option --> Just notify if there are updates
+# defaults write com.panic.Transmit SUAutomaticallyUpdate -bool false
+# defaults write com.panic.Transmit SUEnableAutomaticChecks -bool true
+#   option --> Don't check for updates
+# defaults write com.panic.Transmit SUAutomaticallyUpdate -bool false
+# defaults write com.panic.Transmit SUEnableAutomaticChecks -bool false
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Transmit | Settings | Files
+# --------------------------------------------------------------------------------------------------
+### Ask before deleting items
+# debug "Settings | Settings | Files | checked" -category "Transmit" -icon "🚛"
+#   option [default] --> checked
+defaults delete com.panic.Transmit PCPrefKeyAskBeforeDelete
+#   option --> unchecked
+# defaults write com.panic.Transmit PCPrefKeyAskBeforeDelete -int 0
+
+### Double Click Action
+debug "Settings | Settings | Double Click Action | Edit in External Editor" -category "Transmit" -icon "🚛"
+#   option --> Do Nothing
+#   option [default] --> Transfer
+#   option --> Edit
+# defaults write com.panic.Transmit DoubleClickAction -int 2
+#   option --> Edit in External Editor
+defaults write com.panic.Transmit DoubleClickAction -int 3
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Transmit | Settings | Transfers
+# --------------------------------------------------------------------------------------------------
+### Bandwidth: Limit uploads to: <value>
+debug "Settings | Transfers | Bandwidth: Limit uploads | unchecked" -category "Transmit" -icon "🚛"
+#   option --> checked, 500 KB/s
+# defaults write com.panic.Transmit LimitUploadBandwidth -bool true
+# defaults write com.panic.Transmit MaximumUploadKBytesPerSecond -int 500
+#   option [default] --> unchecked
+defaults write com.panic.Transmit LimitUploadBandwidth -bool false
+
+### Bandwidth: Limit downloads to: <value>
+debug "Settings | Transfers | Bandwidth: Limit downloads | unchecked" -category "Transmit" -icon "🚛"
+#   option --> checked, 500 KB/s
+# defaults write com.panic.Transmit LimitDownloadBandwidth -bool true
+# defaults write com.panic.Transmit MaximumDownloadKBytesPerSecond -int 500
+#   option [default] --> unchecked
+defaults write com.panic.Transmit LimitDownloadBandwidth -bool false
+
+### Transfer up to <value> files simultaneously
+debug "Settings | Transfers | Transfer up to <value> files simultaneously | 5" -category "Transmit" -icon "🚛"
+#   option [default] --> 5
+defaults write com.panic.Transmit SimultaneousTransferLimit -int 5
+
+### Options: Use passive (PASV) mode for data transfers
+debug "Settings | Transfers | Options: Use passive (PASV) mode for data transfers  | checked" -category "Transmit" -icon "🚛"
+#   option [default] --> checked
+defaults write com.panic.Transmit UsePassiveMode2 -bool true
+#   option --> unchecked
+# defaults write com.panic.Transmit UsePassiveMode2 -bool false
+
+### Options: Play <value> when complete
+debug "Settings | Transfers | Options: Play <value> when complete | unchecked" -category "Transmit" -icon "🚛"
+#   option --> checked
+# defaults write com.panic.Transmit TransferSoundEnabled -bool true
+#   option [default] --> unchecked
+defaults write com.panic.Transmit TransferSoundEnabled -bool false
+
+### Options: Open files after downloading
+debug "Settings | Transfers | Options: Open files after downloading | unchecked" -category "Transmit" -icon "🚛"
+#   option --> checked
+# defaults write com.panic.Transmit PostProcess2 -bool true
+#   option [default] --> unchecked
+defaults write com.panic.Transmit PostProcess2 -bool false
+
+### Remove activity items
+debug "Settings | Transfers | Remove activity items | Upon Successful Transfer" -category "Transmit" -icon "🚛"
+#   option [default] --> Manually
+# defaults write com.panic.Transmit RemoveQueueTransfersOnCompletion -bool false
+#   option --> Upon Successful Transfer
+defaults write com.panic.Transmit RemoveQueueTransfersOnCompletion -bool true
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Transmit | Settings | Advanced
+# --------------------------------------------------------------------------------------------------
+### Proxy Server Type
+debug "Settings | Advanced | Proxy Server Type | None" -category "Transmit" -icon "🚛"
+#   option [default] --> None
+defaults delete com.panic.Transmit ProxyType2
+#   option [default] --> Type 1
+# defaults write com.panic.Transmit ProxyType2 -int 1
+#   option [default] --> Type 2
+# defaults write com.panic.Transmit ProxyType2 -int 2
+#   option [default] --> Type 3
+# defaults write com.panic.Transmit ProxyType2 -int 3
+#   option [default] --> Type 4
+# defaults write com.panic.Transmit ProxyType2 -int 3
+#   option [default] --> Type 5
+# defaults write com.panic.Transmit ProxyType2 -int 5
+#   option [default] --> Type 6
+# defaults write com.panic.Transmit ProxyType2 -int 6
+#   option [default] --> Type 7
+# defaults write com.panic.Transmit ProxyType2 -int 7
+#   option [default] --> Type 8
+# defaults write com.panic.Transmit ProxyType2 -int 8
+#   option [default] --> Type 9
+# defaults write com.panic.Transmit ProxyType2 -int 9
+#   option [default] --> Type 10
+# defaults write com.panic.Transmit ProxyType2 -int 13
+#   option [default] --> SOCKS 4
+# defaults write com.panic.Transmit ProxyType2 -int 10
+#   option [default] --> SOCKS 4a
+# defaults write com.panic.Transmit ProxyType2 -int 11
+#   option [default] --> SOCKS5
+# defaults write com.panic.Transmit ProxyType2 -int 12
+
+### Proxy Server
+debug "Settings | Advanced | Proxy Server | <null>" -category "Transmit" -icon "🚛"
+#   option [default] --> Null
+defaults delete com.panic.Transmit ProxyServer
+#   option --> <value>
+# defaults write com.panic.Transmit ProxyServer -string "<value>"
+
+### Proxy Port
+debug "Settings | Advanced | Proxy Port | <null>" -category "Transmit" -icon "🚛"
+#   option [default] --> Null
+defaults delete com.panic.Transmit ProxyPort2
+#   option --> <value>
+# defaults write com.panic.Transmit ProxyPort2 -int <value>
+
+### Proxy User Name
+debug "Settings | Advanced | Proxy User Name | <null>" -category "Transmit" -icon "🚛"
+#   option [default] --> Null
+defaults delete com.panic.Transmit ProxyUser
+#   option --> <value>
+# defaults write com.panic.Transmit ProxyUser -string "<value>"
+
+### FTP Transfer Mode
+debug "Settings | Advanced | FTP Transfer Mode | Binary" -category "Transmit" -icon "🚛"
+#   option [default] --> Binary
+defaults delete com.panic.Transmit DefaultTransferMode
+#   option --> Automatic
+# defaults write com.panic.Transmit DefaultTransferMode -int -1
+#   option --> ASCII (Text)
+# defaults write com.panic.Transmit DefaultTransferMode -int 65
+
+### Try to keep idle connections alive
+debug "Settings | Advanced | Try to keep idle connections alive | unchecked" -category "Transmit" -icon "🚛"
+#   option --> checked
+# defaults write com.panic.Transmit KeepIdleConnectionsAlive -bool true
+#   option [default] --> unchecked
+defaults write com.panic.Transmit KeepIdleConnectionsAlive -bool false
+
+### Verbose logging
+debug "Settings | Advanced | Verbose logging | unchecked" -category "Transmit" -icon "🚛"
+#   option --> checked
+# defaults write com.panic.Transmit UseVerboseLogging -bool true
+#   option [default] --> unchecked
+defaults write com.panic.Transmit UseVerboseLogging -bool false
+# ==================================================================================================
+
+info "Configuration complete." -category "Transmit" -icon "🚛"

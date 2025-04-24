@@ -1,0 +1,71 @@
+#!{{ lookPath "bash" }}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @file           :
+#   @description    :   Configure App Store
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Load script libraries
+# --------------------------------------------------------------------------------------------------
+{{ template "script-library" }}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight
+# --------------------------------------------------------------------------------------------------
+info "Setting log level to debug." -category "App Store" -icon "💾"
+LOG_LEVEL=5
+
+info "Closing App Store, to prevent it from overriding changes." -category "App Store" -icon "💾"
+osascript -e 'tell application "App Store" to quit'
+killall "cfprefsd"
+
+debug "Administrator password is required for \`sudo\` operations in this script." -category "App Store" -icon "💾"
+{{ template "script-sudo" }}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   App Store | Settings
+# --------------------------------------------------------------------------------------------------
+### Automatic Updates
+debug "Settings | Automatic Updates | checked" -category "App Store" -icon "💾"
+#   option --> checked
+sudo defaults write /Library/Preferences/com.apple.commerce AutoUpdate -bool true
+#   option [default] --> unchecked
+# sudo defaults write /Library/Preferences/com.apple.commerce AutoUpdate -bool false
+
+### Automatically download apps purchased on other devices
+# debug "Settings | Automatically download apps purchased on other devices | <option>" -category "App Store" -icon "💾"
+#   option --> checked
+#   option [default] --> unchecked
+
+### Automatically download in-app content
+debug "Settings | Automatically download in-app content | checked" -category "App Store" -icon "💾"
+#   option [default] --> checked
+defaults write com.apple.appstored BackgroundAssetDownloadsEnabled -int 1
+#   option --> unchecked
+# defaults write com.apple.appstored BackgroundAssetDownloadsEnabled -int 0
+
+### Download and install large apps to a separate disk
+# debug "Settings | Download and install large apps to a separate disk | <option>" -category "App Store" -icon "💾"
+#   option --> checked
+#   option [default] --> unchecked
+
+### Video Autoplay
+debug "Settings | Video Autoplay | checked" -category "App Store" -icon "💾"
+#   option [default] --> checked
+defaults write com.apple.AppStore AutoPlayVideoSetting -string "on"
+#   option --> unchecked
+# defaults write com.apple.AppStore AutoPlayVideoSetting -string "off"
+
+### In-App Ratings & Reviews
+debug "Settings | In-App Ratings & Reviews | checked" -category "App Store" -icon "💾"
+#   option [default] --> checked
+defaults write com.apple.AppStore InAppReviewEnabled -int 1
+#   option --> unchecked
+# defaults write com.apple.AppStore InAppReviewEnabled -int 0
+# ==================================================================================================
+
+info "Configuration complete." -category "App Store" -icon "💾"

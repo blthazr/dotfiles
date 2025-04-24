@@ -1,0 +1,536 @@
+#!{{ lookPath "bash" }}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @file           :
+#   @description    :   Configure Safari
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Load script libraries
+# --------------------------------------------------------------------------------------------------
+{{ template "script-library" }}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   function :: skip_configuration
+# --------------------------------------------------------------------------------------------------
+function skip_configuration() {
+  osascript <<EOF
+    set alertTitle to "Safari Configuration"
+    set alertMessage to "Skipping Safari configuration"
+    display alert alertTitle message alertMessage buttons {"OK"} default button "OK"
+EOF
+  error "Skipping configuration." -category "Safari" -icon "🏞"
+  exit 0
+}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight
+# --------------------------------------------------------------------------------------------------
+info "Setting log level to debug." -category "Safari" -icon "🏞"
+LOG_LEVEL=5
+
+debug "Checking for full disk access." -category "Safari" -icon "🏞"
+defaults read com.apple.Safari > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+  debug "This terminal does not have full disk access." -category "Safari" -icon "🏞"
+
+  # show `FDA Required` alert
+  alertTitle="Full Disk Access"
+  alertMessage="Full Disk Access is required to configure Safari"
+  osascript -e "display alert \"$alertTitle\" message \"$alertMessage\" as critical buttons {\"Skip\", \"Continue\"} default button \"Continue\" cancel button \"Skip\" "
+
+  if [ $? -eq 0 ]; then
+    debug "Button clicked: Continue" -category "Safari" -icon "🏞"
+
+    if [ -n "${__CFBundleIdentifier}" ]; then
+      # open System Preferences -> Full Disk Access
+      open "x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles"
+
+      # notify user of which terminal app
+      terminal_app="$(mdfind "kMDItemCFBundleIdentifier == ${__CFBundleIdentifier}")"
+      alertTitle="Full Disk Access Required"
+      alertMessage="Click the plus(+) and add the following to the list of allowed applications:\n${terminal_app}"
+      osascript -e "display dialog \"$alertMessage\" buttons {\"Cancel\", \"Done\"} default button \"Done\" with title \"$alertTitle\" "
+
+      if [ $? -eq 0 ]; then
+        debug "Button clicked: Done" -category "Safari" -icon "🏞"
+        # notify user to restart application after making FDA changes
+        alertTitle="Full Disk Access Required"
+        alertMessage="The terminal app must be restarted after granting Full Disk Access. \nOnce restarted, re-run the Safari configuration script."
+        osascript -e "display dialog \"$alertMessage\" buttons {\"OK\"} with title \"$alertTitle\" "
+        exit
+      else
+        debug "Button clicked: Cancel" -category "Safari" -icon "🏞"
+        skip_configuration
+      fi
+
+    else
+      skip_configuration
+    fi
+
+  else
+    debug "Button clicked: Skip" -category "Safari" -icon "🏞"
+    skip_configuration
+  fi
+
+else
+  debug "This terminal already has full disk access." -category "Safari" -icon "🏞"
+fi
+
+debug "Validating installation full disk access." -category "Safari" -icon "🏞"
+defaults read com.apple.Safari > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+  skip_configuration
+fi
+
+info "Closing Safari, to prevent it from overriding changes." -category "Safari" -icon "🏞"
+osascript -e 'tell application "Safari" to quit'
+killall "cfprefsd"
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Safari | Settings | General
+# --------------------------------------------------------------------------------------------------
+### Safari opens with:
+debug "Settings | General | Safari opens with | A new window" -category "Safari" -icon "🏞"
+#   option [default] --> A new window
+defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -bool false
+defaults write com.apple.Safari ExcludePrivateWindowWhenRestoringSessionAtLaunch -bool false
+defaults write com.apple.Safari OpenPrivateWindowWhenNotRestoringSessionAtLaunch -bool false
+#   option --> A new private window
+# defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -bool false
+# defaults write com.apple.Safari ExcludePrivateWindowWhenRestoringSessionAtLaunch -bool false
+# defaults write com.apple.Safari OpenPrivateWindowWhenNotRestoringSessionAtLaunch -bool true
+#   option --> All windows from last session
+# defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -bool true
+# defaults write com.apple.Safari ExcludePrivateWindowWhenRestoringSessionAtLaunch -bool false
+# defaults write com.apple.Safari OpenPrivateWindowWhenNotRestoringSessionAtLaunch -bool false
+#   option --> All non-private windows from last session
+# defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -bool true
+# defaults write com.apple.Safari ExcludePrivateWindowWhenRestoringSessionAtLaunch -bool true
+# defaults write com.apple.Safari OpenPrivateWindowWhenNotRestoringSessionAtLaunch -bool false
+
+### New windows open with:
+debug "Settings | General | New windows open with | Empty Page" -category "Safari" -icon "🏞"
+#   option [default] --> Start Page
+# defaults write com.apple.Safari NewWindowBehavior -int 4
+#   option --> Homepage
+# defaults write com.apple.Safari NewWindowBehavior -int 0
+#   option --> Empty Page
+defaults write com.apple.Safari NewWindowBehavior -int 1
+defaults write com.apple.Safari IdentifierOfExtensionWithOverridePageForNewWindows '{ }'
+#   option --> Same Page
+# defaults write com.apple.Safari NewWindowBehavior -int 2
+#   option --> Tabs for Favorites
+# defaults write com.apple.Safari NewWindowBehavior -int 5
+
+### New tabs open with:
+debug "Settings | General | New tabs open with | Empty Page" -category "Safari" -icon "🏞"
+#   option [default] --> Start Page
+# defaults write com.apple.Safari IdentifierOfExtensionWithOverridePageForNewTabs '{ }'
+# defaults write com.apple.Safari NewTabBehavior -int 4
+# defaults write com.apple.Safari NewTabPageSetByUserGesture -bool true
+#   option --> Homepage
+# defaults write com.apple.Safari IdentifierOfExtensionWithOverridePageForNewTabs '{ }'
+# defaults write com.apple.Safari NewTabBehavior -int 0
+# defaults write com.apple.Safari NewTabPageSetByUserGesture -bool true
+#   option --> Empty Page
+defaults write com.apple.Safari IdentifierOfExtensionWithOverridePageForNewTabs '{ }'
+defaults write com.apple.Safari NewTabBehavior -int 1
+defaults write com.apple.Safari NewTabPageSetByUserGesture -bool true
+# defaults write com.apple.Safari NewTabPageSetByUserGesture -bool true
+#   option --> Same Page
+# defaults write com.apple.Safari IdentifierOfExtensionWithOverridePageForNewTabs '{ }'
+# defaults write com.apple.Safari NewTabBehavior -int 2
+# defaults write com.apple.Safari NewTabPageSetByUserGesture -bool true
+
+### Remove history items:
+debug "Settings | General | Remove history items | Manually" -category "Safari" -icon "🏞"
+#   option --> After one day
+# defaults write com.apple.Safari HistoryAgeInDaysLimit -int 1
+#   option --> After one week
+# defaults write com.apple.Safari HistoryAgeInDaysLimit -int 7
+#   option --> After two weeks
+# defaults write com.apple.Safari HistoryAgeInDaysLimit -int 14
+#   option --> After one month
+# defaults write com.apple.Safari HistoryAgeInDaysLimit -int 28
+#   option [default] --> After one year
+# defaults write com.apple.Safari HistoryAgeInDaysLimit -int 365
+#   option --> Manually
+defaults write com.apple.Safari HistoryAgeInDaysLimit -int 365000
+
+### Remove download list items:
+debug "Settings | General | Remove download list items | Upon succesful download" -category "Safari" -icon "🏞"
+#   option [default] --> After one day
+# defaults write com.apple.Safari DownloadsClearingPolicy -int 3
+#   option --> When Safari quits
+# defaults write com.apple.Safari DownloadsClearingPolicy -int 1
+#   option --> Upon successful download
+defaults write com.apple.Safari DownloadsClearingPolicy -int 2
+#   option --> Manually
+# defaults write com.apple.Safari DownloadsClearingPolicy -int 0
+
+### Open "safe" files after downloading
+debug "Settings | General | Open \"safe\" files after downloading | unchecked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+# defaults write com.apple.Safari AutoOpenSafeDownloads -bool true
+#   option --> unchecked
+defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Safari | Settings | Tabs
+# --------------------------------------------------------------------------------------------------
+### Tab layout
+debug "Settings | Tabs | Tab layout | Separate" -category "Safari" -icon "🏞"
+#   option [default] --> Separate
+defaults write com.apple.Safari ShowStandaloneTabBar -bool true
+#   option --> Compact
+# defaults write com.apple.Safari ShowStandaloneTabBar -bool false
+
+### Tab layout: Always show website titles in tabs
+debug "Settings | Tabs | Tab layout: Always show website titles in tabs | unchecked" -category "Safari" -icon "🏞"
+#   option --> checked
+# defaults write com.apple.Safari EnableNarrowTabs -bool false
+#   option [default] --> unchecked
+defaults write com.apple.Safari EnableNarrowTabs -bool true
+
+### Open pages in tabs instead of windows:
+debug "Settings | Tabs | Open pages in tabs instead of windows | Automatically" -category "Safari" -icon "🏞"
+#   option --> Never
+# defaults write com.apple.Safari TabCreationPolicy -int 0
+#   option [default] --> Automatically
+defaults write com.apple.Safari TabCreationPolicy -int 1
+#   option --> Always
+# defaults write com.apple.Safari TabCreationPolicy -int 2
+
+### Automatically close tabs:
+debug "Settings | Tabs | Automatically close tabs | Manually" -category "Safari" -icon "🏞"
+#   option [default] --> Manually
+defaults write com.apple.Safari CloseTabsAutomatically -int 0
+#   option --> After 1 day
+# defaults write com.apple.Safari CloseTabsAutomatically -int 1
+#   option --> After 1 week
+# defaults write com.apple.Safari CloseTabsAutomatically -int 2
+#   option --> After 1 month
+# defaults write com.apple.Safari CloseTabsAutomatically -int 3
+
+### Navigation: CMD-click opens a link in a new tab
+debug "Settings | Tabs | Navigation: CMD-click opens a link in a new tab | checked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+defaults write com.apple.Safari CommandClickMakesTabs -bool true
+#   option --> unchecked
+# defaults write com.apple.Safari CommandClickMakesTabs -bool false
+
+### Navigation: When a new tab or window opens, make it active
+debug "Settings | Tabs | Navigation: When a new tab or window opens, make it active | unchecked" -category "Safari" -icon "🏞"
+#   option --> checked
+# defaults write com.apple.Safari OpenNewTabsInFront -bool true
+#   option [default] --> unchecked
+defaults write com.apple.Safari OpenNewTabsInFront -bool false
+
+### Navigation: Use CMD-1 through CMD-9 to switch tabs
+debug "Settings | Tabs | Navigation: Use CMD-1 through CMD-9 to switch tabs | checked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+defaults write com.apple.Safari Command1Through9SwitchesTabs -bool true
+#   option --> unchecked
+# defaults write com.apple.Safari Command1Through9SwitchesTabs -bool false
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Safari | Settings | AutoFill
+# --------------------------------------------------------------------------------------------------
+### AutoFill web forms: Using information from my contacts
+debug "Settings | AutoFill | AutoFill web forms: Using information from my contacts | unchecked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+# defaults write com.apple.Safari AutoFillFromAddressBook -bool true
+#   option --> unchecked
+defaults write com.apple.Safari AutoFillFromAddressBook -bool false
+
+### AutoFill web forms: User names and passwords
+debug "Settings | AutoFill | AutoFill web forms: User names and passwords | unchecked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+# defaults write com.apple.Safari AutoFillPasswords -bool true
+#   option --> unchecked
+defaults write com.apple.Safari AutoFillPasswords -bool false
+
+### AutoFill web forms: Credit cards
+debug "Settings | AutoFill | AutoFill web forms: Credit cards | unchecked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+# defaults write com.apple.Safari AutoFillCreditCardData -bool true
+#   option --> unchecked
+defaults write com.apple.Safari AutoFillCreditCardData -bool false
+
+### AutoFill web forms: Other forms
+debug "Settings | AutoFill | AutoFill web forms: Other forms | unchecked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+# defaults write com.apple.Safari AutoFillMiscellaneousForms -bool true
+#   option --> unchecked
+defaults write com.apple.Safari AutoFillMiscellaneousForms -bool false
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Safari | Settings | Search
+# --------------------------------------------------------------------------------------------------
+### Search engine:
+debug "Settings | Search | Search engine | Google" -category "Safari" -icon "🏞"
+#   option [default] --> Google
+defaults write com.apple.Safari SearchProviderShortName -string "Google"
+#   option --> Yahoo
+# defaults write com.apple.Safari SearchProviderShortName -string "Yahoo!"
+#   option --> Bing
+# defaults write com.apple.Safari SearchProviderShortName -string "Bing"
+#   option --> DuckDuckGo
+# defaults write com.apple.Safari SearchProviderShortName -string "DuckDuckGo"
+#   option --> Ecosia
+# defaults write com.apple.Safari SearchProviderShortName -string "Ecosia"
+
+### Search engine: Also use in Private Browsing
+debug "Settings | Search | Search engine: Also use in Private Browsing | checked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+defaults write com.apple.Safari PrivateSearchEngineUsesNormalSearchEngineToggle -bool true
+#   option --> unchecked
+# defaults write com.apple.Safari PrivateSearchEngineUsesNormalSearchEngineToggle -bool false
+
+### Private Browsing search engine:
+debug "Settings | Search | Private Browsing search engine | Google" -category "Safari" -icon "🏞"
+#   option [default] --> Google
+defaults write com.apple.Safari PrivateSearchProviderShortName -string "Google"
+#   option --> Yahoo
+# defaults write com.apple.Safari PrivateSearchProviderShortName -string "Yahoo!"
+#   option --> Bing
+# defaults write com.apple.Safari PrivateSearchProviderShortName -string "Bing"
+#   option --> DuckDuckGo
+# defaults write com.apple.Safari PrivateSearchProviderShortName -string "DuckDuckGo"
+#   option --> Ecosia
+# defaults write com.apple.Safari PrivateSearchProviderShortName -string "Ecosia"
+
+### Private Browsing search engine: Include search engine suggestions
+debug "Settings | Search | Private Browsing search engine: Include search engine suggestions | checked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+defaults write com.apple.Safari SuppressSearchSuggestions -bool false
+#   option --> unchecked
+# defaults write com.apple.Safari SuppressSearchSuggestions -bool true
+
+### Smart Search Field: Include Safari Suggestions
+debug "Settings | Search | Smart Search Field: Include Safari Suggestions | checked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+defaults write com.apple.Safari UniversalSearchEnabled -bool true
+#   option --> unchecked
+# defaults write com.apple.Safari UniversalSearchEnabled -bool false
+
+### Smart Search Field: Enable Quick Website Search
+debug "Settings | Search | Smart Search Field: Enable Quick Website Search | checked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+defaults write com.apple.Safari WebsiteSpecificSearchEnabled -bool true
+#   option --> unchecked
+# defaults write com.apple.Safari WebsiteSpecificSearchEnabled -bool false
+
+### Smart Search Field: Preload Top Hit in the background
+debug "Settings | Search | Smart Search Field: Preload Top Hit in the background | checked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+defaults write com.apple.Safari PreloadTopHit -bool true
+#   option --> unchecked
+# defaults write com.apple.Safari PreloadTopHit -bool false
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Safari | Settings | Security
+# --------------------------------------------------------------------------------------------------
+### Fraudulent sites: Warn when visiting a fraudulent website
+debug "Settings | Security | Fraudulent sites: Warn when visiting a fraudulent website | checked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+defaults write com.apple.Safari WarnAboutFraudulentWebsites -bool true
+#   option --> unchecked
+# defaults write com.apple.Safari WarnAboutFraudulentWebsites -bool false
+
+### Web content: Enable JavaScript
+debug "Settings | Security | Web content: Enable JavaScript | checked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+defaults write com.apple.Safari WebKitJavaScriptEnabled -bool true
+defaults write com.apple.Safari WebKitPreferences.javaScriptEnabled -bool true
+#   option --> unchecked
+# defaults write com.apple.Safari WebKitJavaScriptEnabled -bool false
+# defaults write com.apple.Safari WebKitPreferences.javaScriptEnabled -bool false
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Safari | Settings | Privacy
+# --------------------------------------------------------------------------------------------------
+### Website tracking: Prevent cross-site tracking
+debug "Settings | Privacy | Website tracking: Prevent cross-site tracking | checked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+defaults write com.apple.Safari BlockStoragePolicy -int 2
+defaults write com.apple.Safari "WebKitPreferences.storageBlockingPolicy" -int 1
+defaults write com.apple.Safari WebKitStorageBlockingPolicy -int 1
+#   option --> unchecked
+# defaults write com.apple.Safari BlockStoragePolicy -int 1
+# defaults write com.apple.Safari "WebKitPreferences.storageBlockingPolicy" -int 0
+# defaults write com.apple.Safari WebKitStorageBlockingPolicy -int 0
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Safari | Settings | Advanced
+# --------------------------------------------------------------------------------------------------
+### Smart Search Field: Show full website address
+debug "Settings | Advanced | Smart Search Field: Show full website address | checked" -category "Safari" -icon "🏞"
+#   option --> checked
+defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
+#   option [default] --> unchecked
+# defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool false
+
+### Accessibility: Never use font sizes smaller than
+debug "Settings | Advanced | Accessibility: Never use font sizes smaller than | unchecked" -category "Safari" -icon "🏞"
+#   option --> checked, 9
+# defaults write com.apple.Safari WebKitMinimumFontSize -int 9
+# defaults write com.apple.Safari WebKitPreferences.minimumFontSize -int 9
+#   option --> checked, 10
+# defaults write com.apple.Safari WebKitMinimumFontSize -int 10
+# defaults write com.apple.Safari WebKitPreferences.minimumFontSize -int 10
+#   option --> checked, 11
+# defaults write com.apple.Safari WebKitMinimumFontSize -int 11
+# defaults write com.apple.Safari WebKitPreferences.minimumFontSize -int 11
+#   option --> checked, 12
+# defaults write com.apple.Safari WebKitMinimumFontSize -int 12
+# defaults write com.apple.Safari WebKitPreferences.minimumFontSize -int 12
+#   option --> checked, 14
+# defaults write com.apple.Safari WebKitMinimumFontSize -int 14
+# defaults write com.apple.Safari WebKitPreferences.minimumFontSize -int 14
+#   option --> checked, 18
+# defaults write com.apple.Safari WebKitMinimumFontSize -int 18
+# defaults write com.apple.Safari WebKitPreferences.minimumFontSize -int 18
+#   option --> checked, 24
+# defaults write com.apple.Safari WebKitMinimumFontSize -int 24
+# defaults write com.apple.Safari WebKitPreferences.minimumFontSize -int 24
+#   option [default] --> unchecked
+defaults write com.apple.Safari WebKitMinimumFontSize -int 0
+defaults write com.apple.Safari WebKitPreferences.minimumFontSize -int 0
+
+### Accessibility: Press Tab to hightlight each item on a webpage
+debug "Settings | Advanced | Accessibility: Press Tab to hightlight each item on a webpage | unchecked" -category "Safari" -icon "🏞"
+#   option --> checked
+# defaults write com.apple.Safari WebKitPreferences.tabFocusesLinks -bool true
+# defaults write com.apple.Safari WebKitTabToLinksPreferenceKey -bool true
+#   option [default] --> unchecked
+defaults write com.apple.Safari WebKitPreferences.tabFocusesLinks -bool false
+defaults write com.apple.Safari WebKitTabToLinksPreferenceKey -bool false
+
+### Accessibility: Show color in compact tab bar
+debug "Settings | Advanced | Accessibility: Show color in compact tab bar" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+defaults write com.apple.Safari NeverUseBackgroundColorInToolbar -bool false
+#   option --> unchecked
+# defaults write com.apple.Safari NeverUseBackgroundColorInToolbar -bool true
+
+### Privacy: Use advanced tracking and fingerprinting protection
+debug "Settings | Advanced | Privacy: Use advanced tracking and fingerprinting protection | checked, in Private Browsing" -category "Safari" -icon "🏞"
+#   option [default] --> checked, in Private Browsing
+defaults write com.apple.Safari EnableEnhancedPrivacyInPrivateBrowsing -bool true
+defaults write com.apple.Safari EnableEnhancedPrivacyInRegularBrowsing -bool false
+#   option [default] --> checked, in all browsing
+# defaults write com.apple.Safari EnableEnhancedPrivacyInPrivateBrowsing -bool true
+# defaults write com.apple.Safari EnableEnhancedPrivacyInRegularBrowsing -bool true
+#   option --> unchecked
+# defaults write com.apple.Safari EnableEnhancedPrivacyInPrivateBrowsing -bool false
+# defaults write com.apple.Safari EnableEnhancedPrivacyInRegularBrowsing -bool false
+
+### Privacy: Allow websites to check for Apple Pay and Apple Card
+debug "Settings | Advanced | Privacy: Allow websites to check for Apple Pay and Apple Card | checked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+defaults write com.apple.Safari WebKitPreferences.applePayCapabilityDisclosureAllowed -bool true
+#   option --> unchecked
+# defaults write com.apple.Safari WebKitPreferences.applePayCapabilityDisclosureAllowed -bool false
+
+### Privacy: Allow privacy-preserving measurement of ad effectiveness
+debug "Settings | Advanced | Privacy: Allow privacy-preserving measurement of ad effectiveness | checked" -category "Safari" -icon "🏞"
+#   option [default] --> checked
+defaults write com.apple.Safari WebKitPreferences.privateClickMeasurementEnabled -bool true
+#   option --> unchecked
+# defaults write com.apple.Safari WebKitPreferences.privateClickMeasurementEnabled -bool false
+
+### Reading List: Save articles for offline reading automatically
+debug "Settings | Advanced | Reading List: Save articles for offline reading automatically | checked" -category "Safari" -icon "🏞"
+#   option --> checked
+defaults write com.apple.Safari ReadingListSaveArticlesOfflineAutomatically -bool true
+#   option [default] --> unchecked
+# defaults write com.apple.Safari ReadingListSaveArticlesOfflineAutomatically -bool false
+
+### Default encoding:
+debug "Settings | Advanced | Default encoding: | Western (ISO Latin 1)" -category "Safari" -icon "🏞"
+#   option [default] --> Western (ISO Latin 1)
+defaults write com.apple.Safari WebKitDefaultTextEncodingName -string "iso-8859-1"
+defaults write com.apple.Safari WebKitPreferences.defaultTextEncodingName -string "iso-8859-1"
+
+### Show features for web developers
+debug "Settings | Advanced | Show features for web developers | checked" -category "Safari" -icon "🏞"
+#   option --> checked
+defaults write com.apple.Safari IncludeDevelopMenu -bool true
+defaults write com.apple.Safari MobileDeviceRemoteXPCEnabled -bool true
+defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+defaults write com.apple.Safari WebKitPreferences.developerExtrasEnabled -bool true
+defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool true
+#   option [default] --> unchecked
+# defaults write com.apple.Safari IncludeDevelopMenu -bool false
+# defaults write com.apple.Safari MobileDeviceRemoteXPCEnabled -bool true
+# defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool false
+# defaults write com.apple.Safari WebKitPreferences.developerExtrasEnabled -bool false
+# defaults write com.apple.Safari.SandboxBroker ShowDevelopMenu -bool false
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Safari | Menu | View
+# --------------------------------------------------------------------------------------------------
+### Always Show Tab Bar
+debug "Menu | View | Always Show Tab Bar | checked" -category "Safari" -icon "🏞"
+#   option --> checked
+defaults write com.apple.Safari AlwaysShowTabBar -bool true
+#   option [default] --> unchecked
+# defaults write com.apple.Safari AlwaysShowTabBar -bool false
+
+### Show/Hide Favorites Bar
+debug "Menu | View | Show/Hide Favorites Bar | Shown" -category "Safari" -icon "🏞"
+#   option [default] --> Shown
+defaults write com.apple.Safari ShowFavoritesBar-v2 -bool true
+#   option --> Hidden
+# defaults write com.apple.Safari ShowFavoritesBar-v2 -bool false
+
+### Show/Hide Status Bar
+debug "Menu | View | Show/Hide Status Bar | Shown" -category "Safari" -icon "🏞"
+#   option --> Shown
+defaults write com.apple.Safari ShowOverlayStatusBar -bool true
+#   option [default] --> Hidden
+# defaults write com.apple.Safari ShowOverlayStatusBar -bool false
+
+### Sidebar
+debug "Menu | View | Show/Hide Sidebar | Hidden" -category "Safari" -icon "🏞"
+#   option --> Shown
+# defaults write com.apple.Safari ShowSidebarInNewWindows -bool true
+# defaults write com.apple.Safari SidebarViewModeIdentifier -int 1
+#   option --> Shown, Bookmarks Sidebar
+# defaults write com.apple.Safari ShowSidebarInNewWindows -bool true
+# defaults write com.apple.Safari SidebarViewModeIdentifier -int 1
+#   option --> Shown, Reading List Sidebar
+# defaults write com.apple.Safari ShowSidebarInNewWindows -bool true
+# defaults write com.apple.Safari SidebarViewModeIdentifier -int 3
+#   option --> Shown, Shared with You Sidebar
+# defaults write com.apple.Safari ShowSidebarInNewWindows -bool true
+#   option [default] --> Hidden
+defaults write com.apple.Safari ShowSidebarInNewWindows -bool false
+defaults write com.apple.Safari SidebarViewModeIdentifier -int 0
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Safari | Additional Safari Settings
+# --------------------------------------------------------------------------------------------------
+### Find | Match Type
+debug "Other | Find | Match Type | Contains" -category "Safari" -icon "🏞"
+#   option --> Begins with
+# defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool true
+#   option [default] --> Contains
+defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
+# ==================================================================================================
+
+info "configuration complete." -category "Safari" -icon "🏞"

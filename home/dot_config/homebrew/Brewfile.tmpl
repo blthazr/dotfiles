@@ -32,6 +32,12 @@ brew "wget"
 # Process YAML documents from the CLI
 brew "yq"
 # --------------------------------------------------------------------------------------------------
+# Password manager that keeps all passwords secure behind one password
+cask "1password"
+# --------------------------------------------------------------------------------------------------
+# Command-line interface for 1Password
+cask "1password-cli"
+# --------------------------------------------------------------------------------------------------
 # Open-source code editor
 cask "visual-studio-code"
 # --------------------------------------------------------------------------------------------------
@@ -70,11 +76,61 @@ vscode "splunk.splunk"
 
 {{-   if .personal }}
 # --------------------------------------------------------------------------------------------------
+# Assign keys, and then decorate and label them
+cask "elgato-stream-deck"
+# --------------------------------------------------------------------------------------------------
 # Calendar software
 cask "fantastical"
 # --------------------------------------------------------------------------------------------------
+# Web browser
+cask "google-chrome"
+# --------------------------------------------------------------------------------------------------
+# Knowledge base that works on top of a local folder of plain text Markdown files
+cask "obsidian"
+# --------------------------------------------------------------------------------------------------
+# Control windows and applications right from your trackpad
+cask "swish"
+# --------------------------------------------------------------------------------------------------
 # File transfer application
 cask "transmit"
+{{-   end }}
+
+{{-   if .work }}
+# --------------------------------------------------------------------------------------------------
+# Assign keys, and then decorate and label them
+cask "elgato-stream-deck"
+# --------------------------------------------------------------------------------------------------
+# Web browser
+cask "google-chrome"
+# --------------------------------------------------------------------------------------------------
+# Client for the Google Drive storage service
+cask "google-drive"
+# --------------------------------------------------------------------------------------------------
+# Team communication and collaboration software
+cask "slack"
+{{-   end }}
+
+{{-   if .devops }}
+# --------------------------------------------------------------------------------------------------
+# Framework for managing multi-language pre-commit hooks
+brew "pre-commit"
+# --------------------------------------------------------------------------------------------------
+# Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
+brew "prettier"
+# --------------------------------------------------------------------------------------------------
+# Task runner / simpler Make alternative written in Go
+tap "go-task/tap"
+brew "go-task/tap/go-task"
+# --------------------------------------------------------------------------------------------------
+# Extremely fast Python package installer and resolver, written in Rust
+brew "uv"
+
+# --------------------------------------------------------------------------------------------------
+# Kubernetes IDE
+cask "lens"
+# --------------------------------------------------------------------------------------------------
+# Collaboration platform for API development
+cask "postman"
 {{-   end }}
 
 {{- end }}

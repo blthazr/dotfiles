@@ -6,6 +6,16 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
+#   @description    :   Homebrew
+# --------------------------------------------------------------------------------------------------
+{{ if eq .chezmoi.os "darwin" -}}
+if [[ -x "/opt/homebrew/bin/brew" ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+{{- end }}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
 #   @description    :   XDG Base Directories are required for some configurations. They are created
 #                       before any additional configuration.
 # --------------------------------------------------------------------------------------------------
@@ -21,17 +31,43 @@ fi
 # ==================================================================================================
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Source .zsh files in ~/.config/zsh/zsh.d
+#   @description    :   Source .zsh files in ~/.config
 # --------------------------------------------------------------------------------------------------
 {{- if eq .chezmoi.os "darwin" }}
-if [ -d "${ZDOTDIR}/zsh.d/" ]; then
-    if test "$(find ${ZDOTDIR}/zsh.d/ -maxdepth 1 -name '*.zsh' -print -quit)"; then
-        for file in ${ZDOTDIR}/zsh.d/*.zsh; do
-            if [ -r "${file}" ]; then
-                source "${file}"
-            fi
-        done
-    fi
-fi
+# get all of the zsh files
+typeset -U ZSH_FILES
+ZSH_FILES=($XDG_CONFIG_HOME/**/*.zsh)
+
+# extend $PATH
+typeset -a PATHS
+
+# source the path files
+for file in ${(M)ZSH_FILES:#*/path.zsh}; do
+  source $file
+done
+
+# de-duplicate the $PATH array
+typeset -U PATH
+
+# combine PATHS using 'j' flag: join PATHS by ':'' (see: man zshexpn)
+export PATH=${(j[:])PATHS}:$PATH
+
+# source everything except for the path and completion files
+for file in ${${ZSH_FILES:#*/path.zsh}:#*/completion.zsh}; do
+  source $file
+done
+
+# initialize autocomplete
+autoload -U compinit
+compinit
+
+# source completion files
+for file in ${(M)ZSH_FILES:#*/completion.zsh}; do
+  source $file
+done
+
+# cleanup
+unset PATHS
+unset ZSH_FILES
 {{- end }}
 # ==================================================================================================

@@ -1,14 +1,16 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #   @author         :   Chris Burnham
-#   @file           :   ~/.config/zsh/zsh.d/2-autocomplete.zsh
-#   @description    :   ZSH Auto-Completion
+#   @file           :   ~/.config/zsh/zshrc.d/zsh-autosuggestions.zsh
+#   @description    :   zsh-autosuggestions
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {{ if eq .chezmoi.os "darwin" -}}
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Initialize auto-complete
+#   @description    :   zsh-autosuggestions
 # --------------------------------------------------------------------------------------------------
-autoload -Uz compinit && compinit
+if [ -f "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+    source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
 # ==================================================================================================
 {{- end }}

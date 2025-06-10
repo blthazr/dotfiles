@@ -7,15 +7,15 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 [character]
-success_symbol = "[➜](bold green) "
-error_symbol = "[✗](bold red) "
+success_symbol = "[➜](bold green)"
+error_symbol = "[✗](bold red)"
 
 [hostname]
-ssh_only = true
 format = "[@$hostname]($style) in "
+ssh_only = true
 style = "green"
 
 [username]
+format = "[$user]($style)"
 style_root = "red"
 style_user = "yellow"
-format = "[$user]($style)"

@@ -14,11 +14,17 @@ brew "chezmoi"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
 # --------------------------------------------------------------------------------------------------
+# Tool for managing dock items
+brew "dockutil"
+# --------------------------------------------------------------------------------------------------
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # --------------------------------------------------------------------------------------------------
 # Mac App Store command-line interface
 brew "mas"
+# --------------------------------------------------------------------------------------------------
+# Collection of tools that nobody wrote when UNIX was young
+brew "moreutils"
 # --------------------------------------------------------------------------------------------------
 # Cross-shell prompt for astronauts
 brew "starship"
@@ -29,8 +35,11 @@ brew "watch"
 # Internet file retriever
 brew "wget"
 # --------------------------------------------------------------------------------------------------
-# Process YAML documents from the CLI
+# Process YAML, JSON, XML, CSV and properties documents from the CLI
 brew "yq"
+# --------------------------------------------------------------------------------------------------
+# Fish-like fast/unobtrusive autosuggestions for zsh
+brew "zsh-autosuggestions"
 # --------------------------------------------------------------------------------------------------
 # Password manager that keeps all passwords secure behind one password
 cask "1password"
@@ -50,7 +59,7 @@ vscode "blueglassblock.better-json5"
 # markdownlint
 vscode "davidanson.vscode-markdownlint"
 # --------------------------------------------------------------------------------------------------
-# Prettier - Code formatter
+# Prettier Formatter for Visual Studio Code
 vscode "esbenp.prettier-vscode"
 # --------------------------------------------------------------------------------------------------
 # Todo Tree
@@ -59,25 +68,31 @@ vscode "gruntfuggly.todo-tree"
 # ENV
 vscode "irongeek.vscode-env"
 # --------------------------------------------------------------------------------------------------
-# SSH Config Syntax Highlighter
+# SSH Config Syntax
 vscode "mousavian.ssh-config-syntax-highlighter"
 # --------------------------------------------------------------------------------------------------
-# indent-rainbow
+# Indent-Rainbow
 vscode "oderwat.indent-rainbow"
 # --------------------------------------------------------------------------------------------------
 # YAML Sort
 vscode "pascalreitermann93.vscode-yaml-sort"
 # --------------------------------------------------------------------------------------------------
-# YAML
+# YAML Language Support by Red Hat
 vscode "redhat.vscode-yaml"
 # --------------------------------------------------------------------------------------------------
-# Better Jinja
+# Jinja Template Highlighting
 vscode "samuelcolvin.jinjahtml"
 # --------------------------------------------------------------------------------------------------
-# Splunk
+# Visual Studio Code Extension for Splunk
 vscode "splunk.splunk"
+# --------------------------------------------------------------------------------------------------
+# Even Better TOML
+vscode "tamasfe.even-better-toml"
 
 {{-   if .personal }}
+# --------------------------------------------------------------------------------------------------
+# Voice and text chat software
+cask "discord"
 # --------------------------------------------------------------------------------------------------
 # Assign keys, and then decorate and label them
 cask "elgato-stream-deck"
@@ -96,9 +111,18 @@ cask "swish"
 # --------------------------------------------------------------------------------------------------
 # File transfer application
 cask "transmit"
+# --------------------------------------------------------------------------------------------------
+# 1Password for Safari
+mas "1Password for Safari", id: 1569813296
 {{-   end }}
 
 {{-   if .work }}
+# --------------------------------------------------------------------------------------------------
+# Isolated development environments using Docker
+brew "docker-compose"
+# --------------------------------------------------------------------------------------------------
+  # App to build and share containerized applications and microservices
+  cask "docker"
 # --------------------------------------------------------------------------------------------------
 # Assign keys, and then decorate and label them
 cask "elgato-stream-deck"
@@ -109,11 +133,33 @@ cask "google-chrome"
 # Client for the Google Drive storage service
 cask "google-drive"
 # --------------------------------------------------------------------------------------------------
+# Meet, chat, call, and collaborate in just one place
+cask "microsoft-teams"
+# --------------------------------------------------------------------------------------------------
+# Collaboration platform for API development
+cask "postman"
+# --------------------------------------------------------------------------------------------------
 # Team communication and collaboration software
 cask "slack"
+# --------------------------------------------------------------------------------------------------
+# Video communication and virtual meeting platform
+cask "zoom"
+# --------------------------------------------------------------------------------------------------
+# Amphetamine
+mas "Amphetamine", id: 937984704
 {{-   end }}
 
 {{-   if .devops }}
+# --------------------------------------------------------------------------------------------------
+# Simple, modern, secure file encryption
+brew "age"
+# --------------------------------------------------------------------------------------------------
+# Task runner / simpler Make alternative written in Go
+tap "go-task/tap"
+brew "go-task/tap/go-task"
+# --------------------------------------------------------------------------------------------------
+# Polyglot runtime manager (asdf rust clone)
+brew "mise"
 # --------------------------------------------------------------------------------------------------
 # Framework for managing multi-language pre-commit hooks
 brew "pre-commit"
@@ -121,19 +167,20 @@ brew "pre-commit"
 # Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
 brew "prettier"
 # --------------------------------------------------------------------------------------------------
-# Task runner / simpler Make alternative written in Go
-tap "go-task/tap"
-brew "go-task/tap/go-task"
+# Editor of encrypted files
+brew "sops"
 # --------------------------------------------------------------------------------------------------
 # Extremely fast Python package installer and resolver, written in Rust
 brew "uv"
-
 # --------------------------------------------------------------------------------------------------
 # Kubernetes IDE
 cask "lens"
 # --------------------------------------------------------------------------------------------------
 # Collaboration platform for API development
 cask "postman"
+# --------------------------------------------------------------------------------------------------
+# VSCode SOPS extension
+vscode "signageos.signageos-vscode-sops"
 {{-   end }}
 
 {{- end }}

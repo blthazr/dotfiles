@@ -1,3 +1,7 @@
 {{- if not .personal }}
-home/**
+home
+{{- end }}
+
+{{- if not .work }}
+work
 {{- end }}

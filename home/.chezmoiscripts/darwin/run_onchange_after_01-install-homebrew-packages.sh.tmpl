@@ -1,10 +1,9 @@
 #!{{ lookPath "bash" }}
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#   @author                 :   Chris Burnham
-#   @file                   :
-#   @description            :   Install Homebrew packages
-#   @homebrew/Brewfile hash : {{ include "dot_config/homebrew/Brewfile.tmpl" | sha256sum }}
+#   @author         :   Chris Burnham
+#   @file           :
+#   @description    :   Install Homebrew packages
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
@@ -16,18 +15,17 @@
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Pre-flight
 # --------------------------------------------------------------------------------------------------
-info "Setting log level to debug." -category "Brew Bundles" -icon "🍺"
-LOG_LEVEL=5
+LOG_LEVEL=5 # debug
 
-debug "Validating installation of homebrew." -category "Brew Bundles" -icon "🍺"
+debug "Verifying installation of homebrew" -category "Brew Bundles" -icon "🍺"
 if ! check_binary brew; then
-  error "Homebrew is not installed." -category "Brew Bundles" -icon "🍺"
+  error "Homebrew is not installed" -category "Brew Bundles" -icon "🍺"
   exit 0
 fi
 
-debug "Validating installation of mas." -category "Brew Bundles" -icon "🍺"
+debug "Verifying installation of mas" -category "Brew Bundles" -icon "🍺"
 if ! check_binary mas; then
-  error "MAS is not installed." -category "Brew Bundles" -icon "🍺"
+  error "MAS is not installed" -category "Brew Bundles" -icon "🍺"
   exit 0
 fi
 # ==================================================================================================
@@ -35,6 +33,7 @@ fi
 # --------------------------------------------------------------------------------------------------
 #   @description    :   Homebrew Bundles
 # --------------------------------------------------------------------------------------------------
-info "Installing essential packages." -category "Homebrew" -icon "🍺"
+# hash: {{ include "dot_config/homebrew/Brewfile.tmpl" | sha256sum }}
+info "Installing applications with Homebrew" -category "Homebrew" -icon "🍺"
 brew bundle --all --file "{{ .chezmoi.homeDir }}/.config/homebrew/Brewfile"
 # ==================================================================================================

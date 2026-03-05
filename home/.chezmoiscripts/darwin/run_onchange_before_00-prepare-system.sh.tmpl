@@ -1,0 +1,69 @@
+#!{{ lookPath "bash" }}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @file           :
+#   @description    :   Prepare system
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Load script libraries
+# --------------------------------------------------------------------------------------------------
+{{ template "script-library" }}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight
+# --------------------------------------------------------------------------------------------------
+LOG_LEVEL=5 # debug
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Xcode Command Line Tools
+# --------------------------------------------------------------------------------------------------
+info "Verifying installation of Xcode Command Line Tools" -category "MacOS" -icon "🍎"
+if ! xcode-select --print-path &>/dev/null; then
+  info "Xcode Command Line Tools are not installed" -category "MacOS" -icon "🍎"
+  info "Installing Xcode Command Line Tools" -category "MacOS" -icon "🍎"
+  xcode-select --install &>/dev/null
+
+  debug "Validating install of Xcode Command Line Tools" -category "MacOS" -icon "🍎"
+  if ! xcode-select --print-path &>/dev/null; then
+    critical "Xcode Command Line Tools are not installed" -category "MacOS" -icon "🍎"
+  fi
+
+else
+  debug "Xcode Command Line Tools are installed" -category "MacOS" -icon "🍎"
+fi
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Rosetta 2
+# --------------------------------------------------------------------------------------------------
+{{ if (eq .chezmoi.arch "arm64") }}
+debug "Checking cpu type" -category "MacOS" -icon "🍎"
+cpu_brand_string="$(sysctl -n machdep.cpu.brand_string)"
+
+if [[ "${cpu_brand_string}" =~ "Apple" ]]; then
+  debug "Apple arm-based cpu detected" -category "MacOS" -icon "🍎"
+  info "Verifying installation of Rosetta 2" -category "MacOS" -icon "🍎"
+  if ! /usr/bin/pgrep oahd >/dev/null 2>&1; then
+    info "Administrator password is required for \`sudo\` operations in this script" -category "MacOS" -icon "🍎"
+    {{ template "script-sudo" }}
+    info "Installing Rosetta 2" -category "MacOS" -icon "🍎"
+    sudo softwareupdate --install-rosetta --agree-to-license
+
+    debug "Validating installation of Rosetta 2" -category "MacOS" -icon "🍎"
+    if ! /usr/bin/pgrep oahd >/dev/null 2>&1; then
+      critical "Rosetta 2 is not installed" -category "MacOS" -icon "🍎"
+    fi
+
+  else
+    debug "Rosetta 2 is installed" -category "MacOS" -icon "🍎"
+  fi
+
+else
+  critical "${cpu_brand_string} is an unsupported cpu type" -category "MacOS" -icon "🍎"
+fi
+{{ end }}
+# ==================================================================================================

@@ -2,8 +2,8 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #   @author         :   Chris Burnham
-#   @file           :   setup.sh
-#   @description    :   Setup dotfiles
+#   @file           :   remote-bootstrap.sh
+#   @description    :   Remote bootstrap script for setting up a new machine with dotfiles
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # --------------------------------------------------------------------------------------------------
@@ -11,13 +11,13 @@
 # --------------------------------------------------------------------------------------------------
 # Enable xtrace if the DEBUG environment variable is set
 if [[ ${DEBUG-} =~ ^1|yes|true$ ]]; then
-    set -o xtrace       # Trace the execution of the script (debug)
+  set -o xtrace       # Trace the execution of the script (debug)
 fi
 
 # Unofficial BASH strict mode when not sourced
 if ! (return 0 2> /dev/null); then
-    set -o errexit      # Exit on most errors
-    set -o pipefail     # Use last non-zero exit code in a pipeline
+  set -o errexit      # Exit on most errors
+  set -o pipefail     # Use last non-zero exit code in a pipeline
 fi
 
 # Enable errtrace or the error trap handler will not work as expected
@@ -43,6 +43,72 @@ LOCAL_REPO_PATH="~/Code/${GIT_HOST}/${GIT_USER}/${GIT_REPO}"
 
 
 # --------------------------------------------------------------------------------------------------
+#   @description    :   Initialize script constants/variables
+# --------------------------------------------------------------------------------------------------
+function init() {
+  readonly orig_cwd="$PWD"
+  readonly script_params="$*"
+  readonly script_path="${BASH_SOURCE[0]}"
+  script_dir="$(dirname "$script_path")"
+  script_name="$(basename "$script_path")"
+  readonly script_dir script_name
+
+  # setup colors
+  if [[ "${NO_COLOR:-}" = "true" ]] || { [[ "${TERM:-}" != "xterm"* ]] && [[ "${TERM:-}" != "screen"* ]]; } || [[ ! -t 2 ]]; then
+    if [[ "${NO_COLOR:-}" != "false" ]]; then
+      # Don't use colors on pipes or non-recognized terminals
+      NOFORMAT="" RED="" YELLOW="" BLUE="" ORANGE="" GREEN="" VIOLET="" WHITE=""
+    fi
+  else
+    NOFORMAT="\033[0m" RED="\033[0;31m" YELLOW="\033[1;33m" BLUE="\033[0;34m" ORANGE="\033[0;33m" GREEN="\033[0;32m" VIOLET="\033[0;35m" WHITE="\033[97m"
+  fi
+}
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Parse arguments/parameters passed via cli
+# --------------------------------------------------------------------------------------------------
+function parse_params() {
+  local param
+  while [[ $# -gt 0 ]]; do
+    param="$1"
+    case $param in
+      -h | --help)
+        usage
+        exit 0
+        ;;
+      -v | --verbose)
+        LOG_LEVEL=5
+        ;;
+      -nc | --no-color)
+        NO_COLOR=true
+        ;;
+      -l | --local-repo)
+        LOCAL_REPO=true
+        ;;
+      -*|--*)
+        error "unknown parameter \"${param}\""
+        usage
+        exit 0
+        ;;
+      *)
+        # save positional parameters
+        POSITIONAL_PARAM+=("${1}")
+        ;;
+    esac
+    shift
+  done
+
+  # restore positional parameters
+  if ! [[ -z ${POSITIONAL_PARAM+x} ]]; then
+    set -- "${POSITIONAL_PARAM[@]}"
+  fi
+}
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
 #   @description    :   Display usage in cli
 # --------------------------------------------------------------------------------------------------
 function usage() {
@@ -62,9 +128,9 @@ EOF
 
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Display script logo
+#   @description    :   Display script header and logo
 # --------------------------------------------------------------------------------------------------
-function display_logo() {
+function show_header() {
 # https://patorjk.com/software/taag/
 # Font | Larry 3D
   echo -e "${GREEN}
@@ -76,7 +142,7 @@ function display_logo() {
 \ \___,_\\\\\\ \____/   \ \__\  \ \_\   \ \_\   /\____\\\\\\ \____\\\\\\/\____/
  \/__,_ / \/___/     \/__/   \/_/    \/_/   \/____/ \/____/ \/___/
 ${VIOLET}
-        *** This is the bootstrap script for my dotfiles ***${WHITE}
+    *** This is the remote bootstrap script for my dotfiles ***${WHITE}
                 ${GIT_URL}${GIT_REPO}${NOFORMAT}
 
  " >&1
@@ -168,6 +234,29 @@ function critical() { [[ "${LOG_LEVEL:-0}" -ge 1 ]] && console_log critical "${@
 
 
 # --------------------------------------------------------------------------------------------------
+#   @description    :   Preflight Checks
+# --------------------------------------------------------------------------------------------------
+function preflight_checks() {
+  # check for missing variables
+  debug "Checking for missing variables" -category "function::preflight_checks"
+  [[ "${LOG_LEVEL:-}" ]] || critical "Cannot continue without LOG_LEVEL."
+
+  # verify OS Type
+  declare -r ostype="$(uname)"
+  if [[ "${ostype}" == "Darwin" ]]; then
+    debug "OS type: $ostype" -category "function::preflight_checks"
+    initialize_macos
+  # elif [[ "${ostype}" == "Linux" ]]; then
+  #   debug "OS type: $ostype" -category "function::preflight_checks"
+  #   initialize_linux
+  else
+    critical "Unsupported OS type: $ostype"
+  fi
+}
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
 #   @description    :   Verify that a command exists
 # --------------------------------------------------------------------------------------------------
 function check_command() {
@@ -193,96 +282,10 @@ function check_command() {
 
 
 # --------------------------------------------------------------------------------------------------
-#   @description    :   Initialize script constants/variables
-# --------------------------------------------------------------------------------------------------
-function init() {
-  readonly orig_cwd="$PWD"
-  readonly script_params="$*"
-  readonly script_path="${BASH_SOURCE[0]}"
-  script_dir="$(dirname "$script_path")"
-  script_name="$(basename "$script_path")"
-  readonly script_dir script_name
-
-  # setup colors
-  if [[ "${NO_COLOR:-}" = "true" ]] || { [[ "${TERM:-}" != "xterm"* ]] && [[ "${TERM:-}" != "screen"* ]]; } || [[ ! -t 2 ]]; then
-    if [[ "${NO_COLOR:-}" != "false" ]]; then
-      # Don't use colors on pipes or non-recognized terminals
-      NOFORMAT="" RED="" YELLOW="" BLUE="" ORANGE="" GREEN="" VIOLET="" WHITE=""
-    fi
-  else
-    NOFORMAT="\033[0m" RED="\033[0;31m" YELLOW="\033[1;33m" BLUE="\033[0;34m" ORANGE="\033[0;33m" GREEN="\033[0;32m" VIOLET="\033[0;35m" WHITE="\033[97m"
-  fi
-}
-# ==================================================================================================
-
-
-# --------------------------------------------------------------------------------------------------
-#   @description    :   Parse arguments/parameters passed via cli
-# --------------------------------------------------------------------------------------------------
-function parse_params() {
-  local param
-  while [[ $# -gt 0 ]]; do
-    param="$1"
-    case $param in
-      -h | --help)
-        usage
-        exit 0
-        ;;
-      -v | --verbose)
-        LOG_LEVEL=5
-        ;;
-      -nc | --no-color)
-        NO_COLOR=true
-        ;;
-      -l | --local-repo)
-        LOCAL_REPO=true
-        ;;
-      -*|--*)
-        error "unknown parameter \"${param}\""
-        usage
-        exit 0
-        ;;
-      *)
-        # save positional parameters
-        POSITIONAL_PARAM+=("${1}")
-        ;;
-    esac
-    shift
-  done
-
-  # restore positional parameters
-  if ! [[ -z ${POSITIONAL_PARAM+x} ]]; then
-    set -- "${POSITIONAL_PARAM[@]}"
-  fi
-}
-# ==================================================================================================
-
-
-# --------------------------------------------------------------------------------------------------
-#   @description    :   Preflight Checks
-# --------------------------------------------------------------------------------------------------
-function preflight_checks() {
-  # check for missing variables
-  [[ "${LOG_LEVEL:-}" ]] || critical "Cannot continue without LOG_LEVEL."
-
-  # verify OS Type
-  declare -r ostype="$(uname)"
-  if [[ "${ostype}" == "Darwin" ]]; then
-    initialize_macos
-  # elif [[ "${ostype}" == "Linux" ]]; then
-  #   initialize_linux
-  else
-    critical "Unsupported OS type: $OSTYPE"
-  fi
-}
-# ==================================================================================================
-
-
-# --------------------------------------------------------------------------------------------------
 #   @description    :   Install MacOS prerequisites
 # --------------------------------------------------------------------------------------------------
 function initialize_macos() {
-  info "Verifying prerequisite applications." -category "MacOS" -icon "🍎"
+  # info "Verifying prerequisite applications." -category "MacOS" -icon "🍎"
 
   # installation | Xcode Command Line Tools
   if ! xcode-select --print-path &>/dev/null; then
@@ -383,7 +386,6 @@ function initialize_macos() {
   fi
 
   info "Prerequisite applications are installed." -category "MacOS" -icon "🍎"
-
 }
 # ==================================================================================================
 
@@ -402,6 +404,23 @@ function initialize_macos() {
 
 
 # --------------------------------------------------------------------------------------------------
+#   @description    :   Initialize dotfiles
+# --------------------------------------------------------------------------------------------------
+function init_dotfiles() {
+  info "Applying Chezmoi configuration." -category "Chezmoi" -icon "🧰"
+
+  if [[ "${LOCAL_REPO:-}" = "true" ]]; then
+    debug "Initializing Chezmoi as local repo." -category "Chezmoi" -icon "🧰"
+    echo chezmoi --source ${LOCAL_REPO_PATH} init "${GIT_URL}${GIT_REPO}" --apply
+  else
+    debug "Initializing Chezmoi." -category "Chezmoi" -icon "🧰"
+    chezmoi init "${GIT_URL}${GIT_REPO}" --apply
+  fi
+}
+# ==================================================================================================
+
+
+# --------------------------------------------------------------------------------------------------
 #   @description    :   Main control function
 #   @arguments      :   (optional) Arguments provided to the script
 #   @outputs        :   None
@@ -414,22 +433,13 @@ function main() {
   parse_params "$@"
 
   # display script logo
-  # display_logo
+  show_header
 
   # perform preflight checks
   preflight_checks
 
   # apply dotfiles
-  info "Applying Chezmoi configuration." -category "Chezmoi" -icon "🧰"
-  
-  if [[ "${LOCAL_REPO:-}" = "true" ]]; then
-    debug "Initializing Chezmoi as local repo." -category "Chezmoi" -icon "🧰"
-    chezmoi --source ${LOCAL_REPO_PATH} init "${GIT_URL}${GIT_REPO}" --apply
-  else
-    debug "Initializing Chezmoi." -category "Chezmoi" -icon "🧰"
-    chezmoi init "${GIT_URL}${GIT_REPO}" --apply
-  fi
-
+  init_dotfiles
 }
 # ==================================================================================================
 

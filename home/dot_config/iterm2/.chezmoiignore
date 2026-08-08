@@ -1,5 +1,0 @@
-{{ if (eq .chezmoi.os "darwin") }}
-com.googlecode.iterm2.plist
-{{ else }}
-**
-{{ end }}

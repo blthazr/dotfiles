@@ -1,0 +1,20 @@
+{
+  /*+--- Text Editor ---+*/
+  "files.associations": {
+    ".chezmoiignore": "ignore",
+    "*.json.tmpl": "jinja-json",
+    "*.sh.tmpl": "jinja-shell",
+    "*.toml.tmpl": "jinja-toml",
+    "*.yaml.tmpl": "jinja-yaml",
+    "*.zsh.tmpl": "jinja-shell",
+    "Brewfile-bundle-dump": "ruby",
+    "Brewfile*.tmpl": "jinja-rb",
+    "dot_zshenv.tmpl": "jinja-shell",
+    "dot_zshrc.tmpl": "jinja-shell",
+    "**/home/dot_config/git/config.tmpl": "jinja-toml",
+    "**/home/dot_config/git/ignore.tmpl": "ignore",
+    "**/home/dot_config/git/config.d/*.conf.tmpl": "jinja-toml",
+    "**/private_dot_ssh/*config*.tmpl": "ssh-config",
+    "**/private_dot_ssh/*config.d/*.tmpl": "ssh-config",
+  }
+}

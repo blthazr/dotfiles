@@ -1,0 +1,41 @@
+#!{{ lookPath "bash" }}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @description    :   Configure iterm2
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Load script libraries
+# --------------------------------------------------------------------------------------------------
+{{ template "script-library" }}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight
+# --------------------------------------------------------------------------------------------------
+LOG_LEVEL=5 # debug
+
+debug "Verifying installation of iTerm2" -category "iTerm2" -icon "🧾"
+if ! check_macos_app "iTerm.app"; then
+  error "iTerm2 is not installed" -category "iTerm2" -icon "🧾"
+  exit 0
+else
+  debug "iTerm2 is installed" -category "iTerm2" -icon "🧾"
+  info "Closing iTerm2, to prevent it from overriding changes" -category "iTerm2" -icon "🧾"
+  osascript -e 'tell application "iTerm" to quit'
+  killall "cfprefsd"
+fi
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   iTerm2 | Settings | General | Settings
+# --------------------------------------------------------------------------------------------------
+### Load settings from a custom folder or URL
+debug "Settings | General | Settings | Load settings from a custom folder or URL | checked" -category "iTerm2" -icon "🧾"
+#   option --> checked
+defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
+defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "{{ .chezmoi.sourceDir }}/dot_config/iterm2"
+#   option [default] --> unchecked
+# defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool false
+# ==================================================================================================

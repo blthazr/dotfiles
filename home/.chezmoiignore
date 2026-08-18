@@ -1,0 +1,8 @@
+# file shards
+**/*-shard*
+
+# MacOS only files
+{{ if ne .chezmoi.os "darwin" }}
+.chezmoiscripts/darwin/**
+Library/
+{{ end }}

@@ -1,0 +1,39 @@
+# Managed by chezmoi — do not edit manually
+# local SSH config goes in ~/.ssh/config.d/local
+
+# default options that apply to all connections
+Host *
+  # default port
+  port 22
+
+  # enable compression
+  Compression yes
+
+  # keep the connection alive by sending a null packet every minute
+  ServerAliveCountMax 10
+  ServerAliveInterval 60
+
+  # accelerate connections by reusing existing connections to the same host
+  ControlMaster auto
+  ControlPath "${HOME}/.ssh/control-%h-%p-%r"
+  ControlPersist 5
+
+  # AddKeysToAgent yes
+  {{- if eq .chezmoi.os "darwin" }}
+  IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+  UseKeychain yes
+  {{- end }}
+
+Include "config.d/*.conf"
+
+Host 192.168.*.*
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+Host 172.16.*.*
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+Host 10.*.*.*
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null

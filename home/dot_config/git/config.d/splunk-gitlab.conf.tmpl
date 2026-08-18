@@ -1,0 +1,5 @@
+{{- if .work -}}
+[user]
+  email = {{ .splunk_gitlab_email | quote }}
+  signingkey = {{ onepasswordRead "op://Cisco/id_ed25519_splunk/public key" }}
+{{- end }}

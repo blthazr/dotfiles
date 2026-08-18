@@ -1,0 +1,32 @@
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @file           :   ~/.config/zsh/zshrc.d/path.zsh
+#   @description    :   ZSH PATH
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Extend PATH
+# --------------------------------------------------------------------------------------------------
+{{ if eq .chezmoi.os "darwin" -}}
+# $(brew --prefix coreutils)/libexec/gnubin
+if [ -d $(brew --prefix coreutils)/libexec/gnubin/ ]; then
+    PATHS+=("$(brew --prefix coreutils)/libexec/gnubin")
+fi
+
+# ${HOME}/.local/bin
+if [ -d ${HOME}/.local/bin/ ]; then
+    PATHS+=("${HOME}/.local/bin")
+fi
+
+# ${HOME}/go/bin
+if [ -d ${HOME}/go/bin/ ]; then
+    PATHS+=("${HOME}/go/bin")
+fi
+
+# /usr/local/sbin
+if [ -d /usr/local/sbin/ ]; then
+    PATHS+=("/usr/local/sbin")
+fi
+{{- end }}
+# ==================================================================================================

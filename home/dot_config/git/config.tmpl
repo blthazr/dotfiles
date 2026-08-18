@@ -1,0 +1,38 @@
+[commit]
+  gpgsign = true
+
+[core]
+  editor = code --wait
+  excludesfile = "{{ .chezmoi.homeDir }}/.config/git/ignore"
+
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+{{ if (eq .chezmoi.os "darwin") -}}
+	allowedSignersFile = "{{.chezmoi.homeDir}}/.ssh/allowed_signers"
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+{{- end }}
+
+[init]
+  defaultBranch = main
+
+[tag]
+	forceSignAnnotated = true
+	gpgSign = true
+
+[url "ssh://git@github.com/"]
+  pushInsteadOf = https://github.com/
+
+[user]
+  name = {{ .name }}
+
+{{ if .personal -}}
+[includeIf "gitdir:{{ .chezmoi.homeDir }}/Projects/Code/GitHub/{{ .personal_github_user }}/"]
+  path = "{{ .chezmoi.homeDir }}/.config/git/config.d/personal.conf"
+{{ end -}}
+
+{{ if .work -}}
+[includeIf "gitdir:{{ .chezmoi.homeDir }}/Projects/Code/GitHub/{{ .splunk_github_user }}/"]
+  path = "{{ .chezmoi.homeDir }}/.config/git/config.d/splunk-github.conf"
+{{ end -}}

@@ -1,0 +1,5 @@
+{{- if .personal -}}
+[user]
+  email = {{ .personal_github_email | quote }}
+  signingkey = {{ onepasswordRead "op://Private/id_ed25519/public key" }}
+{{- end }}

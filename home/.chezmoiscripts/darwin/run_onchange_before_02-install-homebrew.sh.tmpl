@@ -1,0 +1,61 @@
+#!{{ lookPath "bash" }}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @file           :
+#   @description    :   Install Homebrew
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Load script libraries
+# --------------------------------------------------------------------------------------------------
+{{ template "script-library" }}
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Pre-flight
+# --------------------------------------------------------------------------------------------------
+LOG_LEVEL=5 # debug
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Install Homebrew
+# --------------------------------------------------------------------------------------------------
+debug "Verifying installation of Homebrew" -category "Homebrew" -icon "🍺"
+if ! check_binary brew; then
+  info "Administrator password needed to install Homebrew" -category "Homebrew" -icon "🍺"
+  {{ template "script-sudo" }}
+
+  info "Installing Homebrew, a MacOS package manager. Follow the instructions!" -category "Homebrew" -icon "🍺"
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+  if [[ -f /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  fi
+
+  debug "Verifying installation of application." -category "Homebrew" -icon "🍺"
+  if ! check_binary brew; then
+    critical "Application is not installed." -category "Homebrew" -icon "🍺"
+  fi
+
+else
+  debug "Application is installed." -category "Homebrew" -icon "🍺"
+fi
+# ==================================================================================================
+
+# --------------------------------------------------------------------------------------------------
+#   @description    :   Install mas
+# --------------------------------------------------------------------------------------------------
+debug "Verifying installation of mas" -category "mas" -icon "🧺"
+if ! check_binary mas; then
+  info "Installing mas, Mac Apple Store CLI" -category "mas" -icon "🧺"
+  brew install mas
+
+  debug "Verifying installation of application." -category "mas" -icon "🧺"
+  if ! check_binary mas; then
+    critical "Application is not installed." -category "mas" -icon "🧺"
+  fi
+else
+  debug "Application is installed." -category "mas" -icon "🧺"
+fi
+# ==================================================================================================

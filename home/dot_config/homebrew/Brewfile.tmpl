@@ -1,0 +1,100 @@
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @file           :   ~/.config/homebrew/Brewfile
+#   @description    :   Brewfile - one Brewfile to rule them all
+#   @usage          :   brew bundle --file "${HOME}/.config/homebrew/Brewfile"
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{{ if (eq .chezmoi.os "darwin") -}}
+# --------------------------------------------------------------------------------------------------
+# Manage your dotfiles across multiple diverse machines, securely
+brew "chezmoi"
+# --------------------------------------------------------------------------------------------------
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# --------------------------------------------------------------------------------------------------
+# Lightweight and flexible command-line JSON processor
+brew "jq"
+# --------------------------------------------------------------------------------------------------
+# Mac App Store command-line interface
+brew "mas"
+# --------------------------------------------------------------------------------------------------
+# Collection of tools that nobody wrote when UNIX was young
+brew "moreutils"
+# --------------------------------------------------------------------------------------------------
+# Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML
+brew "prettier"
+# --------------------------------------------------------------------------------------------------
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# --------------------------------------------------------------------------------------------------
+# Executes a program periodically, showing output fullscreen
+brew "watch"
+# --------------------------------------------------------------------------------------------------
+# Internet file retriever
+brew "wget"
+# --------------------------------------------------------------------------------------------------
+# Extensible command-line tool to format YAML files
+brew "yamlfmt"
+# --------------------------------------------------------------------------------------------------
+# Process YAML, JSON, XML, CSV and properties documents from the CLI
+brew "yq"
+# --------------------------------------------------------------------------------------------------
+# Fish-like fast/unobtrusive autosuggestions for zsh
+brew "zsh-autosuggestions"
+# --------------------------------------------------------------------------------------------------
+# Password manager that keeps all passwords secure behind one password
+cask "1password"
+# --------------------------------------------------------------------------------------------------
+# Command-line interface for 1Password
+cask "1password-cli"
+# --------------------------------------------------------------------------------------------------
+# Web browser
+cask "google-chrome"
+# --------------------------------------------------------------------------------------------------
+# Open-source code editor
+cask "visual-studio-code"
+# --------------------------------------------------------------------------------------------------
+# 1Password for Safari
+mas "1Password for Safari", id: 1569813296
+# --------------------------------------------------------------------------------------------------
+# yamlfmt
+vscode "bluebrown.yamlfmt"
+# --------------------------------------------------------------------------------------------------
+# EditorConfig for VS Code
+vscode "editorconfig.editorconfig"
+# --------------------------------------------------------------------------------------------------
+# Prettier Formatter for Visual Studio Code
+vscode "esbenp.prettier-vscode"
+# --------------------------------------------------------------------------------------------------
+# Better Todo Tree
+vscode "fanaticpythoner.better-todo-tree"
+# --------------------------------------------------------------------------------------------------
+# Path Autocomplete
+vscode "ionutvmi.path-autocomplete"
+# --------------------------------------------------------------------------------------------------
+# SSH Config Syntax Highlighter
+vscode "mousavian.ssh-config-syntax-highlighter"
+# --------------------------------------------------------------------------------------------------
+# Indent-Rainbow
+vscode "oderwat.indent-rainbow"
+# --------------------------------------------------------------------------------------------------
+# YAML Sort
+vscode "pascalreitermann93.vscode-yaml-sort"
+# --------------------------------------------------------------------------------------------------
+# XML Language Support by Red Hat
+vscode "redhat.vscode-xml"
+# --------------------------------------------------------------------------------------------------
+# YAML Language Support by Red Hat
+vscode "redhat.vscode-yaml"
+# --------------------------------------------------------------------------------------------------
+# JSON5 KIT
+vscode "savh.json5-kit"
+# --------------------------------------------------------------------------------------------------
+# Jinja Template Highlighting
+vscode "samuelcolvin.jinjahtml"
+# --------------------------------------------------------------------------------------------------
+# Even Better TOML
+vscode "tamasfe.even-better-toml"
+{{- end }}

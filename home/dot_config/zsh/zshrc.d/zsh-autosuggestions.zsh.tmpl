@@ -1,0 +1,16 @@
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#   @author         :   Chris Burnham
+#   @file           :   ~/.config/zsh/zshrc.d/zsh-autosuggestions.zsh
+#   @description    :   zsh-autosuggestions
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{{ if eq .chezmoi.os "darwin" -}}
+# --------------------------------------------------------------------------------------------------
+#   @description    :   zsh-autosuggestions
+# --------------------------------------------------------------------------------------------------
+if [ -f "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+    source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+# ==================================================================================================
+{{- end }}
